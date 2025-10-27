@@ -1,0 +1,42 @@
+name: Deploy Static Site
+
+on:
+  push:
+    branches: [ main, master ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create simple homepage
+        run: |
+          echo '<!DOCTYPE html>
+          <html>
+          <head>
+              <title>Lee的博客</title>
+          </head>
+          <body>
+              <h1>欢迎来到我的博客！</h1>
+              <p>网站正在建设中...</p>
+          </body>
+          </html>' > index.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
