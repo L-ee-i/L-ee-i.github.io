@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="dc系列——dc2">
+    <meta name="keywords" content="android">
     
     <meta name="author" content="lee">
     
@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://leei.site/2025/11/27/dc系列——dc2/"/>
+    <link rel="canonical" href="https://leei.site/2026/01/28/dc系列——dc5/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -133,14 +133,14 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="dc系列——dc2">
-<meta property="og:url" content="https://leei.site/2025/11/27/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc2/index.html">
+<meta property="og:title" content="dc5靶机报告">
+<meta property="og:url" content="https://leei.site/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc5/index.html">
 <meta property="og:site_name" content="Lee&#39;s SecLab">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
-<meta property="article:published_time" content="2025-11-26T20:20:06.027Z">
-<meta property="article:modified_time" content="2025-11-27T06:43:05.439Z">
+<meta property="article:published_time" content="2026-01-27T23:30:56.811Z">
+<meta property="article:modified_time" content="2026-01-28T07:30:57.125Z">
 <meta property="article:author" content="Le_ee 博客等级 码龄1年">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
@@ -155,7 +155,7 @@
     
     <title>
         
-            dc系列——dc2 | lee&#39;s seclab
+            dc5靶机报告 | lee&#39;s seclab
         
     </title>
 
@@ -608,7 +608,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">dc系列——dc2</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">dc5靶机报告</h1>
 			</div>
 			
 		</div>
@@ -629,15 +629,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-11-27 04:20:06</span>
-        <span class="mobile">2025-11-27 04:20:06</span>
+        <span class="desktop">2026-01-28 07:30:56</span>
+        <span class="mobile">2026-01-28 07:30:56</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-27 14:43:05</span>
-            <span class="mobile">2025-11-27 14:43:05</span>
+            <span class="desktop">2026-01-28 15:30:57</span>
+            <span class="mobile">2026-01-28 15:30:57</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -664,261 +664,155 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<p>总结：</p>
-<meta name="referrer" content="no-referrer"/>
+			<h4 id="信息收集："><a href="#信息收集：" class="headerlink" title="信息收集："></a>信息收集：</h4><p>arp-scan -l扫</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/a84d5e4e535647d5883b071fdcd98a54.png"
+                     
+                ></p>
+<p>nmap扫</p>
+<p>分析回显，我们可以看到操作系统是linux3-4的，开了三个端口</p>
+<p>80：http协议，nigux1.6.2的服务</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/8ae0a35227194852add7b195210bb1e3.png"
+                     
+                ></p>
+<h4 id="看80端口"><a href="#看80端口" class="headerlink" title="看80端口"></a>看80端口</h4><p><code>http://192.168.145.187</code></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/3d66ce7c7489442ca5e47d92b1b80f4f.png"
+                     
+                ></p>
+<p>点击 <code>Contact</code> 页面提交表单，会跳转到 <code>thankyou.php</code></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/9f8458556e0d4b708c172a162f668915.png"
+                     
+                ></p>
+<p>可以看到url中 <code>thankyou.php</code> 后面包含了firstname,lastname,cuntry等参数，我们试一下写入可 <code>file</code> 参数，看是否存在文件包含</p>
+<p>在?file&#x3D;后面尝试读取系统文件：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.145.187/thankyou.php?file=/etc/passwd</span><br></pre></td></tr></table></figure></div>
 
-<ul>
-<li>官网提示需要在靶机的host文件中添加靶机映射</li>
-</ul>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br></pre></td></tr></table></figure></div>
+<p>如果成功显示用户列表，则证实存在 <strong>本地文件包含（LFI）</strong>漏洞。</p>
+<p>再刷新一遍，bp抓包，看到我们刚才测试的文件路径，把这个改成一句话木马</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/27ce9f2d8f044d39b69cfc1f4e5be866.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/6ad43408597c4ba8ba0b4fa1e33246ff.png"
+                     
+                ></p>
+<p>forward放包，linux的报错日志常见路径是</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/log/nginx/error.log</span><br></pre></td></tr></table></figure></div>
 
-<p>其中etc目录中包含了几乎所有系统服务和程序的配置文件，hosts是本地域名解析文件，当浏览器拿到一个域名，会优先去本地查找域名解析，观察其对应ip</p>
-<p>vim编辑器添加映射</p>
+<p>我们尝试访问一下，可以发现木马被成功写入</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/dd91d30ee8e144d6a3f0f405d6b7611f.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/ab19d6e862f94c2e8f607d0643f6df36.png"
                      
                 ></p>
-<p>补充：（cat &#x2F;etc&#x2F;passwd可查看用户列表）</p>
-<ul>
-<li>*<em>rbash与&#x2F;bin&#x2F;bash</em></li>
-</ul>
-<p>前者相当于试用版shell，受限更多，像一个小笼子，要想办法逃逸到&#x2F;bin&#x2F;bash，之后再进一步提权</p>
-<p>学习一些常用的逃逸手段：</p>
-<p>1：看”&#x2F;“有没有被允许使用，允许直接用&#x2F;bin&#x2F;bash(注：本节尝试失败，限制图如下)</p>
+<p>蚁剑连接，连接成功</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e95221322e4643188eaabe12de4862f7.png"
-                     
-                ></p>
-<p>2.BASH_CMDS环境变量逃逸（本节可用）</p>
-<p>ps：关联数组就是用文字命名的数组</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">BASH_CMDS[a]=&#x27;/bin/sh;a&#x27;</span><br><span class="line">⬇</span><br><span class="line">#BASH_CMDS 是 Bash 的一个关联数组，用于存储命令别名</span><br><span class="line">#[a]=&#x27;/bin/sh——创建一个叫a的命令，&#x27;/bin/sh;a&#x27; 是这个别名对应的值</span><br><span class="line">#/bin/sh意思是启动一个shell</span><br><span class="line">#;命令分隔符</span><br><span class="line">#a再次执行a命令，，形成一个循环（此时以及在新的shell里面了）</span><br><span class="line">⬇</span><br><span class="line">#修复环境变量</span><br><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin</span><br><span class="line">#把一些位于 /bin/ 和 /usr/bin/ 目录的命令路径（如 ls, cat, whoami）添加到 PATH 中，系统才能找到这些命令</span><br></pre></td></tr></table></figure></div>
-
-<p>3：vi&#x2F;vim编辑器逃逸（本节可用）</p>
-<p>vi&#x2F;vim 通常被允许在 rbash 环境中使用</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vi/vim</span><br><span class="line">#启动编译器</span><br><span class="line">⬇</span><br><span class="line">:set shell=/bin/sh</span><br><span class="line">#:set：vi/vim 的设置命令</span><br><span class="line">#shell=/bin/sh：告诉 vi/vim 当执行外部命令时，使用 /bin/sh 作为 shell，改变了 vi/vim 的默认 shell 解释器</span><br><span class="line">⬇</span><br><span class="line">:shell</span><br><span class="line"></span><br><span class="line">#启动shell（/bin/sh）,这个新 shell 不继承 rbash 的限制</span><br><span class="line">⬇</span><br><span class="line">#修复环境变量，同前一种方法</span><br><span class="line">export PATH=$PATH:/bin/</span><br><span class="line">export PATH=$PATH:/usr/bin/</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>CMS</li>
-</ul>
-<p><strong>CMS是一个可以通过浏览器进行管理的、功能完整的网站应用程序，就是一个建站系统，常用的有我们在dc1里遇见的drupal,还有wordpress，joomla</strong></p>
-<p><strong>就是一个能帮助我们轻松建立网站的程序</strong></p>
-<p><strong>我们之所以要识别这个CMS，是为了搞清楚在80端口上的那个网页是基于什么程序建立的，从而找到漏洞从这里去突破</strong></p>
-<ul>
-<li><strong>nikto</strong>进行登录界面的url路径猜测(-h:目标主机)</li>
-</ul>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nikto -h XX.XX.XX.XX</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>cewl爬取这个网站生成自己的字典</li>
-</ul>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cewl http://XX.XX.XX.XX -w pass.txt</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>wpscan扫用户，匹配密码</li>
-</ul>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://dc-2 -U admin -P pass.txt</span><br><span class="line">wpscan --url http://dc-2 -e u</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>命令补充</li>
-</ul>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># less查看文件</span><br><span class="line">less /etc/passwd</span><br><span class="line"># 在less中的操作：</span><br><span class="line"># - 空格键：向下翻页</span><br><span class="line"># - b键：向上翻页  </span><br><span class="line"># - /关键词：搜索</span><br><span class="line"># - q键：退出 </span><br><span class="line"></span><br><span class="line">#ls略;</span><br><span class="line"></span><br><span class="line">#scp——文件传输</span><br><span class="line"># 从本地复制到远程</span><br><span class="line">scp file.txt user@remote:/path/</span><br><span class="line"></span><br><span class="line">#vi文本编辑器</span><br><span class="line"># 在vi中的基本操作：</span><br><span class="line"># - i键：进入插入模式</span><br><span class="line"># - Esc键：退出插入模式  </span><br><span class="line"># - :wq：保存并退出</span><br><span class="line"># - :q!：不保存退出</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>git提权</li>
-</ul>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo git -p help config</span><br><span class="line">#git 以 root 权限 启动，调用分页器 less 来显示帮助文本</span><br><span class="line">#因为 git 是 root，所以 less 也以 root 权限 运行</span><br><span class="line">⬇</span><br><span class="line">!/bin/bash</span><br><span class="line">#! = 在分页器中执行外部命令的特殊前缀</span><br><span class="line">#/bin/bash = 要启动的 shell</span><br></pre></td></tr></table></figure></div>
-
-<p>** 攻击流程： **</p>
-<p>扫ip</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d013f7382e4c408d9e0bda3f5156ead2.png"
-                     
-                ></p>
-<p>扫可疑ip</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ee723d03d3d449f0952a83c82d40f7bf.png"
-                     
-                ></p>
-<p>看到常用端口80和7744开启，进一步侵略性扫描</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/fdbe5808f24241c684294856b2cd520d.png"
-                     
-                ></p>
-<p>分析得到的关键数据：</p>
-<p>80端口对应着web渗透方向，并且我们可以看到这里对应的CMS是wordpress，版本是4.7.10</p>
-<p>然后7744端口对应着ssh渗透，可以通过爆破和版本漏洞进行攻击</p>
-<p>我们先尝试攻击80端口</p>
-<p>输入dc-2登录网页，找到第一个flag入口</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b8101a931a0e4429bb8cabd8b2e0aa5e.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/4d5305402e8c431c9f37de89e9ce959f.png"
                      
                 ></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/4af5a19d780b4247ac321e903c1eff78.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/574ed255ba974c7aa0cdb9c122aa5091.png"
                      
                 ></p>
-<p>translate：你惯用字典或许并不适用，所以不妨换一种方式，也许你需要用cewl。密码越多越好，但大部分时候你很难全部获得。 用一个身份登录以获得下一个flag， 如果没有，就用另一个身份登录。</p>
-<p>提取有效信息：</p>
-<p>1.一般字典不行</p>
-<p>2.提到了cewl工具</p>
-<p>3.需要几个账号密码去登录拿到下一个flag</p>
-<p>所以我们下一步用cewl爬取这个网站生成自己的字典</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cewl http://192.168.145.180 -w dc2password.txt</span><br></pre></td></tr></table></figure></div>
-
-<p>运行这个命令之后，ceWL会从首页开始爬这个网站所有可以访问链接，默认深度为2（也就是从指定的起始界面0+起始页面上能访问的直接链接1+一层间接链接2）</p>
-<p>然后分析所有页面的文本内容，从中提取单词生成一个字典大纲，我们可以从这些包含网站信息的词里猜测密码</p>
-<p>cat dc2password.txt发现爆出了很多敏感词汇<img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/18b230c933484dc2ac5a49b870c91ed0.png"
-                     
-                ></p>
-<p>然后使用工具wpscan</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://dc-2 -e u</span><br></pre></td></tr></table></figure></div>
-
-<p>–url指定要扫描的目标网站url，后面跟目标网站的网址</p>
-<p>-e表示枚举，u是用户</p>
-<p>看结果出来三个用户——admin,jerry,tom</p>
+<p>用kali建立反弹shell</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b39a85c4387045cdad470605ec1ea6aa.png"
-                     
-                ></p>
-<p>继续用wpscan，加上我们之前扫出来的dc-2password字典逐个扫每一个用户名，看能不能找到对应密码</p>
-<p>-u指定用户，-p是指定密码字典文件</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://dc-2 -U admin -P dc2password.txt</span><br></pre></td></tr></table></figure></div>
-
-<p>admin</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a1bcbd072ff2418299a8672d4f02ad54.png"
-                     
-                ></p>
-<p>tom——successsed</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/546b21db01f54c5b85013ebb1f01847f.png"
-                     
-                ></p>
-<p>jerry——successed</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5cca2f243da845e6b99eb9fb23ad863a.png"
-                     
-                ></p>
-<p>所以我们现在得到了两对账户密码，但是没有登录界面</p>
-<p>用nikto进行登录界面的url路径猜测</p>
-<p>-h 指定扫描的目标主机</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nikto -h 192.168.145.180</span><br></pre></td></tr></table></figure></div>
-
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/424b7f04e12043ddbac5503e6460b17c.png"
-                     
-                ></p>
-<p>成功找到并且进入登录界面</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8657d293653549b884b7073fe787d8f9.png"
-                     
-                >先用tom登录，成功，但是进去什么也没找到，刚好对应上flag1（被预判了…）</p>
-<p>所以用jerry试试..</p>
-<p>在pages里找到了flag2</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ec0eb7437aa64fa58ff63258d1da4d65.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/d2d1abb7ad63487cba09241c34ca224b.png"
                      
                 ></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d604001bafee4c1db170c012fd2de700.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/11bd5a9ad833472c9053f3c1a8d74dfc.png"
                      
                 ></p>
-<p>translate:如果wordpress攻击不成功的话，还有另一条路，希望你能找到另一个攻击点</p>
-<p>所以：尝试7744的ssh攻击</p>
-<p>回到终端，用jerry链接显示permission denied</p>
-<p>用tom连接成功</p>
+<p>用python构造一个伪终端</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/44617671a1884564af0df797997a857d.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/841f1ddd9323458aa009ab146808277b.png"
                      
                 ></p>
-<p>ls，找到flag3.txt➡cat</p>
-<p>发现无法查看，被rbash（个人理解是只给用户提供最小权限的一个环境，会比一般shell限制的更多）限制了，所以下一步要从rbash里逃逸</p>
-<p>先看看usr里面有什么，发现bin文件里有四个命令</p>
+<p>这时候再kali的反弹shell里面检查suid程序</p>
+<p>find &#x2F; -perm -u&#x3D;s -type f 2&gt;&#x2F;dev&#x2F;null</p>
+<p>可以找到关键程序 &#x2F;usr&#x2F;bin&#x2F;screen-4.5.0</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/dd5bd3fc046e47e89a5e62520bbea670.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/e4cebe451f3a4e6b83cf55cdb850a7f8.png"
                      
                 ></p>
-<p>可能是能使用的命令，用less看一下flag3.txt试一试，成功</p>
+<p>查找漏洞，尝试第一个41154.sh脚本</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/69e165d61e5748418ff24bda1dbcfdf2.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/8601c50bded84729bf2a26884cab1a29.png"
                      
                 ></p>
-<p>translate：可怜的老tom总是追在jerry后面，他或许应该把承担的一切都su掉</p>
-<p>提示我们用su命令把tom用户转成jerry用户，但是现在权限受制</p>
-<p>用vi编辑器成功逃逸rbash</p>
+<p>复制到kali终端的tmp文件下，保存整个脚本</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/03228bee0ffd45ebb40f219d7488516e.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/df56d7a5cab943bba91ca8f8abc0ab33.png"
                      
                 ></p>
-<p>ls之后发现flag4.txt</p>
+<p>看看</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9cefe393a87f404a9946b763d0a83362.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/2e44ca8f910d411a93ffef9647f429b8.png"
                      
                 ></p>
-<p>translate:夸夸你，但是no，hints…走吧…</p>
-<p>无脑尝试先提权到root</p>
-<p>先sudo -l看看我都被允许用管理员权限运行哪些</p>
+<p>在kali上开启http服务</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/bc54291c17694d7da8bd8e2d6b0cf8d1.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/732dd4ba702746ffae628a27fd7d1c95.png"
                      
                 ></p>
-<p>回显：jerry用户可以 <strong>以root权限</strong>运行git（版本控制系统）命令</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo git -p help config</span><br><span class="line">!/bin/bash</span><br></pre></td></tr></table></figure></div>
-
-<p>cd并且ls</p>
-<p>发现final-flag.txt!</p>
+<p>在靶机的shell里下载exp脚本，给执行权限，.&#x2F;dc5.sh执行提权</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6559a1a71f254386864645df7a9f4857.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/34884df104c94b51b8408df0a29ffc47.png"
                      
                 ></p>
-<p>❀❀❀完结撒花！！❀❀❀</p>
+<p>提权成功，在root下找到flag文件</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/917249dd8650432db95f9813a3d204a3.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/21df2908c53044d483e88ab2e9f6ca0e.png"
+                     
+                ></p>
+<p>完结撒花！！！！！</p>
 
 		</div>
 
@@ -926,18 +820,18 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> dc系列——dc2</li>
+        <li><strong>Title:</strong> dc5靶机报告</li>
         <li><strong>Author:</strong> Le_ee 博客等级 码龄1年</li>
         <li><strong>Created at
-                :</strong> 2025-11-27 04:20:06</li>
+                :</strong> 2026-01-28 07:30:56</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-27 14:43:05
+                    :</strong> 2026-01-28 15:30:57
             </li>
         
         <li>
-            <strong>Link:</strong> https://leei.site/2025/11/27/dc系列——dc2/
+            <strong>Link:</strong> https://leei.site/2026/01/28/dc系列——dc5/
         </li>
         <li>
             <strong>
@@ -963,12 +857,12 @@
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
 			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc3/">
+				<a class="prev" rel="prev" href="/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc6/">
 					<span class="left arrow-icon flex justify-center items-center">
 						<i class="fa-solid fa-chevron-left"></i>
 					</span>
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">dc3靶机报告</span>
+						<span class="post-nav-title-item truncate max-w-48">dc6打靶报告</span>
 						<span class="post-nav-item">Prev posts</span>
 					</span>
 				</a>
@@ -976,9 +870,9 @@
 			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2025/11/24/linux%E5%8C%85%E7%AE%A1%E7%90%86/">
+				<a class="next" rel="next" href="/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc4/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">Linux 软件包管理教程</span>
+						<span class="post-nav-title-item truncate max-w-48">dc4打靶报告</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -1040,7 +934,7 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">dc系列——dc2</div>
+		<div class="page-title">dc5靶机报告</div>
 		
 
 	</div>
