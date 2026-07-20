@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="Linux 软件包管理教程">
+    <meta name="keywords" content="安全性测试,网络安全,栈溢出,ollydbg">
     
     <meta name="author" content="lee">
     
@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://leei.site/2025/11/24/linux包管理/"/>
+    <link rel="canonical" href="https://leei.site/2026/07/20/winxp栈溢出深度学习/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -133,15 +133,15 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux 软件包管理教程">
-<meta property="og:url" content="https://leei.site/2025/11/24/linux%E5%8C%85%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:title" content="winXP栈溢出漏洞深度学习">
+<meta property="og:url" content="https://leei.site/2026/07/20/winXP%E6%A0%88%E6%BA%A2%E5%87%BA%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Lee&#39;s SecLab">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
-<meta property="article:published_time" content="2025-11-24T01:31:37.908Z">
-<meta property="article:modified_time" content="2025-11-24T09:32:42.475Z">
-<meta property="article:author" content="Le_ee 博客等级 码龄1年">
+<meta property="article:published_time" content="2026-07-19T18:39:09.710Z">
+<meta property="article:modified_time" content="2026-07-20T02:44:59.848Z">
+<meta property="article:author" content="Le_ee 博客等级 码龄2年">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
     
@@ -155,7 +155,7 @@
     
     <title>
         
-            Linux 软件包管理教程 | lee&#39;s seclab
+            winXP栈溢出漏洞深度学习 | lee&#39;s seclab
         
     </title>
 
@@ -608,7 +608,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Linux 软件包管理教程</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">winXP栈溢出漏洞深度学习</h1>
 			</div>
 			
 		</div>
@@ -620,7 +620,7 @@
 			</div>
 			<div class="info flex flex-col justify-between">
 				<div class="author flex items-center">
-					<span class="name text-default-text-color text-lg font-semibold">Le_ee 博客等级 码龄1年</span>
+					<span class="name text-default-text-color text-lg font-semibold">Le_ee 博客等级 码龄2年</span>
 					
 					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
 					
@@ -629,15 +629,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2025-11-24 09:31:37</span>
-        <span class="mobile">2025-11-24 09:31:37</span>
+        <span class="desktop">2026-07-20 02:39:09</span>
+        <span class="mobile">2026-07-20 02:39:09</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-24 17:32:42</span>
-            <span class="mobile">2025-11-24 17:32:42</span>
+            <span class="desktop">2026-07-20 10:44:59</span>
+            <span class="mobile">2026-07-20 10:44:59</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -665,610 +665,117 @@
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			<meta name="referrer" content="no-referrer"/>
-Rocky Linux8 -YUM/DNF包管理
+一：环境
 
-<p>列出所有启用的仓库</p>
+<p>windowsXP，vc6，ollydbg，ultraedit</p>
+<p>二：覆盖邻接变量</p>
+<p>原理：利用strcpy函数不会检查长度的漏洞，覆盖临近数组的flag变量，从而绕过验证</p>
+<p>先构建一个漏洞程序</p>
+<p>因为栈的生长方向是从高地址到低地址的，也就是先声明的变量在高地址，后声明的变量在低地址</p>
+<p><strong>栈向下生长，但数组向上溢出</strong>，我们的buffer数组预先只定义了44个字节的位置，所以buffr数组溢出的第一个字节就是flag的位置</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f31481f18e5f493a93b083c2dada86c5.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/e5d7a17589c94056864ecfc484865884.png"
                      
                 ></p>
-<p>列出所有仓库，包括禁用的</p>
+<p>在vc6里面新建一个空项目，添加一个.c文件</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;windows.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">#define REGCODE &quot;12345678&quot;</span><br><span class="line"></span><br><span class="line">int verify(char *code)</span><br><span class="line">&#123;</span><br><span class="line">    int flag;    //&amp;#x90BB;&amp;#x63A5;&amp;#x53D8;&amp;#x91CF;&amp;#xFF0C;&amp;#x4F4D;&amp;#x4E8E;buffer&amp;#x4E0B;&amp;#x65B9;</span><br><span class="line">    char buffer[44];    //&amp;#x7F13;&amp;#x51B2;&amp;#x533A;&amp;#xFF0C;&amp;#x5171;44&amp;#x5B57;&amp;#x8282;</span><br><span class="line">    flag = strcmp(REGCODE, code);</span><br><span class="line">    strcpy(buffer, code);    //&amp;#x65E0;&amp;#x957F;&amp;#x5EA6;&amp;#x68C0;&amp;#x67E5;&amp;#x7684;strcpy&amp;#x51FD;&amp;#x6570;</span><br><span class="line">    return flag;    //&amp;#x662F;&amp;#x5426;&amp;#x901A;&amp;#x8FC7;&amp;#x9A8C;&amp;#x8BC1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void main()</span><br><span class="line">&#123;</span><br><span class="line">    int vFlag = 0;</span><br><span class="line">    char regcode[1024];</span><br><span class="line">    FILE *fp;</span><br><span class="line"></span><br><span class="line">    LoadLibrary(&quot;user32.dll&quot;);</span><br><span class="line"></span><br><span class="line">    if (!(fp = fopen(&quot;reg.txt&quot;, &quot;r+&quot;)))</span><br><span class="line">        exit(0);</span><br><span class="line"></span><br><span class="line">    fscanf(fp, &quot;%s&quot;, regcode);</span><br><span class="line">    //fp&amp;#xFF1A;&amp;#x6587;&amp;#x4EF6;&amp;#x6307;&amp;#x9488;</span><br><span class="line">    //fscanf&amp;#x4F1A;&amp;#x5728;&amp;#x5B57;&amp;#x7B26;&amp;#x4E32;&amp;#x672B;&amp;#x5C3E;&amp;#x81EA;&amp;#x52A8;&amp;#x6DFB;&amp;#x52A0;&#x27;\0&#x27;</span><br><span class="line">    vFlag = verify(regcode);</span><br><span class="line"></span><br><span class="line">    if (vFlag)</span><br><span class="line">        printf(&quot;wrong regcode!&quot;);</span><br><span class="line">    else</span><br><span class="line">        printf(&quot;passed!&quot;);</span><br><span class="line"></span><br><span class="line">    fclose(fp);</span><br><span class="line">&#125;&lt;/string.h&gt;&lt;/windows.h&gt;&lt;/stdio.h&gt;</span><br></pre></td></tr></table></figure></div>
+
+<p>编译</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/cbd2f27ad887492ea718f73eb0f79c6b.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/8a489000b2fd46a4ac37604168bedaed.png"
                      
                 ></p>
-<p>配置仓库</p>
-<p>添加 EPEL 仓库</p>
+<p>在debug文件同层创建一个reg.txt，写入密码12345678，运行看看有没有问题</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1fdbbcbd4cf7421aa87b14d93c65fcbd.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/dcf0ddbce3704dd6bc8db7f6297f706f.png"
                      
                 ></p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f449afede00440b683d59eb76e655e3a.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/5f0abcb6f9d14759be068d2b3ea17a2c.png"
                      
                 ></p>
-<p>启用或禁用仓库 dnf config-manager – (disable&#x2F;enable) repository-name</p>
-<p>软件包搜索和查询</p>
-<p>搜索软件包:</p>
+<p>正常</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/529cdd1c687e44f19b116669a7eb6ad2.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/d0c512ff676e42ed8cd4f0420989587b.png"
                      
                 ></p>
-<p>查看软件包详细信息</p>
+<p>输入44个’1’，填充44个字节没因为fscanf会自动在末尾加上\0，这个\0会覆盖flag的最低位，把flag从1变成0，表示验证通过了</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/076485a90b1d41e48b33c522d27e256c.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/48b6990a7fd34505baf0255170e25c62.png"
                      
                 ></p>
-<p>列出所有可安装的包:</p>
+<p>防御方向：限制复制长度</p>
+<p>二：植入shellcode（运行漏洞程序后令win系统弹出弹窗）</p>
+<p>user32.dll：win动态链接库，包含messageboxa函数</p>
+<p>MessageBoxA：是Windows 系统中弹出提示框的 API 函数。调用它就能显示一个窗口</p>
+<p>实现思路：后面的 shellcode 需要直接调用 MessageBoxA，但代码里不能写函数名（因为植入的是机器码），必须知道它在内存中的 <strong>入口地址</strong>，然后让程序跳转到这个地址去执行。</p>
+<p>所以我们先通过这个c代码得到</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/dd3ad21760574706919cdfaa55f29348.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/500284642a044d7684a2148730941731.png"
                      
                 ></p>
-<p>列出已安装的包:</p>
+<p>在 Windows XP 中，user32.dll 的加载基址是 0x77D10000。</p>
+<p>MessageBoxA 在 user32.dll 中的偏移是 0x000407EA。</p>
+<p>入口地址 &#x3D; 基址 + 偏移 &#x3D;0x77D10000 + 0x000407EA &#x3D; 0x77D507EA</p>
+<p>ollydbg打开exe文件，在菜单的试图里面找到调试窗口→watch</p>
+<p>在watch窗口里面搜一下&amp;buffer</p>
+<p>得到buffer的地址：0x0012faf0</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7961cfa3dd794311a17377f4717a9f7c.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/ca7927af4d8243f5a10d7ec67c4a74c1.png"
                      
                 ></p>
-<p>查找提供特定文件的包:</p>
+<p>开始构建shellcode，首先，调用MessageBoxA函数，我们需要四个参数：</p>
+<p>1hWnd——父窗口句柄指定哪个窗口作为消息框的父窗口，这个实验我们传进去0&#x2F;NULL，表示这是一个独立的窗口2IpText显示的文本3IpCaption标题栏文字4uType按钮类型，这个实验传0，代表只显示确定按钮</p>
+<p>在win中，压栈顺序是从右往左，所以参数顺序是4321，之后就可以调用MessageBoxA</p>
+<p>在压到3，2参数部分的时候，要对字符串进行处理，要先把字符串写入栈内存，再把字符串的地址作为参数进行传递</p>
+<p>顺序如下：</p>
+<p>汇编机器码作用 <code>XOR EBX, EBX</code> <code>33 DB</code></p>
+<p>EBX &#x3D; 0 <code>PUSH EBX</code> <code>53</code></p>
+<p>压入 uType&#x3D;0（参数4） <code>PUSH 0x74736577</code> <code>68 77 65 73 74</code></p>
+<p>压入 “west” <code>PUSH 0x74736577</code> <code>68 77 65 73 74</code></p>
+<p>压入 “west” <code>MOV EAX, ESP</code> <code>8B C4</code></p>
+<p>EAX &#x3D; 字符串地址 <code>PUSH EBX</code> <code>53</code></p>
+<p>压入 hWnd&#x3D;0（参数1） <code>PUSH EAX</code> <code>50</code></p>
+<p>压入 lpText（参数2） <code>PUSH EAX</code> <code>50</code></p>
+<p>压入 lpCaption（参数3） <code>PUSH EBX</code> <code>53</code></p>
+<p>压入 uType&#x3D;0（参数4） <code>MOV EAX, 0x77D507EA</code> <code>B8 EA 07 D5 77</code></p>
+<p>函数地址入 EAX <code>CALL EAX</code> <code>FF D0</code></p>
+<p>调用</p>
+<p>以上0~25这段机器码就是弹窗部分</p>
+<p>26~43内18个字节用90填充，表示NOP指令，什么都不做</p>
+<p>44~47内四个字节用90填充，覆盖旧的flag</p>
+<p>48~51四个字节用90填充，覆盖旧的EBP栈顶指针</p>
+<p>（因为返回地址再flag和EBP后面，要覆盖返回地址，必须先把前52个字节填满，90&#x3D;NOP（空操作），CPU执行到这里什么都不做，继续往下）</p>
+<p>52~55四个字节填充 F0 FA 12 00，表示返回地址→指向buffer[0]</p>
+<p>打开UltraEdit，CTRL+G进入十六进制，开始填充机器码</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/660c31092a2246f0a14a990e2ce88496.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/896050e17f0d4514b731f3e6da5631fd.png"
                      
                 ></p>
-<p>查看包的依赖关系</p>
+<p>之后保存到debug的同层——reg.txt</p>
+<p>再次运行程序，成功跳出弹窗</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9c9073318b9f47d89244f415b002e6d8.png"
-                     
-                ></p>
-<p>软件包安装</p>
-<p>安装单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/daefac7f5db240d9a27bbb157be464f2.png"
-                     
-                ></p>
-<p>安装多个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/30d8fa086f3648d28be6d2d8c4e192e2.png"
-                     
-                ></p>
-<p>从本地rpm文件安装</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3889c4ef555045269ff6fbc05edc6a1f.png"
-                     
-                ></p>
-<p>重新安装软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e68a8ce187254931b2e19e77de3dffbf.png"
-                     
-                ></p>
-<p>安装软件包组</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0f975e4b77244f53bc00f32a5a6c5dc0.png"
-                     
-                >列出可用的组</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1cb9e49d61b04c1a836e574620f0e331.png"
-                     
-                ></p>
-<p>检查可更新的软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/08db0faf8c1a4331b1c790e12db33e46.png"
-                     
-                ></p>
-<p>更新单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/13392af9f1f946a9835ca6dd498cfa23.png"
-                     
-                ></p>
-<p>更新系统</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5b93bcf1cde0434bb95b76879aa19fc0.png"
-                     
-                ></p>
-<p>仅下载更新不安装</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a0b9884dd34e4c69b9429fbbbe9513e4.png"
-                     
-                ></p>
-<p>卸载软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/c1d87e3b9b164c3e9a4c0f48684fad10.png"
-                     
-                ></p>
-<p>清理不再需要的依赖</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/affc3efc52434f56ad523766efbbd054.png"
-                     
-                ></p>
-<p>清理所有缓存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/96c1e5b34435471e88ff7850400cd18f.png"
-                     
-                ></p>
-<p>清理包缓存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/46e77544a11f471aa9c81180e074eb85.png"
-                     
-                ></p>
-<p>清理元数据缓存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/720f90d6f39d4bb29fe558122484e324.png"
-                     
-                ></p>
-<p>清理过期缓存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ac0928811efe435d91a832b046a77592.png"
-                     
-                ></p>
-<p>历史记录管理</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8ccf09b169214b269027dd57965425f7.png"
-                     
-                ></p>
-<p>查看具体操作详情</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/de60491100b846639b87a7f11550f6e9.png"
-                     
-                ></p>
-<p>撤销&#x2F;重做&#x2F;回滚</p>
-<p>dnf history undo&#x2F;redo&#x2F;rollback 5</p>
-<h3 id="Ubuntu-22-04-APT-包管理"><a href="#Ubuntu-22-04-APT-包管理" class="headerlink" title="Ubuntu 22.04 - APT 包管理"></a>Ubuntu 22.04 - APT 包管理</h3><p>备份原始源文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/c5c226b4f5574bbe840fab48786d4831.png"
-                     
-                ></p>
-<p>编辑软件源</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f8ac0f94df8344638da87e5d2e54e112.png"
-                     
-                ></p>
-<p>更新包索引（定期执行）</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3b85eb8b2a5f494888cf8c46a874dde4.png"
-                     
-                ></p>
-<p>更新并显示可升级的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/813ca1e4e75f424f98bcf64d69a2d2f3.png"
-                     
-                ></p>
-<p>搜索软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5b8cb20fade141be92cddc79a3799dea.png"
-                     
-                ></p>
-<p>搜索精确匹配</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/12742e071efa4593b58cd670304e9eb1.png"
-                     
-                ></p>
-<p>查看包详细信息</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9c2e0295fc15408d8c56c541816ca4c3.png"
-                     
-                ></p>
-<p>列出所有可安装的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7c2c0ec6b6af41c7bf6aaa5ccdd297bb.png"
-                     
-                ></p>
-<p>列出已安装的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a94c945b791047918b8cc7ba570b71b7.png"
-                     
-                ></p>
-<p>列出可升级的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/70e8a736bb6841cf8cfd50b4d88bdca8.png"
-                     
-                ></p>
-<p>查找包含特定文件的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/4016022d60a14f4f93123364ef0de3cc.png"
-                     
-                ></p>
-<p>查看包的依赖关系</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9a7254fa1dac4c8e9ffbec3df2ffe21b.png"
-                     
-                ></p>
-<p>查看哪些包依赖此包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d9d17cebe91c4b359c3dce1aa9c20e1b.png"
-                     
-                ></p>
-<p>软件包安装</p>
-<p>安装单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1bac5fa16c204b799a81ae3a42e3753c.png"
-                     
-                ></p>
-<p>安装多个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1093a4ac79634cd0854cab49b18fcd70.png"
-                     
-                ></p>
-<p>安装指定版本的包</p>
-<p>apt install nginx&#x3D;（版本）</p>
-<p>安装本地的deb包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e1a04457161d4fb4bee922f47aa761ac.png"
-                     
-                ></p>
-<p>仅下载不安装</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e53a6c2935d347949504cff7fc09746a.png"
-                     
-                ></p>
-<p>重新安装软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/717dc1750c1540e5a66e5efeae03a4b8.png"
-                     
-                ></p>
-<p>安装推荐的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/767f8c8d330a4ba6812dcfed71df3761.png"
-                     
-                ></p>
-<p>不安装推荐的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0c627a84559441c0b483e9bb805b7c11.png"
-                     
-                ></p>
-<p>软件包更新</p>
-<p>更新单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/81dcb40560c5481db511887f68091f95.png"
-                     
-                ></p>
-<p>更新所有软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5e61532698904c86ae718eada104796e.png"
-                     
-                ></p>
-<p>完整升级</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/696f26a0b9eb46648d2ab3934c6201e7.png"
-                     
-                ></p>
-<p>发行版升级</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/677e59563e304427bb1da5299e199eb0.png"
-                     
-                ></p>
-<p>软件包卸载</p>
-<p>卸载，完全卸载</p>
-<p>apt (remove&#x2F;purge) nginx</p>
-<p>卸载不再需要的依赖</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6e00c3d221b046ad9ae52de314a5c295.png"
-                     
-                ></p>
-<p>清理系统</p>
-<p>清理下载的包文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b51b02abc1af4b1cbd5e50f35ab54d9c.png"
-                     
-                ></p>
-<p>清理旧版本的包文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/5f6ed830eaa644a7806712aa5c5361cf.png"
-                     
-                ></p>
-<p>组合清理命令</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0ed61248ea3b4fd3a9b4a60f6a8917ec.png"
-                     
-                ></p>
-<h3 id="Ubuntu-22-04-Snap-包管理"><a href="#Ubuntu-22-04-Snap-包管理" class="headerlink" title="Ubuntu 22.04 - Snap 包管理"></a>Ubuntu 22.04 - Snap 包管理</h3><p>安装snap</p>
-<p>查看版本</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6db30549e2ea40189c6b35388dbfde98.png"
-                     
-                ></p>
-<p>搜索软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9e469fa4fc754e96b6f56b1646ba1d0b.png"
-                     
-                ></p>
-<p>查看包的详细信息</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/4f70b79ea3ef40488b9597f95a07176d.png"
-                     
-                ></p>
-<p>列出已安装的snap</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/41e7f0bf352044079bcadb0163cfae6b.png"
-                     
-                ></p>
-<p>查看snap 占用的磁盘空间</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e5afd478c6db4727af40375ccfabfc4f.png"
-                     
-                ></p>
-<p>安装snap包（稳定版本）’</p>
-<p>安装软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/1d1f756cc8254512a2e87423f24ef40b.png"
-                     
-                ></p>
-<p>从特定频道安装</p>
-<p>snap install firefox –channel&#x3D;(beta&#x2F;edge)</p>
-<p>安装经典模式的snap</p>
-<p>snap install –classic code</p>
-<p>从本地文件安装</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3c3c07dfc3c34d149706fa983b72d3c3.png"
-                     
-                ></p>
-<p>更新单个软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6647c845503940f99e7e18e0ae89ff92.png"
-                     
-                ></p>
-<p>更新所有软件包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ba477db36050453689506495273d30e3.png"
-                     
-                ></p>
-<p>切换到不同的频道</p>
-<p>snap refresh firefox –channel&#x3D;beta</p>
-<p>查看可用更新</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3a61489748ac406ea81a6876928002a1.png"
-                     
-                ></p>
-<p>管理snap 版本</p>
-<p>查看已安装的版本</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8fab1b9d0bd44ffe9ce996b7a6b86017.png"
-                     
-                ></p>
-<p>回滚到上一个版本&#x2F;特定版本</p>
-<p>snap revert firefox (–revision 1234)</p>
-<p>禁用自动更新（某个包）</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8d9c3e4fe3834be7a4536277f587ebfd.png"
-                     
-                ></p>
-<p>！ 卸载软件包</p>
-<p>snap remove firefox</p>
-<p>卸载并删除所有版本和数据</p>
-<p>snap remove –purge firefox</p>
-<h3 id="常见问题与技巧"><a href="#常见问题与技巧" class="headerlink" title="常见问题与技巧"></a>常见问题与技巧</h3><p>依赖问题处理</p>
-<p>查看损坏的依赖</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f4901e80f9fc4d438b2ae584139be31c.png"
-                     
-                ></p>
-<p>修复依赖问题</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8485eb10f4f64a2694f65d8f79869b1f.png"
-                     
-                ></p>
-<p>跳过损坏的包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7a5f8999d4ae4fc8aaa4b7cfdbf5904c.png"
-                     
-                ></p>
-<h5 id="Ubuntu-22-04-APT"><a href="#Ubuntu-22-04-APT" class="headerlink" title="Ubuntu 22.04 (APT)"></a>Ubuntu 22.04 (APT)</h5><p>修复损坏的依赖</p>
-<p>apt –fix-broken install</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a8adac632466448199582ee977acb475.png"
-                     
-                ></p>
-<p>强制修复</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f490379d2c3547f38449db1500b4b0b2.png"
-                     
-                ></p>
-<p>锁文件问题</p>
-<p>rocky</p>
-<p>rm -f &#x2F;var&#x2F;run&#x2F;yum.pid</p>
-<p>ubuntu</p>
-<p>rm &#x2F;var&#x2F;lib&#x2F;apt&#x2F;lists&#x2F;lock</p>
-<p>查看包安装的文件</p>
-<p>rocky</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/231b08b768c94848bafe53fe985e5baa.png"
-                     
-                ></p>
-<p>查看文件属于哪个包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7e955e600ec74dc59d9e59a56eb5f15a.png"
-                     
-                ></p>
-<p>ubuntu</p>
-<p>查看已安装的包的文件列表</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9829cab25b5c47fcb5730370dce6127f.png"
-                     
-                ></p>
-<p>查看文件属于哪个包</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/75bae77957b4421ab51493bf1a0add39.png"
-                     
-                ></p>
-<p>下载包但不安装</p>
-<p>rocky</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a464be08081447c6ac7d97f906d2abce.png"
-                     
-                ></p>
-<p>下载包及依赖</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/b79ab9eeab4f47abad6b419fbe6e6f8f.png"
-                     
-                ></p>
-<p>指定下载目录</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/671b115e5c8e4e08964a5f474ec73011.png"
-                     
-                ></p>
-<p>ubuntu</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/0251a3a860264a6cb6b65db6224cd042.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/633239cfdd6c4140af9bf999e1006711.png"
                      
                 ></p>
 
@@ -1278,18 +785,18 @@ Rocky Linux8 -YUM/DNF包管理
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> Linux 软件包管理教程</li>
-        <li><strong>Author:</strong> Le_ee 博客等级 码龄1年</li>
+        <li><strong>Title:</strong> winXP栈溢出漏洞深度学习</li>
+        <li><strong>Author:</strong> Le_ee 博客等级 码龄2年</li>
         <li><strong>Created at
-                :</strong> 2025-11-24 09:31:37</li>
+                :</strong> 2026-07-20 02:39:09</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-24 17:32:42
+                    :</strong> 2026-07-20 10:44:59
             </li>
         
         <li>
-            <strong>Link:</strong> https://leei.site/2025/11/24/linux包管理/
+            <strong>Link:</strong> https://leei.site/2026/07/20/winXP栈溢出深度学习/
         </li>
         <li>
             <strong>
@@ -1314,23 +821,11 @@ Rocky Linux8 -YUM/DNF包管理
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2025/11/27/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc2/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">dc系列——dc2</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2025/11/18/rocky%20linux%208%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/">
+				<a class="next" rel="next" href="/2026/07/20/cat%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%A3%80%E6%B5%8B%E8%A7%84%E5%88%99%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E6%88%90/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">RockyLinux8网络配置</span>
+						<span class="post-nav-title-item truncate max-w-48">cat命令注入绕过检测规则的自动化生成</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -1392,8 +887,8 @@ Rocky Linux8 -YUM/DNF包管理
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">Linux 软件包管理教程</div>
-		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-04-APT-%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-text">Ubuntu 22.04 - APT 包管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-04-Snap-%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-text">Ubuntu 22.04 - Snap 包管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%8A%80%E5%B7%A7"><span class="nav-text">常见问题与技巧</span></a></li></ol>
+		<div class="page-title">winXP栈溢出漏洞深度学习</div>
+		
 
 	</div>
 </div>

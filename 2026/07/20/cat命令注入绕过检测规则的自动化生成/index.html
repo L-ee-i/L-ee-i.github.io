@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="cat命令注入, WAF规则生成, OWASP CRS, 语义聚类, HDBSCAN, SecRule, 自动化规则挖掘, RuleMiner">
+    
+    <meta name="author" content="lee">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://leei.site/2026/07/20/cat命令注入绕过检测规则的自动化生成/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cat命令注入绕过检测规则的自动化生成">
+<meta property="og:url" content="https://leei.site/2026/07/20/cat%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%A3%80%E6%B5%8B%E8%A7%84%E5%88%99%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E6%88%90/index.html">
+<meta property="og:site_name" content="Lee&#39;s SecLab">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://leei.site/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-07-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-20T06:45:25.830Z">
+<meta property="article:author" content="lee">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/lit.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/lit.png">
+    <meta name="theme-color" content="#FFB6C1">
+    <link rel="shortcut icon" href="/images/lit.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            cat命令注入绕过检测规则的自动化生成 | lee&#39;s seclab
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"leei.site","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":true,"link_icon":true,"delete_mask":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":true,"list":["记录","攻略","学习"]},"code_block":{"copy":true,"style":"simple","highlight_theme":{"light":"atom-one-light","dark":"night-owl"},"font":{"enable":false,"family":"Fira Code, Consolas","url":"https://fonts.googleapis.com/css2?family=Fira+Code"}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":false},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":5,"mobile_limit":3,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#FFB6C1","secondary":"#FADADD","default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null},"url":{"hover":null,"shadow":true,"scale":true},"scroll_progress":{"bar":true,"percentage":true},"single_page":true,"open_graph":{"enable":true,"image":"/images/lit.png","description":"Here is Lee"}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/water.jpg","dark":"/images/water.jpg"},"title":"Hello ​Guardian","subtitle":{"text":["sudo make me a sandwich!"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#444444","dark":"#444444"},"text_style":{"title_size":"5rem","subtitle_size":"2.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"center","links":{"github":"https://github.com/L-ee-i","zhihu":"https://www.zhihu.com/people/yu-gan-86-73/answers","email":"mailto:1412760342@qq.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":true,"color":{"left":"#FFB6C1","right":"#FFB6C1","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Status":{"path":"https://status.ohevan.com/","icon":"fa-regular fa-chart-bar"},"About":{"icon":"fa-regular fa-user","submenus":{"Me":"/about","Blog":"https://ohevan.com","Friends":"/friends"}},"Links":{"icon":"fa-regular fa-link","submenus":{"Link1":"/link1","Link2":"/link2","Link3":"/link3"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"welcome to lee's blog","show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"relative","excerpt_length":150,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":5}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/lit.png" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                lee&#39;s seclab
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   target="_blank" rel="noopener" href="https://status.ohevan.com/"
+                                        >
+                                    <i class="fa-regular fa-chart-bar fa-fw"></i>
+                                    STATUS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/about">
+                                                    ME
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://ohevan.com">
+                                                    BLOG
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="/friends">
+                                                    FRIENDS
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    LINKS
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/link1">
+                                                    LINK1
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="/link2">
+                                                    LINK2
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="/link3">
+                                                    LINK3
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           target="_blank" rel="noopener" href="https://status.ohevan.com/"
+                        >
+                            <span>
+                                STATUS
+                            </span>
+                            
+                                <i class="fa-regular fa-chart-bar fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-About"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-About">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/about">ME</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://ohevan.com">BLOG</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/friends">FRIENDS</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Links"
+                        >
+                            <span>
+                                LINKS
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Links">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/link1">LINK1</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/link2">LINK2</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/link3">LINK3</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">cat命令注入绕过检测规则的自动化生成</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/headshots.png">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">lee</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-07-20</span>
+        <span class="mobile">2026-07-20</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-07-20 14:45:25</span>
+            <span class="mobile">2026-07-20 14:45:25</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<meta name="referrer" content="no-referrer"/>
+# CRSRuleMiner
+——针对cat命令的CRS规则挖掘
+
+<blockquote>
+<p>说明：文字页保留原始分页文本，图页嵌入原图。</p>
+</blockquote>
+<h2 id="目录与项目简介"><a href="#目录与项目简介" class="headerlink" title="目录与项目简介"></a>目录与项目简介</h2><div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">CRSRuleMiner</span><br><span class="line">——针对cat命令的CRS规则挖掘</span><br><span class="line">目录：</span><br><span class="line">零：项目简介</span><br><span class="line">一：开发环境</span><br><span class="line">二：整体项目架构及文件说明</span><br><span class="line">三：主要功能</span><br><span class="line">- 核心目标</span><br><span class="line">- 功能模块</span><br><span class="line">- 评测体系</span><br><span class="line">四：核心代码</span><br><span class="line">- 自研变种（generate_variants.py）</span><br><span class="line">- 聚类（cluster_training_set.py）</span><br><span class="line">- 规则投票（vote_cluster_regex.py）</span><br><span class="line">- WAF运行时验证（waf_probe.py）</span><br><span class="line">五：实验结果</span><br><span class="line">- 聚类阶段</span><br><span class="line">- 规则投票阶段</span><br><span class="line">- 规则压缩对比</span><br><span class="line">- 冻结一次、只测一次的公共来源hold-out</span><br><span class="line">- 误报与边界测试</span><br><span class="line">- CRS运行时对比</span><br><span class="line">- 总结</span><br><span class="line">六：EXE打包与安装包制作</span><br><span class="line">七：AI 对话记录与项目历程</span><br><span class="line">零：项目简介：</span><br><span class="line">CRSRuleMiner 项目，是面向 OWASP CRS 的 cat 命令注入绕过规则自动挖掘项目。本项目从 165</span><br><span class="line">条真实攻击样本出发，通过自研变种生成、SBERT 语义聚类、HDBSCAN 密度分簇和 GPT5.5</span><br><span class="line">三次采样投票，自动归纳出 11 条紧凑检测规则。</span><br><span class="line">规则在 144 条真实攻击集上命中 129 条，在 5000 条混合日志上实现零误报，且通过 CRS 932</span><br><span class="line">剥离对比验证了独立净增量。项目完整覆盖了从样本收集、规则生成到 WAF</span><br><span class="line">运行时评测的工程闭环，并打包为桌面可执行程序，支持搜索、溯源与结果复核。</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="开发环境与背景说明"><a href="#开发环境与背景说明" class="headerlink" title="开发环境与背景说明"></a>开发环境与背景说明</h2><div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">注：</span><br><span class="line">OWASP 是研究和发布 Web 应用安全相关的知识、工具和标准的安全组织</span><br><span class="line">OWASP CRS（Core Rule Set）就是这个组织发布的一套 WAF</span><br><span class="line">防护规则集。它是全球最主流、应用最广泛的开源 WAF 规则库</span><br><span class="line">我的规则最终要补进 CRS 里，932是CRS规则集里面的规则文件编号，REQUEST-932：专门检测</span><br><span class="line">远程命令执行（RCE），管理着cat的命令注入，最终的11条规则就是要补在932这条链路上，我用 Git 把</span><br><span class="line">OWASP CRS 的官方仓库从 GitHub 克隆到了本地，然后切到 v4.28.0-dev 分支，存放在项目根目录的 .tmp_crs/</span><br><span class="line">文件夹里这样就可以直接引用 CRS 的原始规则文件、配置模板和回归测试框架，在本地 WSL2</span><br><span class="line">环境中加载、对比和验证自己的 11 条自定义规则。</span><br><span class="line">一：开发环境</span><br><span class="line">操作主机：win11</span><br><span class="line">Python：3.8.10</span><br><span class="line">虚拟环境：venv</span><br><span class="line">Web框架：FastAPI 0.124.0</span><br><span class="line">前端：Jinja2 模板 + 原生 HTML5 / CSS3 / JS</span><br><span class="line">可视化：Plotly.js 3.0.1</span><br><span class="line">机器学习：</span><br><span class="line">torch 2.4.1 （计算，推理）</span><br><span class="line">transformers 4.46.3（加载，管理，运行 all-minilm-l6-v2模型）</span><br><span class="line">SBERT(sentence-transformers 3.2.1)(把Token化的payload编码为384维向量）</span><br><span class="line">HDBSCAN 0.8.40（聚类向量）</span><br><span class="line">Pandas（辅助读取训练集，统计簇的大小，统计噪声）</span><br><span class="line">Numpy 1.24.4 (存向量）</span><br><span class="line">Scikit-learn 1.3.2 （算轮廓系数，做消融实验，评估聚类质量）</span><br><span class="line">LLM：GPT-5.5</span><br><span class="line">开发工具：</span><br><span class="line">codex / VS Code</span><br><span class="line">PyInstarller：打包项目为exe</span><br><span class="line">WSL2：提供apache进行modsecurity测试</span><br><span class="line">访问方式：CRSRuleMiner.exe</span><br><span class="line">二：整体项目架构及文件说明：</span><br><span class="line">C:\Users\pc\Desktop\changcheng\</span><br><span class="line">├── app.py #fastapi主程序</span><br><span class="line">├── CRSRuleMiner.spec #pyinstaller打包配置文件</span><br><span class="line">├── GreatWallCup.md</span><br><span class="line">├── PR_4664.md</span><br><span class="line">├── evidence_pack.md</span><br><span class="line">├── static\ #静态前端</span><br><span class="line">│ ├── workbench.css #工作台样式</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="整体项目架构及文件说明"><a href="#整体项目架构及文件说明" class="headerlink" title="整体项目架构及文件说明"></a>整体项目架构及文件说明</h2><div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">│ └── workbench.js #搜索，渲染，导出，溯源显示</span><br><span class="line">├── templates\ #前端样式</span><br><span class="line">│ └── index.html #主页面骨架</span><br><span class="line">├── scripts\ #脚本</span><br><span class="line">│ ├── audit_noise_samples.py #从 206 条噪声中抽 40 条做人工复核，并统计全量噪声的五分类分布</span><br><span class="line">│ ├── build_benign_context_docs.py #生成110条合法文本语境误报集</span><br><span class="line">│ ├── build_benign_mixed.py #生成 5000 条 Apache + Nginx 混合误报压力集</span><br><span class="line">│ ├── build_cat_in_context_probe.py #生成 117 条 cat 命令语境探针集</span><br><span class="line">│ ├── build_custom_crs_conf.py #生成加载 11 条自定义规则的 CRS 配置文件</span><br><span class="line">│ ├── build_custom_only_fp_sample.py #生成 500 条 custom-only 纯误报抽样集</span><br><span class="line">│ ├── build_independent_blind_eval.py #生成 64 条独立盲测集与 80 条跨命令试点</span><br><span class="line">│ ├── build_locked_eval.py #生成 359 条冻结泛化备选集与 5000 条基础误报日志集</span><br><span class="line">│ ├── check_env.py # 检查 Python 依赖和运行环境是否就绪</span><br><span class="line">│ ├── clean_locked_generalization.py # 按语义清洗原始备选集合为裸 payload</span><br><span class="line">│ ├── cluster_training_set.py #三步簇产出结果</span><br><span class="line">│ ├── compare_rule_versions.py # 规则压缩前后消融对比</span><br><span class="line">│ ├── crs_932_blocking_compare.sh # 只加载 932+949 规则，重跑冻结集</span><br><span class="line">│ ├── crs_932_compare.sh # 对比 CRS 基线与本项目补丁的命中差异</span><br><span class="line">│ ├── crs_932_plus_custom_compare.sh # CRS + 自定义规则联合测试</span><br><span class="line">│ ├── custom_only_500_probe.sh # 对 custom-only 纯误报抽样做 WAF 运行时探针</span><br><span class="line">│ ├── custom_only_compare.sh # 只加载自定义规则，单独测误报</span><br><span class="line">│ ├── extract_cluster_patterns.py #从每个簇提取正则骨架</span><br><span class="line">│ ├── freeze_eval_lockin.py</span><br><span class="line">│ ├── generate_variants.py #165→737条自研变种</span><br><span class="line">│ ├── rank_review_candidates.py</span><br><span class="line">│ ├── split_homologous_dataset.py #切分变种集为训练集和同源测试集</span><br><span class="line">│ ├── test_rules.py #离线正则脚本</span><br><span class="line">│ ├── vote_cluster_regex.py #gpt三次投票筛选</span><br><span class="line">│ ├── waf_probe.py # 向本地 WAF/CRS 发送批量请求并统计 blocked/allowed</span><br><span class="line">│ ├── waf_probe_detail.py # 逐行输出每条 payload 的详细拦截结果</span><br><span class="line">│ ├── wsl_inspect_crs_images.sh # 检查 CRS 临时目录中的镜像/引用内容</span><br><span class="line">│ ├── wsl_setup_apache_crs.sh # 在 WSL2 中搭建 Apache + ModSecurity + CRS 环境</span><br><span class="line">│ ├── wsl_test_baseline.sh # 测试基线 CRS 的冻结集表现</span><br><span class="line">│ └── wsl_trust_docker_proxy.sh # 给 Docker 代理证书装信任并重启 Docker</span><br><span class="line">├── dist\ # PyInstaller 打包输出目录</span><br><span class="line">│ ├── CRSRuleMiner.exe # 正式桌面交付产物</span><br><span class="line">│ └── .tmp_tools\workbench_state_cache.json # 工作台运行状态缓存</span><br><span class="line">├── ApacheLog-Dataset\ # Apache 日志数据集</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">├── .tmp_crs\ # 临时克隆的 OWASP CRS 源码，用于 WAF 测试</span><br><span class="line">├── .tmp_tools\ # 外部工具缓存（RegexGenerator、Regexploit 等）</span><br><span class="line">├── .claude\</span><br><span class="line">├── venv\ # Python 虚拟环境，所有第三方依赖安装在此</span><br><span class="line">├── real_samples.txt #原始165条样本集</span><br><span class="line">├── homologous_test.txt #从变种样本集中拿出的100条同源样本集</span><br><span class="line">├── locked_generalization_set.txt #359条备选样本集，冻结</span><br><span class="line">├── locked_generalization_real.txt #149条清洗备选样本集，用于离线测试</span><br><span class="line">├── locked_generalization_attack_real.txt #144条彻底清洗样本集，waf测试</span><br><span class="line">├── benign_logs.txt #误报集：apache5000条真实日志</span><br><span class="line">├── benign_logs_mixed.txt # 误报集：Apache + Nginx 混合日志 5000 条</span><br><span class="line">├── false_positive_logs_public.txt # 误报集：多源公开 HTTP 日志 2037 条</span><br><span class="line">├── false_positive_logs_stress.txt # 误报集：压力版日志 5200 条，含 200 条合法 cat 子串</span><br><span class="line">├── benign_context_docs.txt # 误报集：合法文本语境 110 条，刻意清掉 shell 语法痕迹</span><br><span class="line">├── cat_in_context_probe.txt # 误报集：cat 命令语境探针 117 条，逼近教程命令示例边界</span><br><span class="line">├── cluster_results.json # 聚类结果，含 63 个簇、206 条噪声和摘要统计</span><br><span class="line">├── voting_result.json # LLM 三次采样投票结果，记录每个簇的三次输出与采纳情况</span><br><span class="line">├── rule_compression_ablation.json # 15 条与 11 条规则的压缩消融对比数据</span><br><span class="line">├── crs_932_attack_result.json # REQUEST-932 + 949 only attack-only 结果</span><br><span class="line">├── crs_custom_attack_result.json # CRS + custom attack-only 结果</span><br><span class="line">├── custom_only_attack_result.json # custom-only 攻击样本实测结果</span><br><span class="line">├── custom_only_fp_500_result.json # custom-only 纯误报 500 条抽样实测结果</span><br><span class="line">├── frozen_independent_blind_cat_eval.txt# 冻结一次的公共来源 hold-out 副本，64 条</span><br><span class="line">├── frozen_independent_blind_manifest.json # 公共来源 hold-out 冻结清单与 SHA256</span><br><span class="line">├── frozen_independent_blind_result.json # 公共来源 hold-out 冻结实测结果</span><br><span class="line">├── frozen_homologous_test.txt # 冻结版同源测试集</span><br><span class="line">├── frozen_locked_generalization_real.txt # 冻结版泛化集副本</span><br><span class="line">├── frozen_benign_logs.txt # 冻结版误报集副本</span><br><span class="line">├── frozen_false_positive_logs_public.txt # 冻结版公开误报集副本</span><br><span class="line">├── frozen_false_positive_logs_stress.txt # 冻结版压力误报集副本</span><br><span class="line">├── frozen_rules_final_compact.txt # 冻结版最终规则副本</span><br><span class="line">├── locked_eval_manifest.json # 清洗后评测清单与来源统计</span><br><span class="line">├── locked_generalization_attack_manifest.json # attack-only 冻结集的剔除行和溯源说明</span><br><span class="line">├── evaluation_lockin_manifest.json # 冻结评测锁定清单，含 SHA256 与线数</span><br><span class="line">├── rules.txt # 早期手工基线规则，10 条（对比实验参照）</span><br><span class="line">├── rules_final.txt # 15 条阶段版最终规则（消融实验对照组）</span><br><span class="line">├── rules_final_compact.txt # 当前稳定可复核的紧凑规则集，11 条</span><br><span class="line">├── rules_targeted.txt # 针对特定样本收紧的规则版本，15 条</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">├── candidate_patterns.txt # 每簇候选模式骨架</span><br><span class="line">├── noise_audit_sample.txt # HDBSCAN 噪声抽样复核样本，40 条</span><br><span class="line">├── noise_audit_report.json # 噪声全量 206 条的五分类桶统计报告</span><br><span class="line">├── portability_probe_wget_curl.txt # 跨命令试点集，80 条，验证对 wget/curl 的迁移能力</span><br><span class="line">├── portability_mini_rules.txt # 跨命令试点用的 3 条最小可用规则</span><br><span class="line">├── regexgenerator_best_java.txt # RegexGenerator 输出的最优 Java 正则，1 条</span><br><span class="line">├── regexgenerator_dataset.json # RegexGenerator flagging 数据集</span><br><span class="line">├── regexgenerator_flagging_dataset.json ## RegexGenerator flagging 数据集</span><br><span class="line">├── regexgenerator_flagging_dataset_smallneg.json # 小负样本版 flagging 数据集</span><br><span class="line">├── regexgen_small.json # 小规模 RegexGenerator 结果样本</span><br><span class="line">├── OS-Command-Injection-Unix-Payloads.txt # 公开 Unix 命令注入 payload 集合</span><br><span class="line">├── pentest-book-command-injection.md # 渗透测试命令注入参考笔记</span><br><span class="line">├── portswigger-command-injection-attacker.md # PortSwigger shelling 命令注入资料整理</span><br><span class="line">├── nginx_access_sample.log # Nginx 访问日志样本，37 行</span><br><span class="line">├── nginx_logs_raw.txt # 原始 Nginx 日志，51462 行</span><br><span class="line">├── Apache_2k.log # Apache 访问日志原始样本，2000 行</span><br><span class="line">└── ApacheLog-Dataset/src/data/promjetDec2021.log # 原始 Apache 访问日志，137510 行</span><br><span class="line">项目依赖：</span><br><span class="line">FastAPI 0.124.4/Uvicorn 0.33.0：Web 服务与接口层。</span><br><span class="line">sentence-transformers 3.2.1：SBERT 文本向量化。</span><br><span class="line">transformers 4.46.3：底层模型加载与管理。</span><br><span class="line">torch 2.4.1：推理与张量计算。</span><br><span class="line">hdbscan 0.8.40：密度聚类。</span><br><span class="line">scikit-learn 1.3.2：评估、消融和统计分析。</span><br><span class="line">openai 2.2.0：LLM 投票生成规则。</span><br><span class="line">numpy 1.24.4/pandas 2.0.3：数据处理与汇总。</span><br><span class="line">pyinstaller 6.14.1：桌面版打包。</span><br><span class="line">httpx 0.28.1：OpenAI 兼容接口调用。</span><br><span class="line">4. 配置API密钥</span><br><span class="line">创建 .env 文件，写入：OPENAI_API_KEY=(GPT5.5)</span><br><span class="line">三：主要功能</span><br><span class="line">核心目标</span><br><span class="line">本项目围绕有关cat命令的绕过注入，该项目以真实样本为基准，自动产出检测规则，生成的规则可维护，可</span><br><span class="line">复现，并尽量把规则整理成 CRS 风格SecRule，为后续 PR 集成做准备</span><br><span class="line">2. 功能模块</span><br><span class="line">变种生成—generate_variants.py：从 165 条真实收集的catpayload 生成 737 条自研变种，覆盖 10 种绕过维度</span><br><span class="line">数据切分—split_homologous_dataset.py：从混合池中切出 100 条同源测试集，剩余作为训练集</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="主要功能与核心代码"><a href="#主要功能与核心代码" class="headerlink" title="主要功能与核心代码"></a>主要功能与核心代码</h2><div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">聚类—cluster_training_set.py： Token 化 → SBERT 向量化 → HDBSCAN 聚类，产出 63 个簇 + 206 条噪声</span><br><span class="line">骨架提取—extract_cluster_patterns.py： 从每个簇提取候选正则骨架</span><br><span class="line">规则投票—vote_cluster_regex.py：GPT 单模型三次采样投票，三次一致才进入候选集，得到15条</span><br><span class="line">规则压缩—人工审核 + 消融对比： 从 15 条压缩至 11 条紧凑规则</span><br><span class="line">离线测试—test_rules.py：验证正则规则是否有效，统计命中/漏报/误报</span><br><span class="line">评测集构建—build_*.py：（7 个脚本） 生成合法文本语境集、cat 语境探针、混合日志集、独立盲测集等</span><br><span class="line">噪声审计—audit_noise_samples.py： 对 206</span><br><span class="line">条噪声做五分类（类攻击，元数据，html碎片，文本）统计和人工抽样复核</span><br><span class="line">WAF 运行时—waf_probe.py： 在 WSL2 + Apache + ModSecurity + CRS 中实测拦截率</span><br><span class="line">打包—CRSRuleMiner.spec：PyInstaller 打包成 exe，双击启动桌面工作台</span><br><span class="line">3. 评测体系</span><br><span class="line">同源测试—100 条：验证同分布覆盖能力</span><br><span class="line">冻结泛化（离线）—149：离线正则回归测试</span><br><span class="line">冻结泛化（WAF）—144 条：attack-only 真实 WAF 环境拦截率</span><br><span class="line">独立盲测—64 条：验证对新来源的泛化能力</span><br><span class="line">跨命令试点—80 条：验证对 wget/curl 的迁移能力</span><br><span class="line">合法文本语境—110 条：测纯 prose 文本是否被误杀</span><br><span class="line">cat 语境探针—117 条：测教程命令示例是否被误判</span><br><span class="line">误报压力集—5000+5200+2037 条：真实日志大规模误报测试</span><br><span class="line">custom-only 误报—500 条：剥离 CRS 其他规则后的纯净误报测试</span><br><span class="line">CRS 932 剥离—90/144 vs 129/144：量化自定义规则的净增量</span><br><span class="line">四：核心代码</span><br><span class="line">1. 自研变种（generate_variants.py）</span><br><span class="line">主要作用：</span><br><span class="line">围绕 10 种维度生成变种：变量插入、大小写混淆、完整路径替换、IFS及其变种替代、路径斜杠变种、通配</span><br><span class="line">符变种、引号拆分、变量拼接、二层组合、三层组合。每条原始 payload 随机选取 4-5 种适用规则生成变种，</span><br><span class="line">主要库为：</span><br><span class="line">random打乱顺序，随机选取，re定位cat位置，pathlib读写输入输出文件等...</span><br><span class="line">Seed=20260611。</span><br><span class="line">举例空格变种函数：</span><br><span class="line">应用顺序：</span><br><span class="line">尝试次数：</span><br><span class="line">运行变种脚本，在165条真实数据的基础上生成737条变种数据</span><br><span class="line">2. 聚类（cluster_training_set.py）</span><br><span class="line">主要作用：</span><br><span class="line">聚类函数分为三步：</span><br><span class="line">将训练集中的 payload 按 shell 元字符（特殊符号）切分为 token，用 all-MiniLM-L6-v2 编码为 384</span><br><span class="line">维语义向量，再通过 HDBSCAN 密度聚类自动发现簇，并输出簇结果和噪声列表。</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">主要库为：</span><br><span class="line">re 按 shell 元字符正则分词，sentence-transformers 将 token 序列编码为语义向量，hdbscan 密度聚类，numpy</span><br><span class="line">承载嵌入矩阵，json 输出聚类结果，argparse 解析命令行参数，pathlib 读写文件。</span><br><span class="line">分词正则+Token化：</span><br><span class="line">all-MiniLM-L6-v2 编码Token化的payload为 384 维语义向量：</span><br><span class="line">（解决SSL证书问题：从 Hugging Face</span><br><span class="line">下载模型时，系统要验证SSL证书，但容易验证失败，所以绕过验证，强制信任服务器）</span><br><span class="line">聚类函数：</span><br><span class="line">其中调入两个关键HDBSCAN参数，min_cluster_size=5表示一个簇至少5个成员，min_sample=k（1）</span><br><span class="line">（k值，表示以一个点周围有k个点来判断他是否可以成为中心，k=1这里就会让聚类很敏感，不易把边缘样</span><br><span class="line">本当成噪声处理掉）</span><br><span class="line">聚类结果：</span><br><span class="line">737 样本 → 63 簇 + 206 噪声，噪声率 27.95%，轮廓系数 0.4549，输出cluster_results.json，记录</span><br><span class="line">3. 规则投票（vote_cluster_regex.py）</span><br><span class="line">主要作用：</span><br><span class="line">对每个簇，将簇内 payload 样本发送给 LLM，独立调用 3</span><br><span class="line">次gpt5.5（temperature=0.7），要求每次归纳一条正则表达式。仅当 3</span><br><span class="line">次输出完全一致时，该候选规则才被接受；不一致的簇标记为投票分歧，暂不收录。</span><br><span class="line">主要库为：</span><br><span class="line">openai 调用 GPT 接口生成规则，httpx 自定义 HTTP 客户端（禁用 SSL 验证、支持自定义 base_url），json</span><br><span class="line">读写聚类结果和投票输出，re 清理 LLM 输出中的 markdown 标记，os 读取环境变量中的 API Key，time</span><br><span class="line">指数退避重试，argparse 解析命令行参数。</span><br><span class="line">调用模型以及参数：</span><br><span class="line">My Prompt:：</span><br><span class="line">投票逻辑：</span><br><span class="line">调用+异常重试：</span><br><span class="line">调用 GPT 拿正则，失败了自动重试最多 3</span><br><span class="line">次，每次间隔越来越长（1秒→2秒→4秒），三次全失败就抛异常。</span><br><span class="line">4. WAF 运行时验证（waf_probe.py）</span><br><span class="line">主要作用：</span><br><span class="line">向本地 WSL2 中运行的 Apache + ModSecurity + CRS 发送真实 HTTP 请求，逐条携带攻击</span><br><span class="line">payload，根据返回的 HTTP 状态码判断是否被 WAF 拦截（4xx/5xx 视为拦截，2xx/3xx 视为放行），统计</span><br><span class="line">blocked/allowed 数量</span><br><span class="line">主要库为：</span><br><span class="line">urllib.request 发送 HTTP GET 请求，urllib.parse 将 payload 编码为 URL 查询参数，sys 读取命令行传入的目标</span><br><span class="line">URL 和 payload 文件路径。</span><br><span class="line">请求构造：</span><br><span class="line">拦截判定逻辑：</span><br><span class="line">运行方式：</span><br><span class="line">python waf_probe.py http://127.0.0.1:8080 locked_generalization_attack_real.txt</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="实验结果与打包"><a href="#实验结果与打包" class="headerlink" title="实验结果与打包"></a>实验结果与打包</h2><div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">输出示例：</span><br><span class="line">URL: http://127.0.0.1:8080</span><br><span class="line">Total: 144</span><br><span class="line">Blocked: 129</span><br><span class="line">Allowed: 15</span><br><span class="line">Allowed samples:</span><br><span class="line">- line 26: [200] cat%20/et%5C%0Ac/pa%5C%0Asswd</span><br><span class="line">五：实验结果</span><br><span class="line">1. 聚类阶段</span><br><span class="line">输入样本：737</span><br><span class="line">聚类数：63</span><br><span class="line">噪声点：206</span><br><span class="line">轮廓系数：0.454909</span><br><span class="line">噪声抽审结果：人为观察206 个</span><br><span class="line">噪声里，符号混淆的—153个、像真命令的—40个，html标签—9个、普通文本—4</span><br><span class="line">观察噪声得到结论：206 条噪声里，只有 13 条是真正的废物。所以噪声不能直接扔，值得人工少选</span><br><span class="line">2. 规则投票阶段</span><br><span class="line">模型：gpt-5.5</span><br><span class="line">Temperature：0.7</span><br><span class="line">每簇采样：3 次</span><br><span class="line">处理簇数：63</span><br><span class="line">一致通过簇数：0</span><br><span class="line">一致拒绝簇数：63</span><br><span class="line">也就是说，三次采样投票没有直接产出“完全一致”的簇级规则，后面还是靠人工筛选和压缩落地。</span><br><span class="line">说明！LLM在随机性不同的时候，无法自动的产出稳定的规则！</span><br><span class="line">3. 规则压缩对比</span><br><span class="line">对比 rules_final.txt（15条） 和 rules_final_compact.txt（11条）：</span><br><span class="line">评测集</span><br><span class="line">测什么</span><br><span class="line">15 条</span><br><span class="line">11 条</span><br><span class="line">变化</span><br><span class="line">同源集（100条）</span><br><span class="line">训练分布内的变种</span><br><span class="line">91/100</span><br><span class="line">100/100</span><br><span class="line">从差9个到全过</span><br><span class="line">冻结泛化攻击子集（144条）</span><br><span class="line">真实攻击</span><br><span class="line">139/144</span><br><span class="line">144/144</span><br><span class="line">从差5个到全过</span><br><span class="line">独立盲测（64条）</span><br><span class="line">全新来源</span><br><span class="line">62/64</span><br><span class="line">62/64</span><br><span class="line">无变化</span><br><span class="line">结论：</span><br><span class="line">11 条紧凑规则比 15 条更稳；</span><br><span class="line">4. 冻结一次、只测一次的公共来源 hold-out</span><br><span class="line">公共来源hold-out（64条）和训练链路完全无关，是 6</span><br><span class="line">个新来源的独立样本。冻结后只测一次，也不再回头调参。这组 63/64 是整个项目里最接近独立盲测的证据</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">，说明规则不是靠记住训练数据得分，而是真正学到了绕过家族的通用模式。</span><br><span class="line">来自frozen_independent_blind_result.json) 的结果：</span><br><span class="line">64 条，63 条命中，1 条漏报，命中率 98.44%</span><br><span class="line">漏掉的那条是：</span><br><span class="line">cat%20/et%5C%0Ac/pa%5C%0Asswd</span><br><span class="line">5. 误报与边界测试</span><br><span class="line">纯误报集（一点不能报错）：</span><br><span class="line">benign_context_docs.txt</span><br><span class="line">110</span><br><span class="line">条</span><br><span class="line">纯文字文章文档，</span><br><span class="line">教程、说明书</span><br><span class="line">0</span><br><span class="line">误</span><br><span class="line">报</span><br><span class="line">规则完全不碰纯文字</span><br><span class="line">custom_only_logs_500.txt</span><br><span class="line">500</span><br><span class="line">条</span><br><span class="line">混合日志抽样，只</span><br><span class="line">测结论规则</span><br><span class="line">0</span><br><span class="line">误</span><br><span class="line">报</span><br><span class="line">剥离 CRS 其他规则后的纯净结果</span><br><span class="line">false_positive_logs_stress.txt</span><br><span class="line">5200</span><br><span class="line">条</span><br><span class="line">真实访问日志压力</span><br><span class="line">集</span><br><span class="line">0</span><br><span class="line">误</span><br><span class="line">报</span><br><span class="line">15 条版本曾误拦 200 条，11 条压到</span><br><span class="line">0，体现了压缩效果</span><br><span class="line">边界探针集：</span><br><span class="line">（来源于： man7.org 的 CAT(1) 手册页格式、FreeCodeCamp 的教学风格、GeeksforGeeks 的结构化示例等...）</span><br><span class="line">cat_cat_in_context_probe.txt</span><br><span class="line">117</span><br><span class="line">条</span><br><span class="line">Cat攻击payload</span><br><span class="line">117条拦住了1</span><br><span class="line">15个</span><br><span class="line">15 条版本曾误拦 200 条，11 条压到</span><br><span class="line">0，体现了压缩效果</span><br><span class="line">说明规则对命令模式高度敏感</span><br><span class="line">6. CRS 运行时对比</span><br><span class="line">C:\Users\pc\Desktop\coreruleset\rules\REQUEST-932-APPLICATION-ATTACK-RCE.conf</span><br><span class="line">在 WSL2 的 Apache + ModSecurity + CRS 真实环境中，用 144 条 attack-only 冻结泛化集逐条发送 HTTP</span><br><span class="line">请求，统计 WAF 实际拦截数。</span><br><span class="line">运行口径</span><br><span class="line">文件</span><br><span class="line">命中</span><br><span class="line">含义</span><br><span class="line">仅 REQUEST-932 + REQUEST-949</span><br><span class="line">crs_932_attack_result.json</span><br><span class="line">90/144</span><br><span class="line">只加载 CRS</span><br><span class="line">自带的命令注入规则，过滤 90 条</span><br><span class="line">custom-only</span><br><span class="line">custom_only_attack_result.json</span><br><span class="line">98/144</span><br><span class="line">只加载自定义的 11 条规则，过滤</span><br><span class="line">98 条</span><br><span class="line">CRS + custom</span><br><span class="line">crs_custom_attack_result.json</span><br><span class="line">129/144</span><br><span class="line">两者并行，过滤 129 条</span><br><span class="line">说明：自定义规则确实带来了增量，而且不是只在离线评测里好看</span><br><span class="line">综上6个结论：</span><br><span class="line">聚类阶段能把 737 条样本压成 63 个家族；</span><br><span class="line">投票阶段没有“自动全通”，说明后面人工筛选是必要的；</span><br><span class="line">最终 11 条紧凑规则是当前最稳的版本；</span><br><span class="line">纯误报集里已经做到 0；</span><br><span class="line">真实运行时对 CRS 基线有明显增量。</span><br><span class="line">exe打包以及setup打包</span><br><span class="line">打包工具：PyInstaller 6.14.1把项目压缩为CRSRuleMiner.exe</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">打包方式：CRSRuleMiner.spec 配置文件，一键打包</span><br><span class="line">入口：app.py</span><br><span class="line">资源：static/ + templates/ 一起打进包</span><br><span class="line">输出：dist\CRSRuleMiner.exe</span><br><span class="line">console=False（启动不弹黑窗）</span><br><span class="line">启动流程：双击 exe → 自动拉起 FastAPI 本地服务（端口 8000）→ 打开桌面窗口 →</span><br><span class="line">搜索、预览、导出全能用。关掉窗口，后台服务自动退出。</span><br><span class="line">6.19补：</span><br><span class="line">之前的安装包只带了单个exe，安装后项目文件不完整。</span><br><span class="line">现在改为先把根目录中需要交付的文件复制到installer\payload\，再由 Inno Setup 递归打包。</span><br><span class="line">打包时排除了build/、dist/、venv/、__pycache__/、installer/等构建目录，避免把临时产物一并带入。</span><br><span class="line">工作台包含内容：</span><br><span class="line">主界面展示：</span><br><span class="line">分为左中右布局，整体弹窗以及风格参照apple以及个人喜好</span><br><span class="line">左：流程介绍，核心数据，数据一览，运行环境</span><br><span class="line">中：概况介绍，重要数据，结果按钮，报告摘录</span><br><span class="line">右：高级搜索，搜索结果</span><br><span class="line">高级搜索框：搜 payload、搜文件名、搜数字（如 63/64、CRS），支持按范围、文件类型、类别三层筛选</span><br><span class="line">中间有两个按钮——聚类结果以及复现流程，可以点击跳出独立的内容弹窗</span><br><span class="line">点击复现流程，可以在复现过程中快速核对每一步是怎么做的</span><br><span class="line">点击聚类结果：点击后打开独立弹窗，里面显示了变种之后的总样本数，划出同源样本集之后产生的簇数，</span><br><span class="line">噪声书，以及噪声率，噪声样本示例，簇分布，簇分布可以展开</span><br><span class="line">簇展开</span><br><span class="line">噪声示例</span><br><span class="line">文件展示：文件一览以及搜索可以查看每一个文件，以及包含该文件的文件名，文件路径，类别，类型，行</span><br><span class="line">数，摘要，右上角以及Esc均可关闭</span><br><span class="line">注意：exe 依赖本地文件完整存在，如果数据文件缺失，界面显示为空，不会伪造内容。下载后首次启动有</span><br><span class="line">索引时间，属于正常扫描开销。</span><br><span class="line">最上方有刷新索引按钮，如果后期文件更新，直接刷新索引就可以展示当前最新文件，</span><br><span class="line">七：AI 对话记录与项目历程</span><br><span class="line">在项目开发过程中使用 AI 助手（gpt5.5，cluadecode，deepseek，claude.ai）辅助：s</span><br><span class="line">因为整个方案讨论的过程，文字长度，以及时间太太太太太冗长，只能贴一些重要部分，中间经历了一些修</span><br><span class="line">改</span><br><span class="line">比如把第一版已经做好的K-means+pca降维改成了HDBSCAN聚类</span><br><span class="line">比如第一版做出来的项目关注的命令过于泛散，深度不够，最后只能大改专注于一个cat命令，重新写</span><br><span class="line">比如第一次贸然的提交了crs社区的pr因为格式不对不够详细而被社区审核者驳回</span><br><span class="line">比如</span><br><span class="line">（第一版文章）</span><br><span class="line">（第一次提交pr）</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Ai在代码实现方面的确很强，但是创新方面与真正决策还是不如人意，而且deepseek的专家模式真的难用至</span><br><span class="line">极，知识库只截至于2025年5月，对于新发展的内容判断很容易出错！</span><br><span class="line">初代大纲：</span><br><span class="line">以下是我们的一些对话截图：</span><br><span class="line">Claude在收集数据方面帮我搜索了不仅限于国内的catpayload来源:</span><br><span class="line">Claudecode拉去下载文章，提取payload，并进行清洗去重：</span><br><span class="line">但是幻觉严重，必须进行去重：</span><br><span class="line">DEEPSEEK:</span><br><span class="line">帮我真正的理解项目，以及新的名词（消融实验，聚类，机器学习，混淆矩阵等等...)，帮我真正理解codex</span><br><span class="line">的代码，算法，调整提交pr的格式</span><br><span class="line">但是有时候会犯错</span><br><span class="line">帮我正确调用api：</span><br><span class="line">Codex（代码主力，修bug主力）：</span><br><span class="line">部分prompt是与deepseek交流后生成的，在写prompt的时候避免ai幻觉，需要反复强调真实</span><br><span class="line">现阶段完结撒花！~感谢观看</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="页面-12"><a href="#页面-12" class="headerlink" title="页面 12"></a>页面 12</h2><div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">???????</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="图示"><a href="#图示" class="headerlink" title="图示"></a>图示</h2><h3 id="第-13-页"><a href="#第-13-页" class="headerlink" title="第 13 页"></a>第 13 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_2_1_system_architecture.png"
+                      alt="figure_2_1_system_architecture.png"
+                ><figcaption>figure_2_1_system_architecture.png</figcaption></figure></p>
+<p><em>figure_2_1_system_architecture.png</em></p>
+<h3 id="第-14-页"><a href="#第-14-页" class="headerlink" title="第 14 页"></a>第 14 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_2_2_rule_workbench_flow.png"
+                      alt="figure_2_2_rule_workbench_flow.png"
+                ><figcaption>figure_2_2_rule_workbench_flow.png</figcaption></figure></p>
+<p><em>figure_2_2_rule_workbench_flow.png</em></p>
+<h3 id="第-15-页"><a href="#第-15-页" class="headerlink" title="第 15 页"></a>第 15 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_2_4_software_flow_vertical.png"
+                      alt="figure_2_4_software_flow_vertical.png"
+                ><figcaption>figure_2_4_software_flow_vertical.png</figcaption></figure></p>
+<p><em>figure_2_4_software_flow_vertical.png</em></p>
+<h3 id="第-16-页"><a href="#第-16-页" class="headerlink" title="第 16 页"></a>第 16 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_3_1_test_closure.png"
+                      alt="figure_3_1_test_closure.png"
+                ><figcaption>figure_3_1_test_closure.png</figcaption></figure></p>
+<p><em>figure_3_1_test_closure.png</em></p>
+<h3 id="第-17-页"><a href="#第-17-页" class="headerlink" title="第 17 页"></a>第 17 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_3_2_waf_environment.png"
+                      alt="figure_3_2_waf_environment.png"
+                ><figcaption>figure_3_2_waf_environment.png</figcaption></figure></p>
+<p><em>figure_3_2_waf_environment.png</em></p>
+<h3 id="第-18-页"><a href="#第-18-页" class="headerlink" title="第 18 页"></a>第 18 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_3_2_waf_results.png"
+                      alt="figure_3_2_waf_results.png"
+                ><figcaption>figure_3_2_waf_results.png</figcaption></figure></p>
+<p><em>figure_3_2_waf_results.png</em></p>
+<h3 id="第-19-页"><a href="#第-19-页" class="headerlink" title="第 19 页"></a>第 19 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_3_3_runtime_compare.png"
+                      alt="figure_3_3_runtime_compare.png"
+                ><figcaption>figure_3_3_runtime_compare.png</figcaption></figure></p>
+<p><em>figure_3_3_runtime_compare.png</em></p>
+<h3 id="第-20-页"><a href="#第-20-页" class="headerlink" title="第 20 页"></a>第 20 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_3_4_baseline_gain.png"
+                      alt="figure_3_4_baseline_gain.png"
+                ><figcaption>figure_3_4_baseline_gain.png</figcaption></figure></p>
+<p><em>figure_3_4_baseline_gain.png</em></p>
+<h3 id="第-21-页"><a href="#第-21-页" class="headerlink" title="第 21 页"></a>第 21 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_3_5_boundary_pressure.png"
+                      alt="figure_3_5_boundary_pressure.png"
+                ><figcaption>figure_3_5_boundary_pressure.png</figcaption></figure></p>
+<p><em>figure_3_5_boundary_pressure.png</em></p>
+<h3 id="第-22-页"><a href="#第-22-页" class="headerlink" title="第 22 页"></a>第 22 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_4_1_cluster_summary.png"
+                      alt="figure_4_1_cluster_summary.png"
+                ><figcaption>figure_4_1_cluster_summary.png</figcaption></figure></p>
+<p><em>figure_4_1_cluster_summary.png</em></p>
+<h3 id="第-23-页"><a href="#第-23-页" class="headerlink" title="第 23 页"></a>第 23 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_4_2_stability_filter.png"
+                      alt="figure_4_2_stability_filter.png"
+                ><figcaption>figure_4_2_stability_filter.png</figcaption></figure></p>
+<p><em>figure_4_2_stability_filter.png</em></p>
+<h3 id="第-24-页"><a href="#第-24-页" class="headerlink" title="第 24 页"></a>第 24 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_4_3_frozen_loop.png"
+                      alt="figure_4_3_frozen_loop.png"
+                ><figcaption>figure_4_3_frozen_loop.png</figcaption></figure></p>
+<p><em>figure_4_3_frozen_loop.png</em></p>
+<h3 id="第-25-页"><a href="#第-25-页" class="headerlink" title="第 25 页"></a>第 25 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_4_4_workbench_finalize.png"
+                      alt="figure_4_4_workbench_finalize.png"
+                ><figcaption>figure_4_4_workbench_finalize.png</figcaption></figure></p>
+<p><em>figure_4_4_workbench_finalize.png</em></p>
+<h3 id="第-26-页"><a href="#第-26-页" class="headerlink" title="第 26 页"></a>第 26 页</h3><p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/figure_4_5_crs_gain.png"
+                      alt="figure_4_5_crs_gain.png"
+                ><figcaption>figure_4_5_crs_gain.png</figcaption></figure></p>
+<p><em>figure_4_5_crs_gain.png</em></p>
+<h2 id="作品原创性声明"><a href="#作品原创性声明" class="headerlink" title="作品原创性声明"></a>作品原创性声明</h2><div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">?????</span><br><span class="line">附件3：</span><br><span class="line">作品原创性声明</span><br><span class="line">本参赛团队郑重声明：本团队在第十九届全国大学生信息安全竞赛（作品赛）暨第三届“长城杯”网数智安</span><br><span class="line">全大赛（作品赛）所提交的作品 RuleMiner——面向WAF的检测规则自动生成化系统 ，是团队同学在指导老</span><br><span class="line">师的指导下，独立进行研究工作所取得的真实研究成果，从创意到实现均为原创。除作品报告中已经标注引</span><br><span class="line">用的内容外，本参赛作品不包含任何其他个人或集体已经发表或撰写过的研究成果。对本作品的研究做出贡</span><br><span class="line">献的个人和集体，均已在报告中以明确方式标明。本团队及作品严格遵守竞赛组委会颁布的参赛要求，并且</span><br><span class="line">无侵害他人合法权益行为和违反相关法律法规行为。本团队对该作品拥有完整、合法的著作权及其他相关权</span><br><span class="line">益。本声明的法律后果由本参赛团队承担。</span><br><span class="line">作品参赛团队组员（签名）：</span><br><span class="line">2026年 6 月29日</span><br></pre></td></tr></table></figure></div>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> cat命令注入绕过检测规则的自动化生成</li>
+        <li><strong>Author:</strong> lee</li>
+        <li><strong>Created at
+                :</strong> 2026-07-20 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-07-20 14:45:25
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://leei.site/2026/07/20/cat命令注入绕过检测规则的自动化生成/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/07/20/winXP%E6%A0%88%E6%BA%A2%E5%87%BA%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">winXP栈溢出漏洞深度学习</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/02/05/dc9%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">dc9打靶报告</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.js';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">cat命令注入绕过检测规则的自动化生成</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E4%B8%8E%E9%A1%B9%E7%9B%AE%E7%AE%80%E4%BB%8B"><span class="nav-text">目录与项目简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E4%B8%8E%E8%83%8C%E6%99%AF%E8%AF%B4%E6%98%8E"><span class="nav-text">开发环境与背景说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84%E5%8F%8A%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="nav-text">整体项目架构及文件说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD%E4%B8%8E%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="nav-text">主要功能与核心代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E4%B8%8E%E6%89%93%E5%8C%85"><span class="nav-text">实验结果与打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B5%E9%9D%A2-12"><span class="nav-text">页面 12</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%A4%BA"><span class="nav-text">图示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-13-%E9%A1%B5"><span class="nav-text">第 13 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-14-%E9%A1%B5"><span class="nav-text">第 14 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-15-%E9%A1%B5"><span class="nav-text">第 15 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-16-%E9%A1%B5"><span class="nav-text">第 16 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-17-%E9%A1%B5"><span class="nav-text">第 17 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-18-%E9%A1%B5"><span class="nav-text">第 18 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-19-%E9%A1%B5"><span class="nav-text">第 19 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-20-%E9%A1%B5"><span class="nav-text">第 20 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-21-%E9%A1%B5"><span class="nav-text">第 21 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-22-%E9%A1%B5"><span class="nav-text">第 22 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-23-%E9%A1%B5"><span class="nav-text">第 23 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-24-%E9%A1%B5"><span class="nav-text">第 24 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-25-%E9%A1%B5"><span class="nav-text">第 25 页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-26-%E9%A1%B5"><span class="nav-text">第 26 页</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E5%93%81%E5%8E%9F%E5%88%9B%E6%80%A7%E5%A3%B0%E6%98%8E"><span class="nav-text">作品原创性声明</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-star ffa-star fa-star" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">lee</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        19 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Search..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+    
+<script src="/js/build/libs/pangu.min.js"></script>
+
+<script src="/js/build/plugins/pangu.js"></script>
+
+
+
+
+	
+	<div id="aplayer"></div>
+
+<script src="/js/build/libs/APlayer.min.js"></script>
+
+
+<script src="/js/build/plugins/aplayer.js"></script>
+
+
+	
+</body>
+<script type="text/javascript" src="\js\snow.js"></script>
+
+</html>
