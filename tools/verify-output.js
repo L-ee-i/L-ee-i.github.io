@@ -18,6 +18,8 @@ const requiredOutputs = [
   'atom.xml'
 ];
 
+let publicFiles;
+
 const walk = (directory) => fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
   const fullPath = path.join(directory, entry.name);
   return entry.isDirectory() ? walk(fullPath) : [fullPath];
@@ -31,17 +33,17 @@ const resolvePublicPath = (pathname) => {
     decodedPath = pathname;
   }
 
-  const relativePath = decodedPath.replace(/^\/+/, '');
-  const directPath = path.join(publicRoot, relativePath);
-  const candidates = [directPath];
+  const relativePath = decodedPath.replace(/^\/+/, '').replaceAll('\\', '/');
+  const candidates = [relativePath];
 
-  if (pathname.endsWith('/') || fs.existsSync(directPath) && fs.statSync(directPath).isDirectory()) {
-    candidates.push(path.join(directPath, 'index.html'));
+  if (pathname.endsWith('/')) {
+    candidates.push(`${relativePath}index.html`);
   } else if (!path.extname(relativePath)) {
-    candidates.push(path.join(directPath, 'index.html'), `${directPath}.html`);
+    candidates.push(`${relativePath}/index.html`, `${relativePath}.html`);
   }
 
-  return candidates.some((candidate) => fs.existsSync(candidate) && fs.statSync(candidate).isFile());
+  // A Set comparison remains case-sensitive on Windows, matching GitHub Pages.
+  return candidates.some((candidate) => publicFiles.has(candidate.replace(/^\/+/, '')));
 };
 
 if (!fs.existsSync(publicRoot)) {
@@ -49,8 +51,10 @@ if (!fs.existsSync(publicRoot)) {
   process.exit(1);
 }
 
-const missingRequired = requiredOutputs.filter((relativePath) => !fs.existsSync(path.join(publicRoot, relativePath)));
-const htmlFiles = walk(publicRoot).filter((filePath) => filePath.endsWith('.html'));
+const allFiles = walk(publicRoot);
+publicFiles = new Set(allFiles.map((filePath) => path.relative(publicRoot, filePath).split(path.sep).join('/')));
+const missingRequired = requiredOutputs.filter((relativePath) => !publicFiles.has(relativePath));
+const htmlFiles = allFiles.filter((filePath) => filePath.endsWith('.html'));
 const missingLinks = new Map();
 const placeholderReferences = [];
 
