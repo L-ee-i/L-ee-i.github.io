@@ -177,11 +177,20 @@ home_banner:
     style: center # default, reverse, center
     # Social links
     links:
-      - icon: github
+      - name: GitHub
+        icon: github
         url: https://github.com/L-ee-i
-      - icon: zhihu
-        url: https://www.zhihu.com/people/yu-gan-86-73/answers
-      - icon: email
+      - name: 知乎
+        icon: fa-brands fa-zhihu
+        url: https://www.zhihu.com/people/yu-gan-86-73
+      - name: 小红书
+        icon: fa-solid fa-book-open
+        url: https://xhslink.cn/o/4YwzlDNEZIG
+      - name: CSDN
+        icon: fa-solid fa-code
+        url: https://blog.csdn.net/2403_88102829?type=blog
+      - name: email
+        icon: email
         url: 1412760342@qq.com
     # Social links with QRcode drawers
     qrs: []
@@ -216,6 +225,9 @@ navbar:
     Categories:
       path: /categories/
       icon: fa-regular fa-folder
+    项目:
+      path: /projects/
+      icon: fa-solid fa-code-branch
     About: 
       path: /about/
       icon: fa-regular fa-user
@@ -240,15 +252,18 @@ home:
     announcement: "欢迎来到 Lee's SecLab" # Announcement text
     show_on_mobile: true # Whether to show sidebar navigation on mobile sheet menu
     links:
-       Archives: 
+       归档:
          path: /archives 
          icon: fa-regular fa-archive # can be empty
-       Tags: 
+       标签:
          path: /tags 
          icon: fa-regular fa-tags # can be empty
-       Categories: 
+       分类:
          path: /categories 
          icon: fa-regular fa-folder # can be empty
+       项目:
+         path: /projects/
+         icon: fa-solid fa-code-branch
       # ...... # you can add more
   # Article date format
   article_date_format: relative # auto, relative, YYYY-MM-DD, YYYY-MM-DD HH:mm:ss etc.
@@ -292,8 +307,8 @@ articles:
     min2read: true # Whether to display reading time
   # Author label
   author_label: 
-    enable: true # Whether to enable
-    auto: true # Whether to automatically add author label, e.g. Lv1, Lv2, Lv3...
+    enable: false # Whether to enable
+    auto: false # Whether to automatically add author label, e.g. Lv1, Lv2, Lv3...
     list: ["记录","攻略","学习"]
   # Code block settings
   code_block:
@@ -391,7 +406,7 @@ footer:
   # Icon in footer, write fontawesome icon code here
   icon: '<i class="fa-solid fa-shield-halved" style="color: #f54545"></i>'
   # The start time of the website, format: YYYY/MM/DD HH:mm:ss
-  start: 2025/10/27 00:00:00
+  start: 2025-10-27T00:00:00+08:00
   # Site statistics
   statistics: true # show site statistics or not (total articles, total words)
   # Footer message
@@ -415,6 +430,7 @@ inject:
   # Inject custom footer html code
   footer:
     - '<script src="/js/snow.js" defer></script>'
+    - '<script src="/js/site-polish.js" defer></script>'
 # INJECT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end
 
 

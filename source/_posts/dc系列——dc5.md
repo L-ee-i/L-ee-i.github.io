@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/157176530
 title: dc5靶机报告
-description: 文章浏览阅读411次，点赞4次，收藏10次。后面包含了firstname,lastname,cuntry等参数，我们试一下写入可。在靶机的shell里下载exp脚本，给执行权限，./dc5.sh执行提权。再刷新一遍，bp抓包，看到我们刚才测试的文件路径，把这个改成一句话木马。分析回显，我们可以看到操作系统是linux3-4的，开了三个端口。80：http协议，nigux1.6.2的服务。复制到kali终端的tmp文件下，保存整个脚本。我们尝试访问一下，可以发现木马被成功写入。提权成功，在root下找到flag文件。参数，看是否存在文件包含。
+description: 记录 DC-5 靶机的 Web 参数测试、文件包含与日志写入利用、WebShell 验证以及 Linux 内核提权过程。
+excerpt: 记录 DC-5 靶机的 Web 参数测试、文件包含与日志写入利用、WebShell 验证以及 Linux 内核提权过程。
 keywords: android
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2026-01-28T07:30:56.811Z
 categories:
   - 靶场复现
@@ -11,11 +12,8 @@ tags:
   - DC靶场
   - 文件包含
   - Linux
-publisher: null
-stats: paragraph=49 sentences=40, words=60
 ---
 
-<meta name="referrer" content="no-referrer"/>
 #### 信息收集：
 
 arp-scan -l扫

@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/157427756
 title: dc6打靶报告
-description: 文章浏览阅读61次。Activity Monitor插件存在命令注入，searchsploit扫一下看有没有执行脚本。发现开放端口：22（SSH）、80（HTTP），并提示域名。然后创建一个user列表文件，把刚刚我们扫到的用户名存进去。修改脚本中几个地方——靶机地址，攻击ip，攻击机开放端口。浏览器打开45274.html并提交，获得反向Shell。环境：kali ip：192.168.145.128。——从graham提权至root。→ 获得jens Shell。→ 获得root Shell。发现jens可执行nmap。
+description: 记录 DC-6 靶机的 WordPress 信息收集、Activity Monitor 命令注入利用、多用户横向切换及 nmap 提权过程。
+excerpt: 记录 DC-6 靶机的 WordPress 信息收集、Activity Monitor 命令注入利用、多用户横向切换及 nmap 提权过程。
 keywords: chrome,前端
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2026-01-28T07:31:22.932Z
 categories:
   - 靶场复现
@@ -11,11 +12,8 @@ tags:
   - DC靶场
   - 命令注入
   - Linux
-publisher: null
-stats: paragraph=74 sentences=67, words=169
 ---
 
-<meta name="referrer" content="no-referrer"/>
 环境：kali ip：192.168.145.128
 
 `arp-scan -l` 发现存活靶机IP： `192.168.145.188`
@@ -52,7 +50,7 @@ wpscan --url http://wordy --enumerate u --no-update
 
 `admin`, `mark`, `graham`, `sarah`, `jens`
 
-`&#x5B98;&#x7F51;&#x6709;&#x4E2A;&#x5C0F;&#x63D0;&#x793A;`
+`官网有个小提示`
 
 ![](https://i-blog.csdnimg.cn/direct/21e757da46e84752b206e939a5b5414a.png)
 
@@ -90,7 +88,7 @@ wpscan --url http://wordy --enumerate u --no-update
 
 ![](https://i-blog.csdnimg.cn/direct/6fb0d46cfdcb41c3a7d07f621a0885b0.png)
 
-`45274.html&#xFF0C;html&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x66F4;&#x7B80;&#x5355;&#xFF0C;&#x5148;&#x8BD5;&#x8BD5;&#x8FD9;&#x4E2A;`
+`45274.html，html程序运行更简单，先试试这个`
 
 Kali监听： `nc -lvnp 1234`
 

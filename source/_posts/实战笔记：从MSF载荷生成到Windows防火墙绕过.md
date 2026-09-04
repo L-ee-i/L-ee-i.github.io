@@ -1,5 +1,7 @@
 ---
 title: 实战笔记：从MSF载荷生成到Windows防火墙绕过
+description: 通过 Windows 靶场实验比较 bind_tcp 与 reverse_tcp，记录 MSF 载荷生成、监听配置、会话建立和防火墙规则影响。
+excerpt: 通过 Windows 靶场实验比较 bind_tcp 与 reverse_tcp，记录 MSF 载荷生成、监听配置、会话建立和防火墙规则影响。
 date: 2025-10-28 09:31:57
 categories:
   - 漏洞研究
@@ -8,8 +10,6 @@ tags:
   - Metasploit
   - 防火墙
 ---
-<meta name="referrer" content="no-referrer"/>
-
 ### 正向shell与反向shell的本质区别：
 
 bind_tcp是靶机主动连接攻击机的ip与端口，建立shell连接
@@ -94,8 +94,5 @@ win7
 ### 除了基于端口的防火墙规则，还有哪些更高级的加固手段可以防御此类攻击?
 
 ·使用白名单——只允许特定程序访问，其他一律组织
-
-
-
 
 

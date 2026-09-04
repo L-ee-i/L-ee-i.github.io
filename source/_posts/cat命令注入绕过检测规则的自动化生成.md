@@ -1,8 +1,9 @@
 ---
 title: cat命令注入绕过检测规则的自动化生成
-description: 本文记录了一套面向OWASP CRS的cat命令注入绕过规则自动化挖掘方案。从165条真实攻击样本出发，通过SBERT语义聚类、HDBSCAN密度分簇、GPT三次采样投票和优化器自动收口，最终产出9条可集成CRS的SecRule规则。在WSL2+Apache+ModSecurity真实环境中，规则集将原生CRS检出率从90/144提升至129/144，同时在5000条真实日志上保持零误报。完整链路覆盖样本收集、规则生成、WAF实测和exe打包交付。
+description: 围绕 OWASP CRS 的 cat 命令注入检测，记录从攻击样本、语义聚类、规则生成到 ModSecurity 实测的自动化挖掘流程，并比较检出率与误报表现。
+excerpt: 围绕 OWASP CRS 的 cat 命令注入检测，记录从攻击样本、语义聚类、规则生成到 ModSecurity 实测的自动化挖掘流程，并比较检出率与误报表现。
 keywords: cat命令注入, WAF规则生成, OWASP CRS, 语义聚类, HDBSCAN, SecRule, 自动化规则挖掘, RuleMiner
-author: lee
+author: Lee
 date: 2026-07-20T00:00:00.000Z
 categories:
   - 工具与自动化
@@ -11,10 +12,7 @@ tags:
   - WAF
   - OWASP CRS
   - 自动化
-publisher: null
-stats: paragraph=120 sentences=65, words=480
 ---
-<meta name="referrer" content="no-referrer"/>
 # CRSRuleMiner
 ——针对cat命令的CRS规则挖掘
 

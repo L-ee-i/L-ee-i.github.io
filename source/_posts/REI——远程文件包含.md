@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/153182370
 title: REI——远程文件包含
-description: 文章浏览阅读150次。在里面写入所需的php代码，然后ctrl-x→y→Enter保存，再用curl查看一下是否能成功访问。漏洞本质：攻击者通过包含恶意远程文件，在目标服务器上执行任意代码。ctrl-x→Y→Enter保存，我们再查看一下，保存成功可访问。首先在kali上启动web服务，并且准备一下我们的攻击文件。，使得win10中pphp安全配置允许远程文件包含。并且确保win10中php.in配置中的参数为。攻击效果：远程代码执行，提权，敏感数据。通了，下一步我们实施远程文件包含攻击。在kali的浏览器里面访问。
+description: 以 PHP 远程文件包含为例，梳理环境配置、远程文件加载与代码执行验证过程，并总结漏洞成因、利用条件和风险边界。
+excerpt: 以 PHP 远程文件包含为例，梳理环境配置、远程文件加载与代码执行验证过程，并总结漏洞成因、利用条件和风险边界。
 keywords: REI——远程文件包含
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2025-10-29T00:13:13.243Z
 categories:
   - 漏洞研究
@@ -11,8 +12,6 @@ tags:
   - Web安全
   - 文件包含
   - 远程代码执行
-publisher: null
-stats: paragraph=26 sentences=24, words=43
 ---
 
 <meta name="referrer"content="no-referrer"/>
@@ -38,10 +37,10 @@ kali192.168.145.128攻击机win10192.168.36.128靶机
 首先在kali上启动web服务，并且准备一下我们的攻击文件
 
 ```
-#&#x6253;&#x5F00;apache
+#打开apache
 sudo systemctl start apache2
 
-#&#x521B;&#x5EFA;&#x9700;&#x8981;&#x7684;&#x6587;&#x4EF6;
+#创建需要的文件
 sudo nano /var/www/html/gj.txt
 ```
 

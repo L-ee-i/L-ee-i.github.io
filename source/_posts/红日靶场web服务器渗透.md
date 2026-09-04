@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/154183640
 title: 红日靶场web服务器渗透
-description: 文章浏览阅读334次，点赞14次，收藏7次。随后写入一句话木马，由于该语句在运行时会报错，会被写入日志中，而日志又为php文件，所以我们通过AntSword来连接。・不能，攻击者可能采用端口欺骗（比如用 80，443 端口等），协议伪装（比如看起来像 DNS 域名查询或浏览网页）基本确定，用Nmap 半开扫描，侵略扫描（此时kali开了root权限，-A直接包含-sT，-sV，-O）发现永恒之蓝存在，为高风险等级，优先攻击它以拿到system权限，然后提取哈希凭证，再进行内网横向移动。先用arp-scan扫，更快，也可用 nmap -sn ....
+description: 记录红日靶场 Web 服务器的信息收集、Web 漏洞利用、权限获取、凭据提取与内网横向移动思路，并整理关键判断依据。
+excerpt: 记录红日靶场 Web 服务器的信息收集、Web 漏洞利用、权限获取、凭据提取与内网横向移动思路，并整理关键判断依据。
 keywords: 红日靶场web服务器渗透
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2025-10-31T07:03:50.550Z
 categories:
   - 靶场复现
@@ -11,11 +12,7 @@ tags:
   - 红日靶场
   - Web安全
   - 内网渗透
-publisher: null
-stats: paragraph=126 sentences=75, words=153
 ---
-
-<meta name="referrer" content="no-referrer"/>
 
 **一：有关信息收集，漏洞发现，漏洞利用的攻击链**
 

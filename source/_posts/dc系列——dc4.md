@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/157027804
 title: dc4打靶报告
-description: 文章浏览阅读227次。command进去，发现不同的选项run了之后，select后面会对应一些命令行，所以可以推测run了之后终端会执行对应的命令行。几个名字下都是空，jim用户里有东西，继续进到backups里面还有一个old-passwords.bak文件。这里，说明用户 charles 可以无需密码，以 root 权限执行 /usr/bin/teehee 命令。注意：前面观察ls的时候，数据包里面传输的命令行把空格都换成了加号+所以run的时候抓包看一下，找到了命令行的地方。所以我们的bash命令是这样的。
+description: 记录 DC-4 靶机从网络发现、命令执行流量分析、凭据查找到无密码 sudo 配置利用的提权过程。
+excerpt: 记录 DC-4 靶机从网络发现、命令执行流量分析、凭据查找到无密码 sudo 配置利用的提权过程。
 keywords: 服务器,网络,运维
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2026-01-28T07:30:04.346Z
 categories:
   - 靶场复现
@@ -11,11 +12,8 @@ tags:
   - DC靶场
   - Linux
   - 提权
-publisher: null
-stats: paragraph=60 sentences=33, words=54
 ---
 
-<meta name="referrer" content="no-referrer"/>
 先arp-scan -l 扫局域网内存活主机
 
 ![](https://i-blog.csdnimg.cn/direct/a67283c596f647e1a29ef52171ded76c.png)

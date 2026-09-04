@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/157686845
 title: dc9打靶报告
-description: 文章浏览阅读490次，点赞8次，收藏7次。我们来分析一下脚本内容，大致是把第一个打开的文件给加到第二个后面，因为这个脚本是以root运行的，所以我们可以利用它来修改系统文件——/etc/passwd。存在文件包含漏洞，通过参数file可以读取任意文件，刚开始nmap的时候，可以知道负责ssh的22端口没开，我们现在要通过端口敲门把他打开。逐个进去看，都没有什么有用信息，到了janitor之后多了一个有secrets的目录，进去看看。有用户和密码，再往里爆一层，我们只导出用户名和密码。爆出来三个字符段——密码，id，名字。
+description: 记录 DC-9 靶机从 Web 信息收集、SQL 注入和文件包含，到端口敲门开启 SSH、凭据利用及本地提权的完整链路。
+excerpt: 记录 DC-9 靶机从 Web 信息收集、SQL 注入和文件包含，到端口敲门开启 SSH、凭据利用及本地提权的完整链路。
 keywords: 网络,安全性测试
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2026-02-05T03:02:56.341Z
 categories:
   - 靶场复现
@@ -11,11 +12,8 @@ tags:
   - DC靶场
   - 端口敲门
   - 文件包含
-publisher: null
-stats: paragraph=95 sentences=94, words=221
 ---
 
-<meta name="referrer" content="no-referrer"/>
 环境：
 
 攻击机Kali IP: 192.168.145.128
@@ -195,11 +193,11 @@ http://192.168.145.191/addrecord.php/?file=../../../../../../etc/knockd.conf
 我们来分析一下脚本内容，大致是把第一个打开的文件给加到第二个后面，因为这个脚本是以root运行的，所以我们可以利用它来修改系统文件——/etc/passwd
 
 ```
-f = open(sys.argv[1], "r")     # &#x6253;&#x5F00;&#x7B2C;&#x4E00;&#x4E2A;
-output = (f.read())            # &#x8BFB;&#x53D6;&#x5168;&#x90E8;&#x5185;&#x5BB9;
+f = open(sys.argv[1], "r")     # 打开第一个
+output = (f.read())            # 读取全部内容
 
-f = open(sys.argv[2], "a")     # &#x6253;&#x5F00;&#x7B2C;&#x4E8C;&#x4E2A;
-f.write(output)                # &#x5C06;&#x8BFB;&#x53D6;&#x7684;&#x5185;&#x5BB9;&#x5199;&#x5165;
+f = open(sys.argv[2], "a")     # 打开第二个
+f.write(output)                # 将读取的内容写入
 f.close()v
 ```
 

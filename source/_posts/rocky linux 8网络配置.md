@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/154960222
 title: RockyLinux8网络配置
-description: 
+description: 整理 Rocky Linux 8 的 NetworkManager 与 nmcli 网络配置方法，包括静态地址、网关、DNS、连接启停和故障排查。
+excerpt: 整理 Rocky Linux 8 的 NetworkManager 与 nmcli 网络配置方法，包括静态地址、网关、DNS、连接启停和故障排查。
 keywords: Rocky Linux 8 网络配置
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2025-11-18T04:40:52.775Z
 categories:
   - 网络与系统
@@ -11,11 +12,8 @@ tags:
   - Linux
   - Rocky Linux
   - 网络配置
-publisher: null
-stats: paragraph=127 sentences=61, words=155
 ---
 
-<meta name="referrer" content="no-referrer"/>
 查看网络接口列表
 
 command: ip addr show 或 ip a

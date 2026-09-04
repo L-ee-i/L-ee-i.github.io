@@ -1,5 +1,164 @@
 /* Site-specific refinements kept outside the installed theme. */
 
+/* Clear labels for icon-only controls. */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  position: absolute;
+  z-index: 9999;
+  width: max-content;
+  max-width: 10rem;
+  padding: 0.38rem 0.62rem;
+  border: 1px solid rgb(255 182 193 / 55%);
+  border-radius: 0.55rem;
+  background: rgb(35 39 47 / 92%);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 20%);
+  color: #fff5f7;
+  content: attr(data-tooltip);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.25rem);
+  transition: opacity 160ms ease, transform 160ms ease;
+  white-space: nowrap;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after,
+[data-tooltip]:focus-within::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.navbar-container [data-tooltip]::after,
+.search-pop-overlay [data-tooltip]::after {
+  top: calc(100% + 0.55rem);
+  left: 50%;
+  transform: translate(-50%, 0.25rem);
+}
+
+.navbar-container [data-tooltip]:hover::after,
+.navbar-container [data-tooltip]:focus-visible::after,
+.navbar-container [data-tooltip]:focus-within::after,
+.search-pop-overlay [data-tooltip]:hover::after,
+.search-pop-overlay [data-tooltip]:focus-visible::after,
+.search-pop-overlay [data-tooltip]:focus-within::after {
+  transform: translate(-50%, 0);
+}
+
+.side-tools-container [data-tooltip]::after {
+  top: 50%;
+  right: calc(100% + 0.6rem);
+  transform: translate(0.25rem, -50%);
+}
+
+.side-tools-container [data-tooltip]:hover::after,
+.side-tools-container [data-tooltip]:focus-visible::after,
+.side-tools-container [data-tooltip]:focus-within::after {
+  transform: translate(0, -50%);
+}
+
+[data-tooltip]:focus-visible {
+  outline: 2px solid #ff8fa3;
+  outline-offset: 3px;
+}
+
+/* Social profiles are real destinations, so show their names on wider screens. */
+.home-banner-container .social-contacts {
+  gap: 0.35rem;
+  padding-inline: 0.7rem;
+}
+
+.home-banner-container .social-contact-item > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  padding: 0.28rem 0.48rem;
+  border-radius: 999px;
+  color: inherit;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.home-banner-container .social-contact-item > a:hover,
+.home-banner-container .social-contact-item > a:focus-visible {
+  background: rgb(255 182 193 / 24%);
+  color: #fff;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.social-contact-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Real-project and related-reading sections share the site's soft card language. */
+.project-grid,
+.related-posts-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.project-card,
+.related-post-card {
+  display: block;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border-color, rgb(150 150 150 / 20%));
+  border-radius: 0.9rem;
+  background: var(--second-background-color, rgb(255 255 255 / 70%));
+  color: inherit;
+  box-shadow: 0 4px 18px rgb(0 0 0 / 5%);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.project-card:hover,
+.related-post-card:hover {
+  border-color: rgb(255 143 163 / 58%);
+  box-shadow: 0 8px 24px rgb(255 143 163 / 12%);
+  transform: translateY(-2px);
+}
+
+.project-card h3,
+.related-post-card strong {
+  display: block;
+  margin: 0 0 0.45rem;
+  color: var(--primary-color, #f56c8a);
+}
+
+.project-card p,
+.related-post-card span {
+  margin: 0;
+  color: var(--third-text-color, #69707d);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.project-status {
+  display: inline-flex;
+  margin-bottom: 0.65rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgb(255 143 163 / 13%);
+  color: #df6079;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.related-posts-custom {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+}
+
 @media (max-width: 767px) {
   .home-banner-container .description {
     font-size: 3.3rem !important;
@@ -9,6 +168,26 @@
 
   .home-banner-container #subtitle {
     font-size: 1.55rem !important;
+  }
+
+  .social-contact-label {
+    display: none;
+  }
+
+  .home-banner-container .social-contacts {
+    gap: 0.15rem;
+    padding-inline: 0.45rem;
+  }
+
+  .home-banner-container .social-contact-item > a {
+    min-width: 1.85rem;
+    min-height: 1.85rem;
+    justify-content: center;
+    padding: 0.25rem;
+  }
+
+  [data-tooltip]::after {
+    display: none;
   }
 }
 

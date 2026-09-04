@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/154603420
 title: dc系列——dc2
-description: 其中etc目录中包含了几乎所有系统服务和程序的配置文件，hosts是本地域名解析文件，当浏览器拿到一个域名，会优先去本地查找域名解析，观察其对应ipvim编辑器添加映射补充：（cat /etc/passwd可查看用户列表）
+description: 记录 DC-2 靶机的域名解析、WordPress 枚举、用户名与密码字典生成、SSH 登录以及 Linux 提权过程。
+excerpt: 记录 DC-2 靶机的域名解析、WordPress 枚举、用户名与密码字典生成、SSH 登录以及 Linux 提权过程。
 keywords: dc系列——dc2
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2025-11-27T04:20:06.027Z
 categories:
   - 靶场复现
@@ -11,12 +12,8 @@ tags:
   - DC靶场
   - Linux
   - 提权
-publisher: null
-stats: paragraph=113 sentences=68, words=551
 ---
 总结：
-
-<meta name="referrer" content="no-referrer"/>
 
 * 官网提示需要在靶机的host文件中添加靶机映射
 

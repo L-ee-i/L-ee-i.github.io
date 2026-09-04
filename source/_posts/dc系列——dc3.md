@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/156761678
 title: dc3靶机报告
-description: 文章浏览阅读493次，点赞16次，收藏11次。只开了一个80端口，服务是http，服务是Apache/2.4.18 (Ubuntu)，操作系统是Linux 3.2 - 4.9，进入第一个，这个Beezes3 detail and files，它是joomla的模板编辑入口，可以查看，编辑模板，上传文件。注意，这里用的是https网址，所以我们需要加上一个无需检查证书直接下载的参数——--no-check-certificate。第四个：http://192.168.145.182/images/banners/
+description: 记录 DC-3 靶机的 Joomla 识别、组件与模板入口排查、SQL 注入利用及内核提权过程，整理关键工具和参数。
+excerpt: 记录 DC-3 靶机的 Joomla 识别、组件与模板入口排查、SQL 注入利用及内核提权过程，整理关键工具和参数。
 keywords: 网络,web安全,靶机,linux,安全,dc
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2026-01-28T07:22:43.022Z
 categories:
   - 靶场复现
@@ -11,11 +12,8 @@ tags:
   - DC靶场
   - Joomla
   - Linux
-publisher: null
-stats: paragraph=120 sentences=110, words=210
 ---
 
-<meta name="referrer" content="no-referrer"/>
 先arp-scan -l扫，发现疑似靶机ip——192.168.145.185
 
 ![](https://i-blog.csdnimg.cn/direct/44849b2f93a94525bacc07e4de5157af.png)
@@ -245,11 +243,11 @@ chmod +x linux-exploit-suggester.sh
 为了方便我这里直接在攻击机里面下载解压了
 
 ```
-&#x4E0B;&#x8F7D;
+下载
 wget https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/39772.zip
-&#x89E3;&#x538B;
+解压
 unzip 39771.zip
-&#x67E5;&#x770B;
+查看
 ls -la 39772/
 ```
 

@@ -10,6 +10,7 @@ const requiredOutputs = [
   '404.html',
   'CNAME',
   'about/index.html',
+  'projects/index.html',
   'archives/index.html',
   'categories/index.html',
   'tags/index.html',
@@ -57,6 +58,7 @@ const missingRequired = requiredOutputs.filter((relativePath) => !publicFiles.ha
 const htmlFiles = allFiles.filter((filePath) => filePath.endsWith('.html'));
 const missingLinks = new Map();
 const placeholderReferences = [];
+const contentRegressions = [];
 
 for (const htmlFile of htmlFiles) {
   const html = fs.readFileSync(htmlFile, 'utf8');
@@ -87,15 +89,35 @@ for (const htmlFile of htmlFiles) {
   if (/example\.example\.com|\/link[123](?:\/|["'])|status\.ohevan\.com/i.test(html)) {
     placeholderReferences.push(pageRelativePath);
   }
+
+  if (/CSDN博客|【这里放自动生成的 HTML 报告截图】|&#xFF1A;|博客等级|>Lv3</i.test(html)) {
+    contentRegressions.push(pageRelativePath);
+  }
 }
 
-if (missingRequired.length || missingLinks.size || placeholderReferences.length) {
+const homeHtml = fs.readFileSync(path.join(publicRoot, 'index.html'), 'utf8');
+const articleHtml = fs.readFileSync(path.join(publicRoot, '2026', '09', '04', '科来流量分析+结合MCP自动化', 'index.html'), 'utf8');
+
+if (!homeHtml.includes('https://xhslink.cn/o/4YwzlDNEZIG') ||
+    !homeHtml.includes('https://blog.csdn.net/2403_88102829?type=blog') ||
+    !homeHtml.includes('/js/site-polish.js')) {
+  contentRegressions.push('index.html (missing social profile or accessibility script)');
+}
+
+if (!articleHtml.includes('related-posts-custom')) {
+  contentRegressions.push('latest article (missing related posts)');
+}
+
+if (missingRequired.length || missingLinks.size || placeholderReferences.length || contentRegressions.length) {
   if (missingRequired.length) console.error('Missing required outputs:', missingRequired.join(', '));
   for (const [url, sources] of missingLinks) {
     console.error(`Broken internal link ${url} referenced by ${Array.from(sources).slice(0, 5).join(', ')}`);
   }
   if (placeholderReferences.length) {
     console.error('Placeholder configuration remains in:', placeholderReferences.slice(0, 10).join(', '));
+  }
+  if (contentRegressions.length) {
+    console.error('Content regression found in:', contentRegressions.slice(0, 10).join(', '));
   }
   process.exit(1);
 }

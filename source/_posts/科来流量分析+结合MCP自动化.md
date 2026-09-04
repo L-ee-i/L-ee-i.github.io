@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/164360137
-title: 科来流量分析/结合MCP自动化-CSDN博客
-description: 文章浏览阅读2次。通过两份 Weevely 抓包，可以还原攻击者与 WebShell 之间的通信过程。案例一中，攻击者已经开始使用wShell.php，并执行了echowhoamils和pwd等命令。案例二中，不仅捕获到了的上传过程，还还原出了获取主机名、用户名、当前目录以及尝试查询网络配置等操作。在此基础上，将科来的cmdl.exe封装成 MCP Server，使 Codex 可以直接查询本地抓
+title: 科来流量分析与 MCP 自动化
+description: 通过两份 Weevely 通信流量还原 WebShell 操作，并将科来命令行解析能力封装为 MCP 服务，实现抓包检索、协议统计与报告自动生成。
+excerpt: 通过两份 Weevely 通信流量还原 WebShell 操作，并将科来命令行解析能力封装为 MCP 服务，实现抓包检索、协议统计与报告自动生成。
 keywords: 自动化,运维
-author: Le_ee
+author: Lee
 date: 2026-09-04T02:03:14.000Z
 categories:
   - 工具与自动化
@@ -12,10 +13,7 @@ tags:
   - WebShell
   - MCP
   - 自动化
-publisher: CSDN博客
-stats: paragraph=140 sentences=68, words=539
 ---
-<meta name="referrer" content="no-referrer"/>
 主要分析两份 Weevely 通信流量，并尝试把科来网络分析系统与 Codex 连接起来，实现抓包文件的自动解析和报告生成。
 
 使用的抓包文件为：
@@ -79,9 +77,9 @@ bmk
 完整的对应关系为：
 
 ```
-&#x5F02;&#x6216;&#x5BC6;&#x94A5;&#xFF1A;890ce112
-&#x5F00;&#x59CB;&#x6807;&#x8BB0;&#xFF1A;0339f2efd328
-&#x7ED3;&#x675F;&#x6807;&#x8BB0;&#xFF1A;6b3c9e505489
+异或密钥：890ce112
+开始标记：0339f2efd328
+结束标记：6b3c9e505489
 ```
 
 Weevely 流量的基本还原过程为：
@@ -92,7 +90,7 @@ Weevely 流量的基本还原过程为：
 try {
     echo(24331);
 } catch(Exception $e) {
-    // &#x8FD4;&#x56DE;&#x6267;&#x884C;&#x9519;&#x8BEF;
+    // 返回执行错误
 }
 ```
 
@@ -116,14 +114,14 @@ pwd
 对应结果如下：
 
 ```
-echo 40902&#xFF1A;&#x8FD4;&#x56DE; 40902&#xFF0C;&#x7528;&#x4E8E;&#x6D4B;&#x8BD5;&#x547D;&#x4EE4;&#x6267;&#x884C;&#x662F;&#x5426;&#x6B63;&#x5E38;&#x3002;
+echo 40902：返回 40902，用于测试命令执行是否正常。
 
-whoami&#xFF1A;&#x8FD4;&#x56DE; nginx&#xFF0C;&#x8BF4;&#x660E; Web &#x670D;&#x52A1;&#x4EE5; nginx &#x7528;&#x6237;&#x8EAB;&#x4EFD;&#x8FD0;&#x884C;&#x3002;
+whoami：返回 nginx，说明 Web 服务以 nginx 用户身份运行。
 
-ls&#xFF1A;&#x67E5;&#x770B;&#x5F53;&#x524D;&#x76EE;&#x5F55;&#x4E2D;&#x7684;&#x6587;&#x4EF6;&#x3002;
+ls：查看当前目录中的文件。
 
-pwd&#xFF1A;&#x8FD4;&#x56DE; /usr/share/nginx/html/hackable/uploads&#xFF0C;
-&#x8BF4;&#x660E; WebShell &#x5F53;&#x524D;&#x4F4D;&#x4E8E;&#x8BE5;&#x76EE;&#x5F55;&#x3002;
+pwd：返回 /usr/share/nginx/html/hackable/uploads，
+说明 WebShell 当前位于该目录。
 ```
 
 还是看http日志，发现攻击者已经上传了webshell——wShell3.php，HTTP 日志中发现向 `/vulnerabilities/upload/` 发起的 multipart/form-data POST 请求，上传文件名为 `wShell3.php`，服务器响应显示上传成功。
@@ -135,8 +133,8 @@ pwd&#xFF1A;&#x8FD4;&#x56DE; /usr/share/nginx/html/hackable/uploads&#xFF0C;
 按照案例一相同的方法，观察 HTTP 请求体和响应体，可以找到这一组固定标记：
 
 ```
-&#x5F00;&#x59CB;&#x6807;&#x8BB0;&#xFF1A;b5c349531268
-&#x7ED3;&#x675F;&#x6807;&#x8BB0;&#xFF1A;ae8484112a78
+开始标记：b5c349531268
+结束标记：ae8484112a78
 ```
 
 通过字典计算，发现密码 `lyb` 的 MD5 为：
@@ -160,9 +158,9 @@ lyb
 完整对应关系为：
 
 ```
-&#x5F02;&#x6216;&#x5BC6;&#x94A5;&#xFF1A;38d17dd2
-&#x5F00;&#x59CB;&#x6807;&#x8BB0;&#xFF1A;b5c349531268
-&#x7ED3;&#x675F;&#x6807;&#x8BB0;&#xFF1A;ae8484112a78
+异或密钥：38d17dd2
+开始标记：b5c349531268
+结束标记：ae8484112a78
 ```
 
 对每一轮通信进行解密后，得到以下操作：
@@ -283,9 +281,9 @@ netstat
 [mcp_servers.colasoft]
 command = 'C:\Program Files\Python38\python.exe'
 args = [
-  'D:\&#x5DE5;&#x5177;\Colasoft-MCP\colasoft_mcp.py',
+  'D:\工具\Colasoft-MCP\colasoft_mcp.py',
   '--capture-root',
-  'C:\Users\pc\Desktop\&#x6D41;&#x91CF;&#x5206;&#x6790;&#x4F5C;&#x4E1A;'
+  'C:\Users\pc\Desktop\流量分析作业'
 ]
 ```
 
@@ -316,17 +314,17 @@ colasoft_mcp.py
 基本流程如下：
 
 ```
-&#x7528;&#x6237;&#x63D0;&#x51FA;&#x5206;&#x6790;&#x8981;&#x6C42;
-        &#x2193;
-Codex &#x8C03;&#x7528; MCP &#x5DE5;&#x5177;
-        &#x2193;
-colasoft_mcp.py &#x63A5;&#x6536;&#x8BF7;&#x6C42;
-        &#x2193;
-&#x8C03;&#x7528;&#x79D1;&#x6765; cmdl.exe &#x89E3;&#x6790;&#x6293;&#x5305;
-        &#x2193;
-MCP &#x6574;&#x7406;&#x89E3;&#x6790;&#x7ED3;&#x679C;
-        &#x2193;
-Codex &#x8F93;&#x51FA;&#x5206;&#x6790;&#x7ED3;&#x8BBA;
+用户提出分析要求
+        ↓
+Codex 调用 MCP 工具
+        ↓
+colasoft_mcp.py 接收请求
+        ↓
+调用科来 cmdl.exe 解析抓包
+        ↓
+MCP 整理解析结果
+        ↓
+Codex 输出分析结论
 ```
 
 除了 MCP Server，还运行了一个单独的目录监控程序：
@@ -354,9 +352,9 @@ kall-Packets.analysis.html
 因此，这套功能分为两部分：
 
 ```
-MCP Server&#xFF1A;&#x4F9B; Codex &#x6309;&#x9700;&#x67E5;&#x8BE2;&#x548C;&#x5206;&#x6790;&#x6293;&#x5305;&#x3002;
+MCP Server：供 Codex 按需查询和分析抓包。
 
-&#x76EE;&#x5F55;&#x76D1;&#x63A7;&#x7A0B;&#x5E8F;&#xFF1A;&#x53D1;&#x73B0;&#x65B0;&#x6293;&#x5305;&#x540E;&#x81EA;&#x52A8;&#x751F;&#x6210; HTML &#x62A5;&#x544A;&#x3002;
+目录监控程序：发现新抓包后自动生成 HTML 报告。
 ```
 
 为了测试自动分析是否正常，我使用 Kali 分别 Ping Windows 主机和 VMware 网关。
@@ -364,9 +362,9 @@ MCP Server&#xFF1A;&#x4F9B; Codex &#x6309;&#x9700;&#x67E5;&#x8BE2;&#x548C;&#x5206
 测试环境中的 IP 为：
 
 ```
-Kali&#xFF1A;192.168.145.10
-Windows &#x4E3B;&#x673A;&#xFF1A;192.168.145.1
-VMware &#x7F51;&#x5173;&#xFF1A;192.168.145.2
+Kali：192.168.145.10
+Windows 主机：192.168.145.1
+VMware 网关：192.168.145.2
 ```
 
 测试期间使用科来进行抓包。
@@ -395,28 +393,26 @@ kall-Packets.cap
 kall-Packets.analysis.html
 ```
 
-【这里放自动生成的 HTML 报告截图】
-
 报告中的分析结果为：
 
 ```
-&#x6570;&#x636E;&#x5305;&#x603B;&#x6570;&#xFF1A;34
-ICMP &#x6570;&#x636E;&#x5305;&#xFF1A;16
-ARP &#x6570;&#x636E;&#x5305;&#xFF1A;18
+数据包总数：34
+ICMP 数据包：16
+ARP 数据包：18
 ```
 
 Kali 与 Windows 主机之间存在：
 
 ```
-4&#x4E2A; ICMP Echo Request
-4&#x4E2A; ICMP Echo Reply
+4个 ICMP Echo Request
+4个 ICMP Echo Reply
 ```
 
 Kali 与 VMware 网关之间也存在：
 
 ```
-4&#x4E2A; ICMP Echo Request
-4&#x4E2A; ICMP Echo Reply
+4个 ICMP Echo Request
+4个 ICMP Echo Reply
 ```
 
 每个请求都收到了对应响应，因此可以确定两次 Ping 均成功。

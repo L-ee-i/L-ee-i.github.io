@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/156229134
 title: tomato渗透报告
-description: 文章浏览阅读466次，点赞25次，收藏11次。一：环境：攻击机：kali：192.168.145.128靶机：tomato：192.168.145.182工具：二：渗透过程arp-scan -l扫一下，发现疑似靶机 ip 192.168.145.182简单扫一下，观察开放端口，确定该ip是攻击目标注意：这个命令后面对应的SERVE只是对应nmap内部的服务映射表，并不一定是攻击目标的端口服务所以我们再侵略性扫一下看回显，分析一下得到的信息：目标为Linux，内核版本号是3.2-4.9。
+description: 记录 Tomato 靶机的端口与服务识别、FTP 枚举、文件包含、SSH 登录和本地提权过程，并说明关键扫描结果的判断方法。
+excerpt: 记录 Tomato 靶机的端口与服务识别、FTP 枚举、文件包含、SSH 登录和本地提权过程，并说明关键扫描结果的判断方法。
 keywords: 网络
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2026-01-28T07:32:27.482Z
 categories:
   - 靶场复现
@@ -11,11 +12,7 @@ tags:
   - Tomato靶场
   - Linux
   - 渗透测试
-publisher: null
-stats: paragraph=80 sentences=76, words=149
 ---
-
-<meta name="referrer" content="no-referrer"/>
 
 一：环境：
 

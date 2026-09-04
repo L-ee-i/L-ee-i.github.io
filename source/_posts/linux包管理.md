@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/155194623
 title: Linux 软件包管理教程
-description: 文章浏览阅读282次，点赞2次，收藏6次。Rocky Linux8 -YUM/DNF包管理列出所有启用的仓库列出所有仓库，包括禁用的配置仓库添加 EPEL 仓库启用或禁用仓库 dnf config-manager -- (disable/enable) repository-name软件包搜索和查询搜索软件包:查看软件包详细信息列出所有可安装的包:列出已安装的包:查找提供特定文件的包:查看包的依赖关系软件包安装安装单个软件包安装多个软件包从本地rpm文件安装重新安装软件包安装软件包组列出可用的组。
+description: 系统整理 Rocky Linux 8 中 YUM 与 DNF 的仓库管理、软件包查询、安装、升级、删除、组管理和缓存维护命令。
+excerpt: 系统整理 Rocky Linux 8 中 YUM 与 DNF 的仓库管理、软件包查询、安装、升级、删除、组管理和缓存维护命令。
 keywords: Linux 软件包管理教程
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2025-11-24T09:31:37.908Z
 categories:
   - 网络与系统
@@ -11,11 +12,8 @@ tags:
   - Linux
   - Rocky Linux
   - 软件包管理
-publisher: null
-stats: paragraph=204 sentences=86, words=145
 ---
 
-<meta name="referrer" content="no-referrer"/>
 Rocky Linux8 -YUM/DNF包管理
 
 列出所有启用的仓库

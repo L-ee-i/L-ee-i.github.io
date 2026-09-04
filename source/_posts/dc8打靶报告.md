@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/157612010
 title: dc8靶机报告
-description: 文章浏览阅读319次，点赞8次，收藏8次。环境：攻击机kali ip：192.168.145.128先arp-scan -l 扫描存活主机，得到靶机ip：192.168.145.190扫端口，发现开放了80——http协议，apache服务，drupal7的cms还有一个22端口的远程连接看一眼网页发现url里面有?nid=1/2/3参数可控制，测试是否存在sql注入点，试一下?nid=1'，有回显sql报错用sqlmap跑（可以尝试droopescan扫用户）枚举所有的数据库。
+description: 记录 DC-8 靶机的 Drupal 站点识别、SQL 注入验证、数据库信息获取与后续登录利用过程，整理关键判断依据和操作步骤。
+excerpt: 记录 DC-8 靶机的 Drupal 站点识别、SQL 注入验证、数据库信息获取与后续登录利用过程，整理关键判断依据和操作步骤。
 keywords: android
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2026-02-05T03:02:36.007Z
 categories:
   - 靶场复现
@@ -11,11 +12,8 @@ tags:
   - DC靶场
   - SQL注入
   - Drupal
-publisher: null
-stats: paragraph=63 sentences=56, words=96
 ---
 
-<meta name="referrer" content="no-referrer"/>
 环境：
 
 攻击机kali ip：192.168.145.128

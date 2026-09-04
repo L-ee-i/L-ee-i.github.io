@@ -1,9 +1,10 @@
 ---
 link: https://blog.csdn.net/2403_88102829/article/details/160621600
 title: winXP栈溢出漏洞深度学习
-description: 文章浏览阅读440次，点赞8次，收藏4次。（因为返回地址再flag和EBP后面，要覆盖返回地址，必须先把前52个字节填满，90=NOP（空操作），CPU执行到这里什么都不做，继续往下）输入44个‘1’，填充44个字节没因为fscanf会自动在末尾加上\0，这个\0会覆盖flag的最低位，把flag从1变成0，表示验证通过了。在压到3，2参数部分的时候，要对字符串进行处理，要先把字符串写入栈内存，再把字符串的地址作为参数进行传递。调用它就能显示一个窗口。因为栈的生长方向是从高地址到低地址的，也就是先声明的变量在高地址，后声明的变量在低地址。
+description: 围绕 Windows XP 与 VC6、OllyDbg 环境，分析邻接变量覆盖、返回地址控制、NOP 滑板和 Shellcode 调试等栈溢出基础。
+excerpt: 围绕 Windows XP 与 VC6、OllyDbg 环境，分析邻接变量覆盖、返回地址控制、NOP 滑板和 Shellcode 调试等栈溢出基础。
 keywords: 安全性测试,网络安全,栈溢出,ollydbg
-author: Le_ee 博客等级 码龄2年
+author: Lee
 date: 2026-07-20T02:39:09.710Z
 categories:
   - 漏洞研究
@@ -11,10 +12,7 @@ tags:
   - Windows
   - 栈溢出
   - 漏洞利用
-publisher: · AI 阅读助手· AI 阅读助手
-stats: paragraph=69 sentences=22, words=250
 ---
-<meta name="referrer" content="no-referrer"/>
 一：环境
 
 windowsXP，vc6，ollydbg，ultraedit
@@ -42,11 +40,11 @@ windowsXP，vc6，ollydbg，ultraedit
 
 int verify(char *code)
 {
-    int flag;    //&#x90BB;&#x63A5;&#x53D8;&#x91CF;&#xFF0C;&#x4F4D;&#x4E8E;buffer&#x4E0B;&#x65B9;
-    char buffer[44];    //&#x7F13;&#x51B2;&#x533A;&#xFF0C;&#x5171;44&#x5B57;&#x8282;
+    int flag;    //邻接变量，位于buffer下方
+    char buffer[44];    //缓冲区，共44字节
     flag = strcmp(REGCODE, code);
-    strcpy(buffer, code);    //&#x65E0;&#x957F;&#x5EA6;&#x68C0;&#x67E5;&#x7684;strcpy&#x51FD;&#x6570;
-    return flag;    //&#x662F;&#x5426;&#x901A;&#x8FC7;&#x9A8C;&#x8BC1;
+    strcpy(buffer, code);    //无长度检查的strcpy函数
+    return flag;    //是否通过验证
 }
 
 void main()
@@ -61,8 +59,8 @@ void main()
         exit(0);
 
     fscanf(fp, "%s", regcode);
-    //fp&#xFF1A;&#x6587;&#x4EF6;&#x6307;&#x9488;
-    //fscanf&#x4F1A;&#x5728;&#x5B57;&#x7B26;&#x4E32;&#x672B;&#x5C3E;&#x81EA;&#x52A8;&#x6DFB;&#x52A0;'\0'
+    //fp：文件指针
+    //fscanf会在字符串末尾自动添加'\0'
     vFlag = verify(regcode);
 
     if (vFlag)
