@@ -11,6 +11,8 @@ const requiredOutputs = [
   'CNAME',
   'about/index.html',
   'projects/index.html',
+  'learning/index.html',
+  'learning/sql-injection/index.html',
   'archives/index.html',
   'categories/index.html',
   'tags/index.html',

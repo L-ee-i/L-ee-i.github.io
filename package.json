@@ -9,6 +9,7 @@
     "rebuild": "hexo clean && hexo generate",
     "server": "hexo server",
     "list:posts": "hexo list post",
+    "import:csdn": "node tools/import-csdn-selection.js",
     "verify:output": "node tools/verify-output.js"
   },
   "engines": {
@@ -32,5 +33,9 @@
     "hexo-server": "3.0.0",
     "hexo-theme-redefine": "2.9.0",
     "hexo-wordcount": "6.0.1"
+  },
+  "devDependencies": {
+    "turndown": "7.2.4",
+    "turndown-plugin-gfm": "1.0.2"
   }
 }

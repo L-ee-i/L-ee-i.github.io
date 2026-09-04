@@ -225,6 +225,9 @@ navbar:
     Categories:
       path: /categories/
       icon: fa-regular fa-folder
+    学习:
+      path: /learning/
+      icon: fa-solid fa-graduation-cap
     项目:
       path: /projects/
       icon: fa-solid fa-code-branch
@@ -261,6 +264,9 @@ home:
        分类:
          path: /categories 
          icon: fa-regular fa-folder # can be empty
+       学习:
+         path: /learning/
+         icon: fa-solid fa-graduation-cap
        项目:
          path: /projects/
          icon: fa-solid fa-code-branch
