@@ -1,0 +1,24 @@
+/* Site-specific refinements kept outside the installed theme. */
+
+@media (max-width: 767px) {
+  .home-banner-container .description {
+    font-size: 3.3rem !important;
+    line-height: 1.08 !important;
+    padding-inline: 1rem;
+  }
+
+  .home-banner-container #subtitle {
+    font-size: 1.55rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

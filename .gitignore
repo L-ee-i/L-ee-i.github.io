@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Generated Hexo output and caches
+public/
+db.json
+.deploy_git/
+
+# Logs and local tooling
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Migration-only reference file
+package-lock.original.json
