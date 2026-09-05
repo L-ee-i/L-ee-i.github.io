@@ -13,6 +13,10 @@ const requiredOutputs = [
   'projects/index.html',
   'learning/index.html',
   'learning/sql-injection/index.html',
+  'dictionary/index.html',
+  'dictionary/dictionary.css',
+  'dictionary/dictionary.js',
+  'dictionary/knowledge.enc',
   'archives/index.html',
   'categories/index.html',
   'tags/index.html',
@@ -99,6 +103,11 @@ for (const htmlFile of htmlFiles) {
 
 const homeHtml = fs.readFileSync(path.join(publicRoot, 'index.html'), 'utf8');
 const articleHtml = fs.readFileSync(path.join(publicRoot, '2026', '09', '04', '科来流量分析+结合MCP自动化', 'index.html'), 'utf8');
+const dictionaryRoot = path.join(publicRoot, 'dictionary');
+const dictionaryBundle = path.join(dictionaryRoot, 'knowledge.enc');
+const dictionaryLeaks = fs.existsSync(dictionaryRoot)
+  ? walk(dictionaryRoot).filter((filePath) => /(?:\.md|\.pem|\.key|\.log|\.encrypted|search_content\.js)$/i.test(filePath))
+  : [];
 
 if (!homeHtml.includes('https://xhslink.cn/o/4YwzlDNEZIG') ||
     !homeHtml.includes('https://blog.csdn.net/2403_88102829?type=blog') ||
@@ -108,6 +117,14 @@ if (!homeHtml.includes('https://xhslink.cn/o/4YwzlDNEZIG') ||
 
 if (!articleHtml.includes('related-posts-custom')) {
   contentRegressions.push('latest article (missing related posts)');
+}
+
+if (!fs.existsSync(dictionaryBundle) || fs.readFileSync(dictionaryBundle).subarray(0, 8).toString('ascii') !== 'LEEKBD01') {
+  contentRegressions.push('dictionary (missing or invalid encrypted bundle)');
+}
+
+if (dictionaryLeaks.length) {
+  contentRegressions.push(`dictionary (plaintext or sensitive files leaked: ${dictionaryLeaks.map((filePath) => path.basename(filePath)).join(', ')})`);
 }
 
 if (missingRequired.length || missingLinks.size || placeholderReferences.length || contentRegressions.length) {

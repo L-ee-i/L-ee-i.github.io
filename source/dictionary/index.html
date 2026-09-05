@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Lee's Security Dictionary</title>
+  <link rel="stylesheet" href="./dictionary.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main id="unlock-view" class="unlock-shell">
+    <section class="unlock-card" aria-labelledby="unlock-title">
+      <a class="back-link" href="/">← 返回 Lee's SecLab</a>
+      <div class="lock-mark" aria-hidden="true">⌁</div>
+      <p class="eyebrow">ENCRYPTED KNOWLEDGE BASE</p>
+      <h1 id="unlock-title">Lee's Security Dictionary</h1>
+      <p class="intro">内容使用 AES-256-GCM 加密。口令只在当前页面用于本地解密，不会发送到服务器。</p>
+      <form id="unlock-form">
+        <label for="password">访问口令</label>
+        <div class="password-row">
+          <input id="password" name="password" type="password" minlength="16" autocomplete="current-password" required autofocus>
+          <button id="toggle-password" type="button" aria-label="显示或隐藏口令">显示</button>
+        </div>
+        <button id="unlock-button" class="primary-button" type="submit">解锁字典</button>
+      </form>
+      <p id="unlock-status" class="status" role="status" aria-live="polite"></p>
+      <p class="privacy-note">刷新或关闭页面后需要重新输入口令。</p>
+    </section>
+  </main>
+
+  <div id="app-view" class="app-shell" hidden>
+    <header class="app-header">
+      <a class="brand" href="#/">Lee's <span>Dictionary</span></a>
+      <div class="header-actions">
+        <button id="open-search" class="icon-button" type="button" aria-label="搜索知识库">⌕</button>
+        <button id="lock-button" class="text-button" type="button">锁定</button>
+        <a class="text-button" href="/">博客</a>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside id="sidebar" class="sidebar" aria-label="知识库分类">
+        <div class="sidebar-heading">
+          <strong>知识字典</strong>
+          <span id="document-count"></span>
+        </div>
+        <nav id="category-nav"></nav>
+      </aside>
+
+      <main id="content" class="content" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <dialog id="search-dialog" class="search-dialog">
+    <form method="dialog" class="search-box">
+      <div class="search-heading">
+        <label for="search-input">搜索知识库</label>
+        <button value="close" aria-label="关闭搜索">×</button>
+      </div>
+      <input id="search-input" type="search" placeholder="标题、标签、命令或正文…" autocomplete="off">
+      <div id="search-results" class="search-results"></div>
+    </form>
+  </dialog>
+
+  <noscript>此加密知识库需要启用 JavaScript 才能在浏览器中解锁。</noscript>
+  <script src="./dictionary.js" defer></script>
+</body>
+</html>
