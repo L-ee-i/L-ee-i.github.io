@@ -83,8 +83,11 @@ label { display: block; margin-bottom: 9px; font-size: 14px; font-weight: 700; }
 .article img { max-width: 100%; border-radius: 14px; }
 .article blockquote { margin: 1.5em 0; padding: 2px 18px; border-left: 3px solid var(--accent); color: var(--muted); background: rgba(255,255,255,.025); }
 .article code { padding: .16em .38em; border-radius: 5px; color: #ffb2c7; background: #29262a; }
-.article pre { padding: 18px; border: 1px solid var(--line); border-radius: 13px; background: #111113; overflow: auto; }
+.code-shell { position: relative; margin: 1.5em 0; }
+.article .code-shell pre { margin: 0; padding: 46px 18px 18px; border: 1px solid var(--line); border-radius: 13px; background: #111113; overflow: auto; }
 .article pre code { padding: 0; color: #e7e2e5; background: transparent; }
+.copy-code { position: absolute; z-index: 2; top: 9px; right: 9px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 7px; color: var(--muted); background: #252328; font-size: 12px; cursor: pointer; }
+.copy-code:hover { color: var(--text); border-color: rgba(255,141,172,.42); }
 .article table { display: block; width: max-content; max-width: 100%; border-collapse: collapse; overflow: auto; }
 .article th, .article td { padding: 8px 12px; border: 1px solid var(--line); }
 .unavailable-link { text-decoration: line-through; opacity: .65; }

@@ -11,6 +11,7 @@
     "list:posts": "hexo list post",
     "import:csdn": "node tools/import-csdn-selection.js",
     "knowledge:check": "node tools/sync-encrypted-dictionary.js --check",
+    "knowledge:practice-docs": "node tools/generate-practice-markdown.js",
     "knowledge:sync": "node tools/sync-encrypted-dictionary.js --sync",
     "knowledge:test": "node tools/verify-encrypted-dictionary.js",
     "knowledge:update": "pwsh -NoProfile -File tools/update-encrypted-dictionary.ps1",

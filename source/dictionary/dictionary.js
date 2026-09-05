@@ -115,6 +115,7 @@
         </header>
         <div class="article">${doc.html}</div>
       </article>`;
+    enableCodeCopy();
     content.focus({ preventScroll: true });
     if (anchor) requestAnimationFrame(() => document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' }));
     else window.scrollTo({ top: 0 });
@@ -123,6 +124,29 @@
   const renderNotFound = () => {
     renderSidebar();
     content.innerHTML = '<div class="empty"><h1>没有找到这个条目</h1><p><a href="#/">返回字典首页</a></p></div>';
+  };
+
+  const enableCodeCopy = () => {
+    for (const pre of content.querySelectorAll('.article pre')) {
+      const shell = document.createElement('div');
+      shell.className = 'code-shell';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制';
+      button.setAttribute('aria-label', '复制这段代码');
+      pre.before(shell);
+      shell.append(button, pre);
+      button.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(pre.innerText);
+          button.textContent = '已复制';
+          setTimeout(() => { button.textContent = '复制'; }, 1600);
+        } catch {
+          button.textContent = '复制失败';
+        }
+      });
+    }
   };
 
   const downloadAttachment = (id) => {

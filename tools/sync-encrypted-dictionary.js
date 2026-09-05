@@ -6,6 +6,7 @@ const path = require('node:path');
 const zlib = require('node:zlib');
 const { JSDOM } = require('jsdom');
 const { marked } = require('marked');
+const { generatePracticeMarkdown } = require('./generate-practice-markdown');
 
 const projectRoot = path.resolve(__dirname, '..');
 const sourceRoot = path.resolve(process.env.KNOWLEDGE_SOURCE || 'C:\\Users\\pc\\Desktop\\Helpme!');
@@ -235,6 +236,10 @@ const encryptPayload = (payload, secret) => {
 };
 
 const main = () => {
+  if (mode === 'sync') {
+    const generated = generatePracticeMarkdown(sourceRoot);
+    console.log(`练习脚本文档：${generated.scripts} 个代码文件，${generated.changed ? '已重新生成' : '内容未变化'}`);
+  }
   const result = collectKnowledge();
   const riskyDocuments = result.documents.filter((doc) => doc.risk.length);
   const malformedDocuments = result.documents.filter((doc) => doc.malformedFrontmatter);
