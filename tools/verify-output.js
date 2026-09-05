@@ -60,6 +60,16 @@ if (!fs.existsSync(publicRoot)) {
 
 const allFiles = walk(publicRoot);
 publicFiles = new Set(allFiles.map((filePath) => path.relative(publicRoot, filePath).split(path.sep).join('/')));
+const missingModuleImports = [];
+for (const scriptFile of allFiles.filter((filePath) => filePath.endsWith('.js'))) {
+  const source = fs.readFileSync(scriptFile, 'utf8');
+  for (const match of source.matchAll(/(?:from\s*|import\s*\(\s*)["'](\.[^"']+)["']/g)) {
+    const target = path.resolve(path.dirname(scriptFile), match[1]);
+    if (!fs.existsSync(target)) {
+      missingModuleImports.push(`${path.relative(publicRoot, scriptFile)} -> ${path.relative(publicRoot, target)}`);
+    }
+  }
+}
 const missingRequired = requiredOutputs.filter((relativePath) => !publicFiles.has(relativePath));
 const htmlFiles = allFiles.filter((filePath) => filePath.endsWith('.html'));
 const missingLinks = new Map();
@@ -127,8 +137,9 @@ if (dictionaryLeaks.length) {
   contentRegressions.push(`dictionary (plaintext or sensitive files leaked: ${dictionaryLeaks.map((filePath) => path.basename(filePath)).join(', ')})`);
 }
 
-if (missingRequired.length || missingLinks.size || placeholderReferences.length || contentRegressions.length) {
+if (missingRequired.length || missingModuleImports.length || missingLinks.size || placeholderReferences.length || contentRegressions.length) {
   if (missingRequired.length) console.error('Missing required outputs:', missingRequired.join(', '));
+  if (missingModuleImports.length) console.error('Missing JavaScript module imports:', missingModuleImports.slice(0, 10).join(', '));
   for (const [url, sources] of missingLinks) {
     console.error(`Broken internal link ${url} referenced by ${Array.from(sources).slice(0, 5).join(', ')}`);
   }

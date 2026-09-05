@@ -20,7 +20,7 @@ hexo.extend.filter.register('after_generate', () => {
     /^js\/(?:app|layouts|libs|plugins|state|tools|utils)\//,
     /^js\/(?:build|main|utils)\.js$/,
     /^js\/build\/libs\/(?:APlayer|mermaid|waline)/i,
-    /^js\/build\/plugins\/(?:aplayer|hbe|mermaid)/i,
+    /^js\/build\/plugins\/(?:aplayer|hbe)/i,
     /^(?:assets|css)\/hbe\.style\.css$/,
     /^webfonts\/fa-(?:duotone|light|sharp-solid|thin|v4compatibility)/
   ];
