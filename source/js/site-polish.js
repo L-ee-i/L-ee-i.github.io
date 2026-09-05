@@ -21,6 +21,42 @@
     ['blog.csdn.net/2403_88102829', 'CSDN'],
     ['mailto:1412760342@qq.com', '邮箱']
   ];
+  let mobileNavFallbackReady = false;
+
+  function syncMobileNavState() {
+    const open = document.body.classList.contains('navbar-drawer-show');
+    document.querySelectorAll('.navbar-bar').forEach((button) => {
+      button.setAttribute('aria-expanded', String(open));
+      button.setAttribute('aria-controls', 'mobile-navigation');
+    });
+    const drawer = document.querySelector('.navbar-drawer');
+    if (drawer) drawer.id = 'mobile-navigation';
+  }
+
+  function initMobileNavFallback() {
+    syncMobileNavState();
+    if (mobileNavFallbackReady) return;
+    mobileNavFallbackReady = true;
+
+    document.addEventListener('click', (event) => {
+      const control = event.target.closest('.navbar-bar, .window-mask');
+      if (!control) return;
+      const wasOpen = document.body.classList.contains('navbar-drawer-show');
+      window.setTimeout(() => {
+        if (document.body.classList.contains('navbar-drawer-show') === wasOpen) {
+          document.body.classList.toggle('navbar-drawer-show', !wasOpen);
+        }
+        syncMobileNavState();
+      }, 0);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !document.body.classList.contains('navbar-drawer-show')) return;
+      document.body.classList.remove('navbar-drawer-show');
+      syncMobileNavState();
+      document.querySelector('.navbar-bar')?.focus();
+    });
+  }
 
   function makeAccessible(element, label) {
     element.setAttribute('aria-label', label);
@@ -94,6 +130,7 @@
   function applyEnhancements() {
     enhanceControls();
     enhanceSocialLinks();
+    initMobileNavFallback();
     updateRuntime();
   }
 
