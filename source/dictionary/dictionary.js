@@ -2,6 +2,9 @@
   'use strict';
 
   const MAGIC = 'LEEKBD01';
+  const REMEMBER_DURATION = 24 * 60 * 60 * 1000;
+  const AUTH_DB = 'lee-security-dictionary';
+  const AUTH_STORE = 'auth';
   const decoder = new TextDecoder();
   const state = { payload: null, docsById: new Map(), attachmentsById: new Map(), snippets: null, failedAttempts: 0 };
   const $ = (selector) => document.querySelector(selector);
@@ -16,6 +19,8 @@
   const searchDialog = $('#search-dialog');
   const searchInput = $('#search-input');
   const searchResults = $('#search-results');
+  const rememberLogin = $('#remember-login');
+  let bundlePromise = null;
 
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
@@ -27,7 +32,7 @@
     return decoder.decode(await new Response(stream).arrayBuffer());
   };
 
-  const decrypt = async (password) => {
+  const loadBundle = async () => {
     const response = await fetch(`./knowledge.enc?v=${Date.now()}`, { cache: 'no-store' });
     if (!response.ok) throw new Error('加密知识包尚未部署，请稍后重试。');
     const bytes = new Uint8Array(await response.arrayBuffer());
@@ -37,18 +42,67 @@
     const salt = bytes.slice(12, 28);
     const iv = bytes.slice(28, 40);
     const cipherText = bytes.slice(40);
+    return { iterations, salt, iv, cipherText, id: [...salt].map((byte) => byte.toString(16).padStart(2, '0')).join('') };
+  };
+
+  const getBundle = () => {
+    if (!bundlePromise) bundlePromise = loadBundle().catch((error) => { bundlePromise = null; throw error; });
+    return bundlePromise;
+  };
+
+  const decryptWithKey = async (key, bundle) => {
+    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bundle.iv }, key, bundle.cipherText);
+    return JSON.parse(await bytesToText(new Uint8Array(plain)));
+  };
+
+  const decrypt = async (password) => {
+    const bundle = await getBundle();
     const passwordBytes = new TextEncoder().encode(password);
     const material = await crypto.subtle.importKey('raw', passwordBytes, 'PBKDF2', false, ['deriveKey']);
     passwordBytes.fill(0);
     const key = await crypto.subtle.deriveKey(
-      { name: 'PBKDF2', hash: 'SHA-256', salt, iterations },
+      { name: 'PBKDF2', hash: 'SHA-256', salt: bundle.salt, iterations: bundle.iterations },
       material,
       { name: 'AES-GCM', length: 256 },
       false,
       ['decrypt']
     );
-    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherText);
-    return JSON.parse(await bytesToText(new Uint8Array(plain)));
+    return { payload: await decryptWithKey(key, bundle), key, bundleId: bundle.id };
+  };
+
+  const openAuthDatabase = () => new Promise((resolve, reject) => {
+    const request = indexedDB.open(AUTH_DB, 1);
+    request.onupgradeneeded = () => request.result.createObjectStore(AUTH_STORE);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+
+  const readRememberedAuth = async () => {
+    const database = await openAuthDatabase();
+    return new Promise((resolve, reject) => {
+      const request = database.transaction(AUTH_STORE, 'readonly').objectStore(AUTH_STORE).get('session');
+      request.onsuccess = () => { database.close(); resolve(request.result || null); };
+      request.onerror = () => { database.close(); reject(request.error); };
+    });
+  };
+
+  const writeRememberedAuth = async (key, bundleId) => {
+    const database = await openAuthDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = database.transaction(AUTH_STORE, 'readwrite');
+      transaction.objectStore(AUTH_STORE).put({ key, bundleId, expiresAt: Date.now() + REMEMBER_DURATION }, 'session');
+      transaction.oncomplete = () => { database.close(); resolve(); };
+      transaction.onerror = () => { database.close(); reject(transaction.error); };
+    });
+  };
+
+  const clearRememberedAuth = async () => {
+    const database = await openAuthDatabase();
+    return new Promise((resolve) => {
+      const transaction = database.transaction(AUTH_STORE, 'readwrite');
+      transaction.objectStore(AUTH_STORE).delete('session');
+      transaction.oncomplete = transaction.onerror = () => { database.close(); resolve(); };
+    });
   };
 
   const categoryAliases = { web: 'Web', pwn: 'Pwn', crypto: 'Crypto', src: 'SRC', linux: 'Linux' };
@@ -360,28 +414,63 @@
       <a class="search-result" href="#/doc/${doc.id}"><strong>${escapeHtml(doc.title)}</strong><span>${escapeHtml(doc.category)} · ${escapeHtml(doc.description)}</span></a>`).join('') : '<div class="empty">没有找到匹配内容</div>';
   };
 
+  const activatePayload = (payload) => {
+    state.payload = payload;
+    state.docsById = new Map(payload.documents.map((doc) => [doc.id, doc]));
+    state.attachmentsById = new Map(payload.attachments.map((item) => [item.id, item]));
+    state.snippets = null;
+    collectSnippets();
+    passwordInput.value = '';
+    unlockView.hidden = true;
+    appView.hidden = false;
+    state.failedAttempts = 0;
+    route();
+  };
+
   const unlock = async (event) => {
     event.preventDefault();
     unlockButton.disabled = true;
     unlockButton.textContent = '验证中…';
     unlockStatus.textContent = '';
     try {
-      const payload = await decrypt(passwordInput.value);
-      state.payload = payload;
-      state.docsById = new Map(payload.documents.map((doc) => [doc.id, doc]));
-      state.attachmentsById = new Map(payload.attachments.map((item) => [item.id, item]));
-      collectSnippets();
-      passwordInput.value = '';
-      unlockView.hidden = true;
-      appView.hidden = false;
-      state.failedAttempts = 0;
-      route();
+      const result = await decrypt(passwordInput.value);
+      if (rememberLogin.checked) {
+        try { await writeRememberedAuth(result.key, result.bundleId); } catch { /* Private browsing may block IndexedDB. */ }
+      } else {
+        try { await clearRememberedAuth(); } catch { /* Unlock should still succeed. */ }
+      }
+      activatePayload(result.payload);
     } catch (error) {
       state.failedAttempts += 1;
       const wait = Math.min(state.failedAttempts * 900, 5000);
       unlockStatus.textContent = error.name === 'OperationError' ? '密码错误' : error.message;
       await new Promise((resolve) => setTimeout(resolve, wait));
       passwordInput.select();
+    } finally {
+      unlockButton.disabled = false;
+      unlockButton.textContent = '解锁';
+    }
+  };
+
+  const tryRememberedUnlock = async () => {
+    let remembered;
+    try { remembered = await readRememberedAuth(); } catch { return; }
+    if (!remembered) return;
+    const now = Date.now();
+    if (remembered.expiresAt <= now || remembered.expiresAt > now + REMEMBER_DURATION + 60000) {
+      try { await clearRememberedAuth(); } catch { /* Ignore unavailable storage. */ }
+      return;
+    }
+
+    unlockButton.disabled = true;
+    unlockButton.textContent = '恢复中…';
+    try {
+      const bundle = await getBundle();
+      if (remembered.bundleId !== bundle.id) throw new Error('Knowledge bundle changed.');
+      activatePayload(await decryptWithKey(remembered.key, bundle));
+    } catch {
+      try { await clearRememberedAuth(); } catch { /* Ignore unavailable storage. */ }
+      passwordInput.focus();
     } finally {
       unlockButton.disabled = false;
       unlockButton.textContent = '解锁';
@@ -398,7 +487,10 @@
     event.currentTarget.setAttribute('aria-pressed', String(!showing));
     passwordInput.focus();
   });
-  $('#lock-button').addEventListener('click', () => location.reload());
+  $('#lock-button').addEventListener('click', async () => {
+    try { await clearRememberedAuth(); } catch { /* Reload still clears the decrypted page. */ }
+    location.reload();
+  });
   $('#snippet-library').addEventListener('click', () => { location.hash = '#/snippets'; });
   $('#file-library').addEventListener('click', () => { location.hash = '#/files'; });
   $('#random-document').addEventListener('click', () => {
@@ -462,4 +554,5 @@
     if (!searchDialog.open) openSearch();
   });
   window.addEventListener('hashchange', route);
+  tryRememberedUnlock();
 })();

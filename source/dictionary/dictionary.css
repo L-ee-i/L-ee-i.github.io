@@ -45,7 +45,9 @@ label { display: block; margin: 46px 0 9px; font-size: 14px; font-weight: 700; }
 .password-row button { width: 46px; display: grid; place-items: center; border: 0; padding: 0; color: var(--muted); background: transparent; cursor: pointer; }
 .password-row button:hover { color: var(--text); }
 .password-row svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.primary-button { width: 100%; margin-top: 14px; padding: 14px; border: 0; border-radius: 13px; color: #29181e; background: linear-gradient(135deg, #ffb3c8, #ff789d); font-weight: 800; cursor: pointer; }
+.remember-row { display: inline-flex; align-items: center; gap: 9px; margin: 13px 0 0; color: var(--muted); font-size: 13px; font-weight: 500; cursor: pointer; }
+.remember-row input { width: 15px; height: 15px; margin: 0; accent-color: var(--accent); }
+.primary-button { width: 100%; margin-top: 18px; padding: 14px; border: 0; border-radius: 13px; color: #29181e; background: linear-gradient(135deg, #ffb3c8, #ff789d); font-weight: 800; cursor: pointer; }
 .primary-button:hover { filter: brightness(1.04); }
 .primary-button:disabled { cursor: wait; opacity: .66; }
 .status { min-height: 24px; margin: 14px 0 0; color: var(--danger); font-size: 14px; }
