@@ -15,17 +15,30 @@
 
   <main id="unlock-view" class="unlock-shell">
     <section class="unlock-card" aria-labelledby="unlock-title">
-      <a class="back-link" href="/">← 返回博客</a>
-      <h1 id="unlock-title">Security Dictionary</h1>
-      <form id="unlock-form">
-        <label for="password">密码</label>
-        <div class="password-row">
-          <input id="password" name="password" type="password" minlength="16" autocomplete="current-password" required autofocus>
-          <button id="toggle-password" type="button" aria-label="显示或隐藏口令">显示</button>
+      <div class="unlock-brand">
+        <a class="back-link" href="/">← Lee's SecLab</a>
+        <div class="brand-copy">
+          <span class="brand-mark">LS</span>
+          <p class="brand-kicker">LEE'S SECLAB</p>
+          <h1 id="unlock-title">Security<br>Dictionary</h1>
+          <p class="topic-line">WEB · PWN · CRYPTO · REVERSE · LINUX</p>
         </div>
-        <button id="unlock-button" class="primary-button" type="submit">进入</button>
-      </form>
-      <p id="unlock-status" class="status" role="status" aria-live="polite"></p>
+      </div>
+      <div class="unlock-panel">
+        <h2>访问字典</h2>
+        <form id="unlock-form">
+          <label for="password">访问密码</label>
+          <div class="password-row">
+            <input id="password" name="password" type="password" minlength="16" autocomplete="current-password" required autofocus>
+            <button id="toggle-password" type="button" aria-label="显示密码" aria-pressed="false">
+              <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.75"/></svg>
+              <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.75"/><path d="M4 4 20 20"/></svg>
+            </button>
+          </div>
+          <button id="unlock-button" class="primary-button" type="submit">解锁</button>
+        </form>
+        <p id="unlock-status" class="status" role="status" aria-live="polite"></p>
+      </div>
     </section>
   </main>
 
@@ -33,7 +46,7 @@
     <header class="app-header">
       <a class="brand" href="#/">Lee's <span>Dictionary</span></a>
       <div class="header-actions">
-        <button id="open-search" class="icon-button" type="button" aria-label="搜索知识库">⌕</button>
+        <button id="open-search" class="search-button" type="button" aria-label="搜索知识库"><span>搜索</span><kbd>Ctrl K</kbd></button>
         <button id="lock-button" class="text-button" type="button">锁定</button>
         <a class="text-button" href="/">博客</a>
       </div>
@@ -53,14 +66,14 @@
   </div>
 
   <dialog id="search-dialog" class="search-dialog">
-    <form method="dialog" class="search-box">
+    <div class="search-box">
       <div class="search-heading">
         <label for="search-input">搜索知识库</label>
-        <button value="close" aria-label="关闭搜索">×</button>
+        <button id="close-search" type="button" aria-label="关闭搜索">×</button>
       </div>
       <input id="search-input" type="search" placeholder="搜索…" autocomplete="off">
       <div id="search-results" class="search-results"></div>
-    </form>
+    </div>
   </dialog>
 
   <noscript>此加密知识库需要启用 JavaScript 才能在浏览器中解锁。</noscript>

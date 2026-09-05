@@ -82,6 +82,9 @@
       ? state.payload.documents
       : state.payload.documents.filter((doc) => topCategory(doc) === selectedCategory);
     const categories = categoryCounts().filter(([name]) => name !== '全部');
+    const sortedDocs = [...docs].sort((a, b) => b.updated.localeCompare(a.updated));
+    const visibleDocs = selectedCategory === '全部' ? sortedDocs.slice(0, 12) : sortedDocs;
+    const latestUpdate = sortedDocs[0]?.updated || '—';
     const categorySection = selectedCategory === '全部' ? `
       <h2 class="section-title">分类浏览</h2>
       <div class="category-grid">${categories.map(([name, count]) => `
@@ -91,11 +94,16 @@
     content.innerHTML = `
       <section class="hero">
         <h1>${selectedCategory === '全部' ? 'Security Dictionary' : escapeHtml(selectedCategory)}</h1>
-        <p>${docs.length} 篇</p>
+        ${selectedCategory === '全部' ? `<p>个人安全知识库</p>
+        <div class="knowledge-stats">
+          <div><strong>${docs.length}</strong><span>文档</span></div>
+          <div><strong>${categories.length}</strong><span>分类</span></div>
+          <div><strong>${escapeHtml(latestUpdate)}</strong><span>最近更新</span></div>
+        </div>` : `<p>${docs.length} 篇</p>`}
       </section>
       ${categorySection}
       <h2 class="section-title">${selectedCategory === '全部' ? '最近更新' : '全部条目'}</h2>
-      <div class="document-grid">${[...docs].sort((a, b) => b.updated.localeCompare(a.updated)).map(card).join('')}</div>`;
+      <div class="document-grid">${visibleDocs.map(card).join('')}</div>`;
     content.focus({ preventScroll: true });
     window.scrollTo({ top: 0 });
   };
@@ -196,7 +204,8 @@
   const unlock = async (event) => {
     event.preventDefault();
     unlockButton.disabled = true;
-    unlockStatus.textContent = '正在进入…';
+    unlockButton.textContent = '验证中…';
+    unlockStatus.textContent = '';
     try {
       const payload = await decrypt(passwordInput.value);
       state.payload = payload;
@@ -215,6 +224,7 @@
       passwordInput.select();
     } finally {
       unlockButton.disabled = false;
+      unlockButton.textContent = '解锁';
     }
   };
 
@@ -222,20 +232,33 @@
   $('#toggle-password').addEventListener('click', (event) => {
     const showing = passwordInput.type === 'text';
     passwordInput.type = showing ? 'password' : 'text';
-    event.currentTarget.textContent = showing ? '显示' : '隐藏';
+    event.currentTarget.querySelector('.eye-open').hidden = !showing;
+    event.currentTarget.querySelector('.eye-closed').hidden = showing;
+    event.currentTarget.setAttribute('aria-label', showing ? '显示密码' : '隐藏密码');
+    event.currentTarget.setAttribute('aria-pressed', String(!showing));
+    passwordInput.focus();
   });
   $('#lock-button').addEventListener('click', () => location.reload());
-  $('#open-search').addEventListener('click', () => {
+  const openSearch = () => {
     searchDialog.showModal();
     searchInput.value = '';
     runSearch('');
     setTimeout(() => searchInput.focus(), 0);
-  });
+  };
+  $('#open-search').addEventListener('click', openSearch);
+  $('#close-search').addEventListener('click', () => searchDialog.close());
   searchInput.addEventListener('input', () => runSearch(searchInput.value));
   searchResults.addEventListener('click', () => searchDialog.close());
   categoryNav.addEventListener('click', (event) => {
     const button = event.target.closest('[data-category]');
     if (button) location.hash = button.dataset.category === '全部' ? '#/' : `#/category/${encodeURIComponent(button.dataset.category)}`;
+  });
+  window.addEventListener('keydown', (event) => {
+    const isShortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k';
+    const isSlash = event.key === '/' && !/^(?:INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+    if (!state.payload || (!isShortcut && !isSlash)) return;
+    event.preventDefault();
+    if (!searchDialog.open) openSearch();
   });
   window.addEventListener('hashchange', route);
 })();
