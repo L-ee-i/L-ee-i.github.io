@@ -23,7 +23,23 @@ try {
     npm run verify:output
     if ($LASTEXITCODE -ne 0) { throw '生成结果检查失败。' }
     Write-Host ''
-    Write-Host '加密字典已更新并通过本地检查。需要发布时提交并推送博客仓库。' -ForegroundColor Green
+    Write-Host '加密字典已更新并通过本地检查。' -ForegroundColor Green
+
+    $publish = Read-Host '是否立即发布到 GitHub？输入 Y 发布，直接回车仅保留在本地'
+    if ($publish -match '^[Yy]$') {
+        git add -- source/dictionary/knowledge.enc
+        $pending = git diff --cached --name-only -- source/dictionary/knowledge.enc
+        if ($pending) {
+            $stamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
+            git commit -m "Update encrypted dictionary $stamp"
+            if ($LASTEXITCODE -ne 0) { throw 'Git 提交失败。' }
+            git push origin main
+            if ($LASTEXITCODE -ne 0) { throw 'GitHub 推送失败。' }
+            Write-Host '已推送，GitHub Pages 正在自动部署。' -ForegroundColor Green
+        } else {
+            Write-Host '加密包没有变化，无需重复发布。'
+        }
+    }
 } finally {
     $env:DICTIONARY_PASSWORD = $null
     $plainPassword = $null
