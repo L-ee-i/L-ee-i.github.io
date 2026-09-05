@@ -15,21 +15,17 @@
 
   <main id="unlock-view" class="unlock-shell">
     <section class="unlock-card" aria-labelledby="unlock-title">
-      <a class="back-link" href="/">← 返回 Lee's SecLab</a>
-      <div class="lock-mark" aria-hidden="true">⌁</div>
-      <p class="eyebrow">ENCRYPTED KNOWLEDGE BASE</p>
-      <h1 id="unlock-title">Lee's Security Dictionary</h1>
-      <p class="intro">内容使用 AES-256-GCM 加密。口令只在当前页面用于本地解密，不会发送到服务器。</p>
+      <a class="back-link" href="/">← 返回博客</a>
+      <h1 id="unlock-title">Security Dictionary</h1>
       <form id="unlock-form">
-        <label for="password">访问口令</label>
+        <label for="password">密码</label>
         <div class="password-row">
           <input id="password" name="password" type="password" minlength="16" autocomplete="current-password" required autofocus>
           <button id="toggle-password" type="button" aria-label="显示或隐藏口令">显示</button>
         </div>
-        <button id="unlock-button" class="primary-button" type="submit">解锁字典</button>
+        <button id="unlock-button" class="primary-button" type="submit">进入</button>
       </form>
       <p id="unlock-status" class="status" role="status" aria-live="polite"></p>
-      <p class="privacy-note">刷新或关闭页面后需要重新输入口令。</p>
     </section>
   </main>
 
@@ -62,7 +58,7 @@
         <label for="search-input">搜索知识库</label>
         <button value="close" aria-label="关闭搜索">×</button>
       </div>
-      <input id="search-input" type="search" placeholder="标题、标签、命令或正文…" autocomplete="off">
+      <input id="search-input" type="search" placeholder="搜索…" autocomplete="off">
       <div id="search-results" class="search-results"></div>
     </form>
   </dialog>

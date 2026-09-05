@@ -87,13 +87,11 @@
       <div class="category-grid">${categories.map(([name, count]) => `
         <a class="category-card" href="#/category/${encodeURIComponent(name)}">
           <span class="count-badge">${count} 篇</span><strong>${escapeHtml(name)}</strong>
-          <p>打开 ${escapeHtml(name)} 分类中的知识条目</p>
         </a>`).join('')}</div>` : '';
     content.innerHTML = `
       <section class="hero">
-        <p class="eyebrow">PRIVATE · LOCAL DECRYPTION</p>
         <h1>${selectedCategory === '全部' ? 'Security Dictionary' : escapeHtml(selectedCategory)}</h1>
-        <p>${selectedCategory === '全部' ? `已解锁 ${state.payload.documents.length} 篇安全学习笔记。所有搜索与阅读均在当前浏览器内完成。` : `${docs.length} 篇相关知识条目。`}</p>
+        <p>${docs.length} 篇</p>
       </section>
       ${categorySection}
       <h2 class="section-title">${selectedCategory === '全部' ? '最近更新' : '全部条目'}</h2>
@@ -198,7 +196,7 @@
   const unlock = async (event) => {
     event.preventDefault();
     unlockButton.disabled = true;
-    unlockStatus.textContent = '正在派生密钥并解密…';
+    unlockStatus.textContent = '正在进入…';
     try {
       const payload = await decrypt(passwordInput.value);
       state.payload = payload;
@@ -212,7 +210,7 @@
     } catch (error) {
       state.failedAttempts += 1;
       const wait = Math.min(state.failedAttempts * 900, 5000);
-      unlockStatus.textContent = error.name === 'OperationError' ? '口令错误，无法解密知识库。' : error.message;
+      unlockStatus.textContent = error.name === 'OperationError' ? '密码错误' : error.message;
       await new Promise((resolve) => setTimeout(resolve, wait));
       passwordInput.select();
     } finally {

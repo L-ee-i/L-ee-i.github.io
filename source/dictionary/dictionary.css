@@ -27,13 +27,10 @@ a { color: inherit; }
 
 .unlock-shell { position: relative; z-index: 1; min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; padding: 28px; }
 .unlock-card { min-width: 0; width: min(100%, 510px); padding: 42px; border: 1px solid var(--line); border-radius: 26px; background: var(--panel); box-shadow: 0 34px 90px rgba(0,0,0,.38); backdrop-filter: blur(18px); }
-.back-link { display: inline-block; margin-bottom: 42px; color: var(--muted); text-decoration: none; font-size: 14px; }
+.back-link { display: inline-block; margin-bottom: 52px; color: var(--muted); text-decoration: none; font-size: 14px; }
 .back-link:hover { color: var(--text); }
-.lock-mark { display: grid; place-items: center; width: 54px; height: 54px; margin-bottom: 22px; border: 1px solid rgba(255,141,172,.35); border-radius: 17px; color: var(--accent); background: var(--accent-soft); font-size: 30px; }
-.eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .14em; }
 h1 { margin: 0; font-size: clamp(31px, 7vw, 48px); line-height: 1.05; letter-spacing: -.04em; overflow-wrap: anywhere; }
-.intro { margin: 20px 0 30px; color: var(--muted); line-height: 1.75; }
-label { display: block; margin-bottom: 9px; font-size: 14px; font-weight: 700; }
+label { display: block; margin: 34px 0 9px; font-size: 14px; font-weight: 700; }
 .password-row { display: flex; border: 1px solid var(--line); border-radius: 13px; background: rgba(0,0,0,.18); overflow: hidden; transition: border-color .2s, box-shadow .2s; }
 .password-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .password-row input { min-width: 0; flex: 1; padding: 14px 15px; border: 0; outline: 0; color: var(--text); background: transparent; }
@@ -41,7 +38,6 @@ label { display: block; margin-bottom: 9px; font-size: 14px; font-weight: 700; }
 .primary-button { width: 100%; margin-top: 14px; padding: 14px; border: 0; border-radius: 13px; color: #29181e; background: linear-gradient(135deg, #ffb3c8, #ff789d); font-weight: 800; cursor: pointer; }
 .primary-button:disabled { cursor: wait; opacity: .66; }
 .status { min-height: 24px; margin: 14px 0 0; color: var(--danger); font-size: 14px; }
-.privacy-note { margin: 12px 0 0; color: #777276; font-size: 12px; text-align: center; }
 
 .app-shell { position: relative; z-index: 1; min-height: 100vh; }
 .app-header { position: sticky; top: 0; z-index: 20; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--line); background: rgba(21,21,23,.88); backdrop-filter: blur(18px); }
@@ -60,11 +56,12 @@ label { display: block; margin-bottom: 9px; font-size: 14px; font-weight: 700; }
 .category-link span:last-child { font-size: 12px; opacity: .65; }
 .content { width: min(100%, 1120px); margin: 0 auto; padding: 50px clamp(24px, 5vw, 72px) 90px; outline: none; }
 .hero { padding: 24px 0 36px; }
-.hero .eyebrow { margin-bottom: 13px; }
 .hero h1 { max-width: 760px; }
 .hero p { max-width: 720px; color: var(--muted); line-height: 1.8; }
 .category-grid, .document-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
-.category-card, .document-card { display: block; min-height: 155px; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); text-decoration: none; transition: transform .2s, border-color .2s; }
+.category-card, .document-card { display: block; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); text-decoration: none; transition: transform .2s, border-color .2s; }
+.category-card { min-height: 110px; }
+.document-card { min-height: 155px; }
 .category-card:hover, .document-card:hover { transform: translateY(-2px); border-color: rgba(255,141,172,.42); }
 .category-card strong, .document-card strong { display: block; margin: 12px 0 8px; font-size: 18px; }
 .category-card p, .document-card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
