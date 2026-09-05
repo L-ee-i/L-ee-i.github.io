@@ -17,10 +17,8 @@ const password = process.env.DICTIONARY_PASSWORD || '';
 
 const MAGIC = Buffer.from('LEEKBD01', 'ascii');
 const KDF_ITERATIONS = 600000;
-const EXCLUDED_DIRECTORIES = new Set(['.claude', '.git', '__pycache__', 'node_modules']);
-const EXCLUDED_EXTENSIONS = new Set(['.pem', '.encrypted', '.sig', '.log', '.key', '.p12', '.pfx']);
-const ATTACHMENT_EXTENSIONS = new Set(['.doc', '.docx', '.pdf', '.ppt', '.pptx', '.xls', '.xlsx']);
-const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024;
+const EXCLUDED_DIRECTORIES = new Set(['.git', '__pycache__', 'node_modules']);
+const TEXT_EXTENSIONS = new Set(['.txt', '.log', '.pem', '.py', '.js', '.json', '.html', '.css', '.bat', '.cmd', '.sh', '.xml', '.yml', '.yaml', '.ini', '.conf']);
 const SKIP_FILE_PATTERNS = [/\+待填\+教程\.md$/i];
 const RISK_RULES = [
   ['私钥正文', /BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY/],
@@ -44,7 +42,7 @@ const safeDecode = (value) => {
 };
 
 const walk = (directory) => fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-  if (entry.isDirectory() && (EXCLUDED_DIRECTORIES.has(entry.name) || entry.name.startsWith('.'))) return [];
+  if (entry.isDirectory() && EXCLUDED_DIRECTORIES.has(entry.name)) return [];
   const fullPath = path.join(directory, entry.name);
   return entry.isDirectory() ? walk(fullPath) : [fullPath];
 });
@@ -146,11 +144,11 @@ const sanitizeAndRewrite = (html, sourcePath, documentsByPath, attachmentsByPath
     }
     const attachment = candidates.map((item) => attachmentsByPath.get(item.toLowerCase())).find(Boolean);
     if (attachment) {
-      anchor.setAttribute('href', `#/attachment/${attachment.id}`);
+      anchor.setAttribute('href', `#/file/${attachment.id}`);
       continue;
     }
     anchor.classList.add('unavailable-link');
-    anchor.setAttribute('title', '该本地资源未包含在公开加密包中');
+    anchor.setAttribute('title', '该本地资源未包含在加密包中');
   }
 
   for (const media of document.querySelectorAll('[src]')) {
@@ -168,10 +166,7 @@ const collectKnowledge = () => {
   const markdownFiles = allFiles.filter((file) => path.extname(file).toLowerCase() === '.md')
     .filter((file) => fs.statSync(file).size >= 50)
     .filter((file) => !SKIP_FILE_PATTERNS.some((pattern) => pattern.test(file)));
-  const attachmentFiles = allFiles.filter((file) => ATTACHMENT_EXTENSIONS.has(path.extname(file).toLowerCase()))
-    .filter((file) => fs.statSync(file).size <= MAX_ATTACHMENT_BYTES);
-  const excludedSensitiveFiles = allFiles.filter((file) => EXCLUDED_EXTENSIONS.has(path.extname(file).toLowerCase()));
-  const oversizedFiles = allFiles.filter((file) => fs.statSync(file).size > MAX_ATTACHMENT_BYTES);
+  const attachmentFiles = allFiles.filter((file) => path.extname(file).toLowerCase() !== '.md');
 
   const documents = markdownFiles.map((file) => {
     const relativePath = toPosix(path.relative(sourceRoot, file));
@@ -198,15 +193,21 @@ const collectKnowledge = () => {
 
   const attachments = attachmentFiles.map((file) => {
     const relativePath = toPosix(path.relative(sourceRoot, file));
+    const extension = path.extname(file).toLowerCase();
+    const data = fs.readFileSync(file);
     return {
       id: shaId(`attachment:${relativePath.toLowerCase()}`), relativePath,
-      name: path.basename(file), mime: {
+      name: path.basename(file), extension: extension.slice(1) || 'file', size: data.length,
+      text: TEXT_EXTENSIONS.has(extension), sha256: crypto.createHash('sha256').update(data).digest('hex'), mime: {
         '.pdf': 'application/pdf', '.doc': 'application/msword',
         '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         '.xls': 'application/vnd.ms-excel', '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        '.ppt': 'application/vnd.ms-powerpoint', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-      }[path.extname(file).toLowerCase()] || 'application/octet-stream',
-      data: fs.readFileSync(file).toString('base64')
+        '.ppt': 'application/vnd.ms-powerpoint', '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        '.txt': 'text/plain', '.log': 'text/plain', '.pem': 'text/plain', '.py': 'text/x-python',
+        '.js': 'text/javascript', '.json': 'application/json', '.html': 'text/html', '.css': 'text/css',
+        '.bat': 'text/plain', '.cmd': 'text/plain', '.sh': 'text/x-shellscript', '.xml': 'application/xml'
+      }[extension] || 'application/octet-stream',
+      data: data.toString('base64')
     };
   });
 
@@ -218,7 +219,7 @@ const collectKnowledge = () => {
     delete doc.markdown;
   }
 
-  return { documents, attachments, excludedSensitiveFiles, oversizedFiles };
+  return { documents, attachments };
 };
 
 const encryptPayload = (payload, secret) => {
@@ -246,9 +247,7 @@ const main = () => {
 
   console.log(`知识库来源：${sourceRoot}`);
   console.log(`Markdown：${result.documents.length} 篇`);
-  console.log(`加密附件：${result.attachments.length} 个`);
-  console.log(`强制排除敏感文件：${result.excludedSensitiveFiles.length} 个`);
-  console.log(`排除超大文件：${result.oversizedFiles.length} 个`);
+  console.log(`完整加密文件：${result.attachments.length} 个（非 Markdown 文件全部纳入）`);
   console.log(`不完整头信息：${malformedDocuments.length} 篇（同步时已兼容处理）`);
   console.log(`内容风险提示：${riskyDocuments.length} 篇（内容会进入加密包，请确认密码强度）`);
   for (const doc of riskyDocuments.slice(0, 12)) console.log(`  - ${doc.relativePath}: ${doc.risk.join('、')}`);

@@ -72,6 +72,8 @@
       </button>`).join('');
     $('#document-count').textContent = `${state.payload.documents.length} 篇`;
     $('#snippet-library').classList.toggle('active', active === '代码片段');
+    $('#file-library').classList.toggle('active', active === '全部文件');
+    $('#file-count').textContent = state.payload.attachments.length;
   };
 
   const card = (doc) => `
@@ -255,7 +257,69 @@
     link.download = attachment.name;
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    history.replaceState(null, '', '#/');
+  };
+
+  const formatBytes = (bytes) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  };
+
+  const attachmentBytes = (attachment) => {
+    const binary = atob(attachment.data);
+    return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  };
+
+  const renderFileCards = () => {
+    const query = ($('#file-filter')?.value || '').normalize('NFKC').trim().toLowerCase();
+    const files = state.payload.attachments
+      .filter((item) => !query || `${item.name} ${item.relativePath} ${item.extension}`.toLowerCase().includes(query))
+      .sort((a, b) => a.relativePath.localeCompare(b.relativePath, 'zh-CN'));
+    $('#file-summary').textContent = `${files.length} 个文件`;
+    $('#file-results').innerHTML = files.length ? files.map((item) => `
+      <a class="file-card" href="#/file/${item.id}">
+        <span class="count-badge">${escapeHtml(item.extension.toUpperCase())}</span>
+        <strong>${escapeHtml(item.name)}</strong>
+        <small>${escapeHtml(item.relativePath)} · ${formatBytes(item.size)}</small>
+      </a>`).join('') : '<div class="empty">没有找到匹配文件</div>';
+  };
+
+  const renderFileLibrary = () => {
+    renderSidebar('全部文件');
+    content.innerHTML = `
+      <section class="hero"><h1>File Library</h1><p>Helpme 中随加密包同步的全部非 Markdown 文件。</p></section>
+      <div class="vault-toolbar file-toolbar"><input id="file-filter" type="search" placeholder="搜索文件名、路径或扩展名…" autocomplete="off" aria-label="搜索文件"></div>
+      <p id="file-summary" class="snippet-summary"></p>
+      <div id="file-results" class="file-grid"></div>`;
+    renderFileCards();
+    $('#file-filter').addEventListener('input', renderFileCards);
+    content.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
+  };
+
+  const renderFile = (id) => {
+    const attachment = state.attachmentsById.get(id);
+    if (!attachment) return renderNotFound();
+    renderSidebar('全部文件');
+    let body = '<div class="binary-file">该文件不是文本格式，可下载后使用对应应用打开。</div>';
+    if (attachment.text) {
+      const value = decoder.decode(attachmentBytes(attachment));
+      body = `<pre class="file-content"><code>${escapeHtml(value)}</code></pre>`;
+    }
+    content.innerHTML = `
+      <article>
+        <header class="doc-header">
+          <nav class="breadcrumbs"><a href="#/files">全部文件</a><span>/</span><span>${escapeHtml(attachment.relativePath)}</span></nav>
+          <h1>${escapeHtml(attachment.name)}</h1>
+          <div class="doc-meta"><span>${escapeHtml(attachment.extension.toUpperCase())}</span><span>${formatBytes(attachment.size)}</span><span>SHA-256 ${escapeHtml(attachment.sha256.slice(0, 12))}…</span></div>
+        </header>
+        <div class="file-viewer">
+          <div class="file-actions"><div>${escapeHtml(attachment.relativePath)}</div><div>${attachment.text ? `<button type="button" data-copy-file="${attachment.id}">复制全文</button>` : ''} <button type="button" data-download-file="${attachment.id}">下载原文件</button></div></div>
+          ${body}
+        </div>
+      </article>`;
+    content.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
   };
 
   const route = () => {
@@ -267,10 +331,14 @@
       renderDocument(id, params.get('anchor') || '');
     } else if (routeValue === 'snippets') {
       renderSnippetLibrary();
+    } else if (routeValue === 'files') {
+      renderFileLibrary();
+    } else if (routeValue.startsWith('file/')) {
+      renderFile(routeValue.slice('file/'.length));
     } else if (routeValue.startsWith('category/')) {
       renderHome(decodeURIComponent(routeValue.slice('category/'.length)));
     } else if (routeValue.startsWith('attachment/')) {
-      downloadAttachment(routeValue.slice('attachment/'.length));
+      renderFile(routeValue.slice('attachment/'.length));
     } else renderHome();
   };
 
@@ -332,6 +400,7 @@
   });
   $('#lock-button').addEventListener('click', () => location.reload());
   $('#snippet-library').addEventListener('click', () => { location.hash = '#/snippets'; });
+  $('#file-library').addEventListener('click', () => { location.hash = '#/files'; });
   $('#random-document').addEventListener('click', () => {
     const documents = state.payload?.documents || [];
     if (!documents.length) return;
@@ -355,6 +424,24 @@
     if (button) location.hash = button.dataset.category === '全部' ? '#/' : `#/category/${encodeURIComponent(button.dataset.category)}`;
   });
   content.addEventListener('click', async (event) => {
+    const fileCopy = event.target.closest('[data-copy-file]');
+    if (fileCopy) {
+      const attachment = state.attachmentsById.get(fileCopy.dataset.copyFile);
+      if (!attachment?.text) return;
+      try {
+        await navigator.clipboard.writeText(decoder.decode(attachmentBytes(attachment)));
+        fileCopy.textContent = '已复制';
+        setTimeout(() => { fileCopy.textContent = '复制全文'; }, 1600);
+      } catch {
+        fileCopy.textContent = '复制失败';
+      }
+      return;
+    }
+    const fileDownload = event.target.closest('[data-download-file]');
+    if (fileDownload) {
+      downloadAttachment(fileDownload.dataset.downloadFile);
+      return;
+    }
     const button = event.target.closest('[data-snippet-index]');
     if (!button) return;
     const snippet = state.snippets?.[Number(button.dataset.snippetIndex)];

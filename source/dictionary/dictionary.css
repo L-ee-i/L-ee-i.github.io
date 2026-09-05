@@ -113,6 +113,7 @@ label { display: block; margin: 46px 0 9px; font-size: 14px; font-weight: 700; }
 .related-section .document-card { min-height: 130px; }
 
 .vault-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 10px; margin: 4px 0 24px; }
+.vault-toolbar.file-toolbar { grid-template-columns: 1fr; }
 .vault-toolbar input, .vault-toolbar select { min-width: 0; height: 46px; padding: 0 14px; border: 1px solid var(--line); border-radius: 11px; outline: 0; color: var(--text); background: #1b1b1e; }
 .vault-toolbar input:focus, .vault-toolbar select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .snippet-summary { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
@@ -126,6 +127,18 @@ label { display: block; margin: 46px 0 9px; font-size: 14px; font-weight: 700; }
 .snippet-copy { padding: 5px 9px; border: 1px solid var(--line); border-radius: 7px; color: var(--muted); background: rgba(255,255,255,.03); font-size: 12px; cursor: pointer; }
 .snippet-copy:hover { color: var(--text); border-color: rgba(255,141,172,.42); }
 .snippet-card pre { max-height: 310px; margin: 0; padding: 16px; color: #e7e2e5; background: #111113; font: 13px/1.65 ui-monospace, SFMono-Regular, Consolas, monospace; overflow: auto; white-space: pre; }
+.file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.file-card { display: block; min-width: 0; padding: 17px; border: 1px solid var(--line); border-radius: 13px; color: var(--text); background: var(--panel); text-decoration: none; }
+.file-card:hover { border-color: rgba(255,141,172,.42); transform: translateY(-1px); }
+.file-card strong { display: block; margin: 11px 0 7px; overflow-wrap: anywhere; }
+.file-card small { display: block; color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
+.file-viewer { margin-top: 24px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); overflow: hidden; }
+.file-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.file-actions div { color: var(--muted); font-size: 12px; }
+.file-actions button { padding: 7px 11px; border: 1px solid var(--line); border-radius: 8px; color: var(--text); background: rgba(255,255,255,.04); cursor: pointer; }
+.file-actions button:hover { border-color: rgba(255,141,172,.42); }
+.file-content { max-height: 70vh; margin: 0; padding: 18px; color: #e7e2e5; background: #111113; font: 13px/1.65 ui-monospace, SFMono-Regular, Consolas, monospace; overflow: auto; white-space: pre; }
+.binary-file { padding: 50px 22px; color: var(--muted); text-align: center; }
 
 .search-dialog { width: min(720px, calc(100% - 28px)); margin-top: 10vh; padding: 0; border: 1px solid var(--line); border-radius: 20px; color: var(--text); background: #222226; box-shadow: 0 30px 90px rgba(0,0,0,.55); }
 .search-dialog::backdrop { background: rgba(0,0,0,.66); backdrop-filter: blur(6px); }
@@ -176,5 +189,8 @@ label { display: block; margin: 46px 0 9px; font-size: 14px; font-weight: 700; }
   .related-section .document-grid { grid-template-columns: 1fr; }
   .vault-toolbar { grid-template-columns: 1fr; }
   .snippet-card pre { max-height: 260px; font-size: 12px; }
+  .file-grid { grid-template-columns: 1fr; }
+  .file-actions { align-items: flex-start; flex-direction: column; }
+  .file-content { max-height: 62vh; font-size: 12px; }
   .text-button { padding: 0 10px; }
 }

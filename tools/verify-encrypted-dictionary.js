@@ -34,8 +34,15 @@ try {
   const bundle = fs.readFileSync(bundlePath);
   const payload = decrypt(bundle, password);
   const ids = new Set(payload.documents.map((doc) => doc.id));
+  const attachmentIds = new Set(payload.attachments.map((item) => item.id));
   if (payload.documents.length < 100) throw new Error(`Expected at least 100 documents, got ${payload.documents.length}.`);
   if (ids.size !== payload.documents.length) throw new Error('Duplicate document IDs found.');
+  if (attachmentIds.size !== payload.attachments.length) throw new Error('Duplicate attachment IDs found.');
+  for (const attachment of payload.attachments) {
+    const data = Buffer.from(attachment.data, 'base64');
+    if (data.length !== attachment.size) throw new Error(`Attachment size mismatch: ${attachment.relativePath}`);
+    if (crypto.createHash('sha256').update(data).digest('hex') !== attachment.sha256) throw new Error(`Attachment hash mismatch: ${attachment.relativePath}`);
+  }
   const unsafeDocuments = payload.documents.filter((doc) => {
     const document = new JSDOM(`<!doctype html><body>${doc.html}</body>`).window.document;
     if (document.querySelector('script,iframe,object,embed,form,input,button,textarea,select,meta,link,base,svg,math')) return true;
