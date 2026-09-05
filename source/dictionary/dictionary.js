@@ -3,7 +3,7 @@
 
   const MAGIC = 'LEEKBD01';
   const decoder = new TextDecoder();
-  const state = { payload: null, docsById: new Map(), attachmentsById: new Map(), failedAttempts: 0 };
+  const state = { payload: null, docsById: new Map(), attachmentsById: new Map(), snippets: null, failedAttempts: 0 };
   const $ = (selector) => document.querySelector(selector);
   const unlockView = $('#unlock-view');
   const appView = $('#app-view');
@@ -51,7 +51,11 @@
     return JSON.parse(await bytesToText(new Uint8Array(plain)));
   };
 
-  const topCategory = (doc) => doc.category === '首页' ? '首页' : doc.category.split('/')[0];
+  const categoryAliases = { web: 'Web', pwn: 'Pwn', crypto: 'Crypto', src: 'SRC', linux: 'Linux' };
+  const topCategory = (doc) => {
+    const category = doc.category === '首页' ? '首页' : doc.category.split('/')[0];
+    return categoryAliases[category.toLowerCase()] || category;
+  };
   const categoryCounts = () => {
     const counts = new Map([['全部', state.payload.documents.length]]);
     for (const doc of state.payload.documents) {
@@ -67,6 +71,7 @@
         <span>${escapeHtml(name)}</span><span>${count}</span>
       </button>`).join('');
     $('#document-count').textContent = `${state.payload.documents.length} 篇`;
+    $('#snippet-library').classList.toggle('active', active === '代码片段');
   };
 
   const card = (doc) => `
@@ -120,11 +125,95 @@
           <div class="doc-meta"><span>更新于 ${escapeHtml(doc.updated)}</span>${doc.difficulty ? `<span class="tag">${escapeHtml(doc.difficulty)}</span>` : ''}${doc.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
         </header>
         <div class="article">${doc.html}</div>
+        ${renderRelated(doc)}
       </article>`;
     enableCodeCopy();
     content.focus({ preventScroll: true });
     if (anchor) requestAnimationFrame(() => document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' }));
     else window.scrollTo({ top: 0 });
+  };
+
+  const relatedDocuments = (current) => state.payload.documents
+    .filter((doc) => doc.id !== current.id)
+    .map((doc) => {
+      const sharedTags = doc.tags.filter((tag) => current.tags.includes(tag)).length;
+      const sameCategory = topCategory(doc) === topCategory(current) ? 2 : 0;
+      return { doc, score: sharedTags * 3 + sameCategory };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || b.doc.updated.localeCompare(a.doc.updated))
+    .slice(0, 4)
+    .map(({ doc }) => doc);
+
+  function renderRelated(doc) {
+    const related = relatedDocuments(doc);
+    return related.length ? `<section class="related-section"><h2 class="section-title">关联条目</h2><div class="document-grid">${related.map(card).join('')}</div></section>` : '';
+  }
+
+  const collectSnippets = () => {
+    if (state.snippets) return state.snippets;
+    const parser = new DOMParser();
+    const snippets = [];
+    for (const doc of state.payload.documents) {
+      const parsed = parser.parseFromString(`<main>${doc.html}</main>`, 'text/html');
+      for (const code of parsed.querySelectorAll('pre code, pre:not(:has(code))')) {
+        const value = code.textContent.trim();
+        if (!value) continue;
+        const languageClass = [...code.classList].find((name) => name.startsWith('language-'));
+        snippets.push({
+          index: snippets.length,
+          docId: doc.id,
+          title: doc.title,
+          category: doc.category,
+          language: languageClass ? languageClass.slice(9) : 'text',
+          code: value
+        });
+      }
+    }
+    state.snippets = snippets;
+    $('#snippet-count').textContent = snippets.length;
+    return snippets;
+  };
+
+  const renderSnippetResults = () => {
+    const snippets = collectSnippets();
+    const query = ($('#snippet-filter')?.value || '').normalize('NFKC').trim().toLowerCase();
+    const language = $('#snippet-language')?.value || '';
+    const tokens = query.split(/\s+/).filter(Boolean);
+    const matches = snippets.filter((snippet) => {
+      if (language && snippet.language !== language) return false;
+      const haystack = `${snippet.title} ${snippet.category} ${snippet.language} ${snippet.code}`.toLowerCase();
+      return tokens.every((token) => haystack.includes(token));
+    });
+    const visible = matches.slice(0, 60);
+    $('#snippet-summary').textContent = `${matches.length} 个片段${matches.length > visible.length ? `，显示前 ${visible.length} 个` : ''}`;
+    $('#snippet-results').innerHTML = visible.length ? visible.map((snippet) => `
+      <article class="snippet-card">
+        <div class="snippet-head">
+          <a class="snippet-source" href="#/doc/${snippet.docId}" title="${escapeHtml(snippet.title)}">${escapeHtml(snippet.title)}</a>
+          <div class="snippet-actions"><span class="snippet-language">${escapeHtml(snippet.language)}</span><button class="snippet-copy" type="button" data-snippet-index="${snippet.index}">复制</button></div>
+        </div>
+        <pre><code>${escapeHtml(snippet.code)}</code></pre>
+      </article>`).join('') : '<div class="empty">没有找到匹配片段</div>';
+  };
+
+  const renderSnippetLibrary = () => {
+    renderSidebar('代码片段');
+    const snippets = collectSnippets();
+    const languages = [...new Set(snippets.map((snippet) => snippet.language))].sort();
+    content.innerHTML = `
+      <section class="hero"><h1>Code Vault</h1><p>从全部笔记中自动提取的代码与命令，搜索后可直接复制。</p></section>
+      <div class="vault-toolbar">
+        <input id="snippet-filter" type="search" placeholder="搜索命令、参数或来源…" autocomplete="off" aria-label="搜索代码片段">
+        <select id="snippet-language" aria-label="按语言筛选"><option value="">全部语言</option>${languages.map((language) => `<option value="${escapeHtml(language)}">${escapeHtml(language)}</option>`).join('')}</select>
+      </div>
+      <p id="snippet-summary" class="snippet-summary"></p>
+      <div id="snippet-results" class="snippet-grid"></div>`;
+    renderSnippetResults();
+    $('#snippet-filter').addEventListener('input', renderSnippetResults);
+    $('#snippet-language').addEventListener('change', renderSnippetResults);
+    content.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
   };
 
   const renderNotFound = () => {
@@ -176,6 +265,8 @@
       const [id, query = ''] = routeValue.slice(4).split('?', 2);
       const params = new URLSearchParams(query);
       renderDocument(id, params.get('anchor') || '');
+    } else if (routeValue === 'snippets') {
+      renderSnippetLibrary();
     } else if (routeValue.startsWith('category/')) {
       renderHome(decodeURIComponent(routeValue.slice('category/'.length)));
     } else if (routeValue.startsWith('attachment/')) {
@@ -211,6 +302,7 @@
       state.payload = payload;
       state.docsById = new Map(payload.documents.map((doc) => [doc.id, doc]));
       state.attachmentsById = new Map(payload.attachments.map((item) => [item.id, item]));
+      collectSnippets();
       passwordInput.value = '';
       unlockView.hidden = true;
       appView.hidden = false;
@@ -239,6 +331,15 @@
     passwordInput.focus();
   });
   $('#lock-button').addEventListener('click', () => location.reload());
+  $('#snippet-library').addEventListener('click', () => { location.hash = '#/snippets'; });
+  $('#random-document').addEventListener('click', () => {
+    const documents = state.payload?.documents || [];
+    if (!documents.length) return;
+    const currentId = location.hash.startsWith('#/doc/') ? location.hash.slice(6).split('?')[0] : '';
+    const choices = documents.filter((doc) => doc.id !== currentId);
+    const selected = choices[Math.floor(Math.random() * choices.length)] || documents[0];
+    location.hash = `#/doc/${selected.id}`;
+  });
   const openSearch = () => {
     searchDialog.showModal();
     searchInput.value = '';
@@ -252,6 +353,19 @@
   categoryNav.addEventListener('click', (event) => {
     const button = event.target.closest('[data-category]');
     if (button) location.hash = button.dataset.category === '全部' ? '#/' : `#/category/${encodeURIComponent(button.dataset.category)}`;
+  });
+  content.addEventListener('click', async (event) => {
+    const button = event.target.closest('[data-snippet-index]');
+    if (!button) return;
+    const snippet = state.snippets?.[Number(button.dataset.snippetIndex)];
+    if (!snippet) return;
+    try {
+      await navigator.clipboard.writeText(snippet.code);
+      button.textContent = '已复制';
+      setTimeout(() => { button.textContent = '复制'; }, 1600);
+    } catch {
+      button.textContent = '复制失败';
+    }
   });
   window.addEventListener('keydown', (event) => {
     const isShortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k';
